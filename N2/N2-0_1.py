@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue Jun 16 16:13:07 2020
+Created on Tue Oct 14 16:13:07 2020
 
 @author: joshuaprince
 """
@@ -16,6 +16,7 @@ This cell take in the inputs to this code. This does so by:
 
 This is the primary code one should be modifying when testing different physical systems for the model
 """
+
 
 import time
 import numpy as np
@@ -112,7 +113,7 @@ def MOL(t,x,y,h,p,tol):
                 J=out[1] #Grab the Jacobian
                 R=yw-yold-h*R ; #Update Residual
                 if k>100:
-                    print('Whoops')
+                    print('Whoops: Did not converge')
                     whoops=whoops+1
                     break
             y[:,i]=yw
@@ -129,7 +130,7 @@ t=np.arange(t1,t2+h,h) #Define t
 nt=len(t) #Define the number of timepoints
 y=np.zeros((ny+2,nt)) #Initialize y
 y=y+10**(-8) #Make starting values not exactly equal to zero (divide by zero erros pop up)
-p=[0.1,1,1,1,0.822]
+p=[0.1,1,10,0.1,1]
 tol=10**(-8)
 
 [c,whoops]=MOL(t,x,y,h,p,tol) #Find the concntration profiles in space and time using Method of Lines (MOL)
@@ -153,7 +154,7 @@ for i in t2index:
 change_in_concentration=np.zeros(nt)
 t3index=t2index[:-1].copy()
 for i in t3index:
-    change_in_concentration[i]=(average_conc_overtime[i+1]-average_conc_overtime[i])#/h
+    change_in_concentration[i]=(average_conc_overtime[i+1]-average_conc_overtime[i])/h
 
 """Plotting"""
 
