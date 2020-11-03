@@ -222,7 +222,6 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_p
         unbound_anim=anim.FuncAnimation(unbound_anim_fig,unbound_animate,frames=tp_u_anim,interval=100)
         unbound_anim_filename_partial=f'unboun_anim{pc_i}.gif'
         unbound_anim_filename_full=os.path.join(direct_export_path,unbound_anim_filename_partial)
-        unbound_anim.save(unbound_anim_filename_full,writer='imagemagick')
         pic7.add_picture(unbound_anim_filename_full, width=docx.shared.Inches(3))
         
     
