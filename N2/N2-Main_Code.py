@@ -29,21 +29,22 @@ from N2_method_of_lines import *
 from N2_parameter_tester import *
 from N2_parameter_matrix import *
 from N2_report_generator import *
+from N2_csv_generator import *
 
 # %% Start Timer
 t_start=time.time()
 
 # %%Inputs Code Block
-h=np.array([0.00001]) #Define timesteps to test
+h=np.array([0.02]) #Define timesteps to test
 tol=np.array([10**(-8)])  #Define the tolerance the code will run with when running Newton-Rhapson
 t1=np.array([0]) #Define initialtime vector of values to test
-t2=np.array([2]) #Final Time
-nx=np.array([100]) #Mesh size
-gam=np.array([0.1]) #Define dimenionless ratio of diffusivities to test
-beta=np.array([0]) #Define the dimensionless ratio of potentials to test
-F=np.array([100]) #Define the dimensionless forward reaction rate constant to test
-Re=np.array([0]) #Define the dimensionless reverse reaction rate constant to test
-n=np.array([0.8]) #Define the hill coeffecient to test
+t2=np.array([5]) #Final Time
+nx=np.array([50]) #Mesh size
+gam=np.array([1]) #Define dimenionless ratio of diffusivities to test
+beta=np.array([1]) #Define the dimensionless ratio of potentials to test
+F=np.array([1]) #Define the dimensionless forward reaction rate constant to test
+Re=np.array([1]) #Define the dimensionless reverse reaction rate constant to test
+n=np.array([0.9]) #Define the hill coeffecient to test
 ci=10**(-8) #Define the inital concentration in the biofilm (Can't be zero, if one wants to be zero, set it to a very small number instead)
 
 
@@ -53,8 +54,11 @@ ci=10**(-8) #Define the inital concentration in the biofilm (Can't be zero, if o
 # %% Run parameters through numerical model (Heart of the Code)               
 c_set = parameter_checker(parameter_matrix,ci) #output the set of concentration over time and space results for each set of parameters tested
 
-# %% Report Generator: Exports Plots as Word Document to Seperate Directory (see file N2_report_generator.py)
+# %% Export results to csv files
 direct_export_path='/Users/joshuaprince/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Direct Exports' #Direct Export path for Files, used for actual script outputs
+null = csv_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_path)
+
+# %% Report Generator: Exports Plots as Word Document to Seperate Directory (see file N2_report_generator.py)
 report=plot_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_path)
 
 # %% Stop Timer
