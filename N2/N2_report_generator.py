@@ -16,11 +16,11 @@ from datetime import datetime
 import matplotlib.animation as anim
 from matplotlib.animation import FuncAnimation
 
-def plot_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_path):
+def plot_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_path,new_count_number):
     """Static Plotting (Exported to Word Document)"""
     internal_export_path='/Users/joshuaprince/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Internal Exports' #Indirect Export path for Files, used for outputs which only get using internally
     report=docx.Document()
-    report.add_heading('Results from most recent run of N2',0)
+    report.add_heading(f'Results from N2 Run #{new_count_number}',0)
     now = datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     date_time_line=report.add_paragraph('Date and Time Report Generated:  ')
@@ -222,6 +222,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_p
         unbound_anim=anim.FuncAnimation(unbound_anim_fig,unbound_animate,frames=tp_u_anim,interval=100)
         unbound_anim_filename_partial=f'unboun_anim{pc_i}.gif'
         unbound_anim_filename_full=os.path.join(direct_export_path,unbound_anim_filename_partial)
+        unbound_anim.save(unbound_anim_filename_full)
         pic7.add_picture(unbound_anim_filename_full, width=docx.shared.Inches(3))
         
     
