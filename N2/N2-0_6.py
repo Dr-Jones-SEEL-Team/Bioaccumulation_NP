@@ -32,6 +32,7 @@ import docx
 from docx.shared import Pt
 import  matplotlib.animation as anim
 from matplotlib.animation import FuncAnimation
+from N2_RJ import *
 
 #Editing Code
 
@@ -511,5 +512,7 @@ report_filename_partial=f'N20_report.docx'
 report_filename_full=os.path.join(direct_export_path,report_filename_partial)
 report.save(report_filename_full)
 
+test=function_test()
+print(test)
 
 
