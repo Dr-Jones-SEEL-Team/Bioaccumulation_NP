@@ -34,6 +34,14 @@ from N2_csv_generator import *
 # %% Start Timer
 t_start=time.time()
 
+# %% Determine what run number this is then update run number
+counter_file = open("counter_file.txt",'r+')
+old_count_number=int(counter_file.read())
+new_count_number=str(old_count_number+1)
+counter_file = open("counter_file.txt",'w')
+counter_file.write(new_count_number)
+counter_file.close()
+
 # %%Inputs Code Block
 h=np.array([0.02]) #Define timesteps to test
 tol=np.array([10**(-8)])  #Define the tolerance the code will run with when running Newton-Rhapson
@@ -59,7 +67,7 @@ direct_export_path='/Users/joshuaprince/Northeastern University/Jones SEEL Team 
 null = csv_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_path)
 
 # %% Report Generator: Exports Plots as Word Document to Seperate Directory (see file N2_report_generator.py)
-report=plot_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_path)
+report=plot_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_path,new_count_number)
 
 # %% Stop Timer
 #End timer
@@ -70,7 +78,7 @@ print('Total time is {} sec'.format(total_time))
 #%% To export report, turn on this code block
 #Finish Report
 para5=report.add_paragraph(f'Time to Run (sec): {total_time}     ')
-report_filename_partial=f'N2_report.docx'
+report_filename_partial=f'N2_report{new_count_number}.docx'
 report_filename_full=os.path.join(direct_export_path,report_filename_partial)
 report.save(report_filename_full)
 
