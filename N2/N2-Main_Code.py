@@ -34,7 +34,7 @@ from N2_report_generator import *
 t_start=time.time()
 
 # %%Inputs Code Block
-h=np.array([0.00005]) #Define timesteps to test
+h=np.array([0.00001]) #Define timesteps to test
 tol=np.array([10**(-8)])  #Define the tolerance the code will run with when running Newton-Rhapson
 t1=np.array([0]) #Define initialtime vector of values to test
 t2=np.array([2]) #Final Time
@@ -42,8 +42,8 @@ nx=np.array([100]) #Mesh size
 gam=np.array([0.1]) #Define dimenionless ratio of diffusivities to test
 beta=np.array([0]) #Define the dimensionless ratio of potentials to test
 F=np.array([100]) #Define the dimensionless forward reaction rate constant to test
-Re=np.array([1]) #Define the dimensionless reverse reaction rate constant to test
-n=np.array([0.8,0.9,1]) #Define the hill coeffecient to test
+Re=np.array([0]) #Define the dimensionless reverse reaction rate constant to test
+n=np.array([0.8]) #Define the hill coeffecient to test
 ci=10**(-8) #Define the inital concentration in the biofilm (Can't be zero, if one wants to be zero, set it to a very small number instead)
 
 
