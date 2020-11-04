@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Oct 29 21:55:18 2020
 
-@author: joshuaprince
-"""
+vn_RJ=1.1
 
 import numpy as np
 
@@ -43,4 +40,14 @@ def RJ(x,y,p):
             J[i,i+1]=F*y[i]**n+Re
         else:
             print('Uh oh')
-    return (R,J)
+    return (R,J,vn_RJ)
+
+"""
+Version 1.1
+
+Purpose: Code to return the values of the Residual vector and Jacobian matrix for use in method of lines. Equations can be found in N2.0 documentation
+
+Created on Thu Oct 29 21:55:18 2020
+
+@author: joshuaprince
+"""

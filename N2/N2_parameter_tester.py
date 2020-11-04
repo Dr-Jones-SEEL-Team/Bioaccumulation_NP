@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Sat Oct 31 17:32:29 2020
 
-@author: joshuaprince
-"""
+vn_parameter_tester=1.1
+
 import numpy as np
 from N2_method_of_lines import *
 
@@ -37,7 +35,7 @@ def parameter_checker(parameter_matrix,ci): #unpack paramteres and test
         y=y+10**(-8) #Make starting values not exactly equal to zero (divide by zero erros pop up)
         p=[gam,beta,F,Re,n] #dimensionless parameter matrix
         #Run calculation for parameters of interest
-        [c,whoops]=method_of_lines(t,x,y,h,p,tol) #Find the concntration profiles in space and time using Method of Lines (MOL)
+        [c,whoops,vn_method_of_lines,vn_RJ]=method_of_lines(t,x,y,h,p,tol) #Find the concntration profiles in space and time using Method of Lines (MOL)
         print('you whoopsed {} many times'.format(whoops))
         
         #Unpack the data
@@ -81,4 +79,15 @@ def parameter_checker(parameter_matrix,ci): #unpack paramteres and test
         c_set[i][5]=tchange_in_concentration
         
             
-    return c_set
+    return [c_set,vn_parameter_tester,vn_method_of_lines,vn_RJ]
+
+
+"""
+Purpose: Script for running through each parameter combination and passing to method of lines vector. Then unpacks the results into usable numpy arrays for unbound and bound concentrations
+
+Version 1.1
+
+Created on Sat Oct 31 17:32:29 2020
+
+@author: joshuaprince
+"""

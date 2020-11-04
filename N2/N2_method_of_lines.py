@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Sat Oct 31 17:25:29 2020
 
-@author: joshuaprince
-"""
+vn_method_of_lines=1.1
 
 import numpy as np
 import scipy as sp
@@ -22,40 +19,30 @@ def method_of_lines(t,x,y,h,p,tol):
         else:
             yold=yw #update the old y-value
             yw[0]=1 #hardcode in boundary condition
-            out=RJ(x,yw,p); #Calculate Residual and Jacobian from new y value
-            R=out[0] #Grab the Residual
-            J=out[1] #Grab the Jacobian
-            #print('This is the residual')
-            #print(R)
+            [R,J,vn_RJ]=RJ(x,yw,p); #Calculate Residual and Jacobian from new y value
             R=yw-yold-h*R
             k=0
             while np.linalg.norm(R)>tol :
                 k=k+1
                 J=np.eye(len(yw))-h*J; #Calculate new Jacobian from new y
-                #print('This is the Jacobian and the determinant')
-                #print(J)
-                #print(np.linalg.det(J))
                 J=sp.sparse.csc_matrix(J)
                 dif=-sp.sparse.linalg.spsolve(J,R) #Apply built in sparse Linear solver to find delta from J and R
-                #dif=-np.linalg.solve(J,R)  #Regular Solver. Just keeping it in there in case the sparse solver isn't working for some reason
-                #print('This is delta')
-                #print(dif)
-                #This section is to determine if the differecne will make the working y outside the domain, and apply a different change
-                #ywc=yw+dif
-                
-                #This is the working area
                 yw=yw+dif ; #Update y
-                #print('This is the new y')
-                #print(yw)
-                out=RJ(x,yw,p); #Calculate Residual and Jacobian from new y value
-                R=out[0] #Grab the Residual
-                #print('This is the residual')
-                #print(R)
-                J=out[1] #Grab the Jacobian
+                [R,J,nv_RJ]=RJ(x,yw,p); #Calculate Residual and Jacobian from new y value
                 R=yw-yold-h*R ; #Update Residual
                 if k>100:
                     print('Whoops')
                     whoops=whoops+1
                     break
             y[:,i]=yw
-    return (y,whoops)
+    return (y,whoops,vn_method_of_lines,vn_RJ)
+
+"""
+Purpose: Script for running method of lines to solve the equations for the model
+
+Version 1.1
+
+Created on Sat Oct 31 17:25:29 2020
+
+@author: joshuaprince
+"""

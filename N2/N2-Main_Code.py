@@ -1,21 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Jun 16 16:13:07 2020
 
-@author: joshuaprince
-"""
-
-
-#Inputs Code Block
-"""
-This cell take in the inputs to this code. This does so by:
-1a) takes in the user-specified dimensional values for the code, or 
-1b) takes in user-specified dimensionless numbers then
-2) defines the relevant inputs and outputs which go to the heart of the code 
-
-This is the primary code one should be modifying when testing different physical systems for the model
-"""
+# %% Code Version Numbers
+vn_N2=1.6 #See meta-data at bottom for details
+vn_Main_Code=1.4 #See meta-data fro details
 
 from IPython import get_ipython
 get_ipython().magic('reset -sf')
@@ -43,31 +31,31 @@ counter_file.write(new_count_number)
 counter_file.close()
 
 # %%Inputs Code Block
-h=np.array([0.02]) #Define timesteps to test
+h=np.array([0.00001]) #Define timesteps to test
 tol=np.array([10**(-8)])  #Define the tolerance the code will run with when running Newton-Rhapson
 t1=np.array([0]) #Define initialtime vector of values to test
-t2=np.array([5]) #Final Time
+t2=np.array([0.01]) #Final Time
 nx=np.array([50]) #Mesh size
 gam=np.array([1]) #Define dimenionless ratio of diffusivities to test
-beta=np.array([1]) #Define the dimensionless ratio of potentials to test
+beta=np.array([0]) #Define the dimensionless ratio of potentials to test
 F=np.array([1]) #Define the dimensionless forward reaction rate constant to test
 Re=np.array([1]) #Define the dimensionless reverse reaction rate constant to test
-n=np.array([0.9]) #Define the hill coeffecient to test
+n=np.array([0.5]) #Define the hill coeffecient to test
 ci=10**(-8) #Define the inital concentration in the biofilm (Can't be zero, if one wants to be zero, set it to a very small number instead)
 
 
 # %% Generate Parameter Matrix for Testing
-[parameter_matrix,parameter_combos_count]=parameter_matrix_generator(h,tol,t1,t2,nx,gam,beta,F,Re,n)
+[parameter_matrix,parameter_combos_count,vn_parameter_matrix_generator]=parameter_matrix_generator(h,tol,t1,t2,nx,gam,beta,F,Re,n)
                     
 # %% Run parameters through numerical model (Heart of the Code)               
-c_set = parameter_checker(parameter_matrix,ci) #output the set of concentration over time and space results for each set of parameters tested
+[c_set,vn_parameter_checker,vn_method_of_lines,vn_RJ] = parameter_checker(parameter_matrix,ci) #output the set of concentration over time and space results for each set of parameters tested
 
 # %% Export results to csv files
 direct_export_path='/Users/joshuaprince/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Direct Exports' #Direct Export path for Files, used for actual script outputs
-null = csv_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_path)
+vn_csv_generator = csv_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_path,new_count_number)
 
 # %% Report Generator: Exports Plots as Word Document to Seperate Directory (see file N2_report_generator.py)
-report=plot_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_path,new_count_number)
+report=plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N2,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ)
 
 # %% Stop Timer
 #End timer
@@ -81,6 +69,52 @@ para5=report.add_paragraph(f'Time to Run (sec): {total_time}     ')
 report_filename_partial=f'N2_report{new_count_number}.docx'
 report_filename_full=os.path.join(direct_export_path,report_filename_partial)
 report.save(report_filename_full)
+
+"""
+Created on Tue Jun 16 16:13:07 2020
+
+@author: joshuaprince
+
+This cell take in the inputs to this code. This does so by:
+1a) takes in the user-specified dimensional values for the code, or 
+1b) takes in user-specified dimensionless numbers then
+2) defines the relevant inputs and outputs which go to the heart of the code 
+
+This is the primary code one should be modifying when testing different physical systems for the model
+
+Overall N2.1 Computer Model Meta-data
+Version 1.6
+
+Changes from version 1.5 to 1.6 (11/3/2020 4:35 pm):
+    Added version number tracker for all scripts
+
+Changes from  version 1.4 and 1.5 (11/3/2020 8:15 am):
+    In report_generator, added plot close functionalities for all plots (python was complaining about holding so many plots in memory)
+
+Changes from version 1.4 to 1.3: (11/3/2020 8:00 am)
+    Main_code and report_generator were changed so that the unbound animation isn't a direct export, but an internal export, since it is now included in the report.
+    
+Changes from version 1.3 to 1.2: (11/3/2020 7:50 am)
+    Main_Code.py and csv_generator were changed so that when csv files with data were exported, they are labelled with run number so data isn't overridden everytime model is run
+
+
+
+Main_Code File Meta-data
+Version 1.4
+
+Changes from Version 1.3 to 1.4 (11/3/2020 9:00 am):
+    Added Version number tracker for all scripts
+    Line 5, 6: Added new manual entry variable which tracks version number for overall N2 model and Main_Code
+    
+
+Changes from Version 1.2 to Version 1.3 (11/3/2020 8:00 am):
+    Changed animated gif from direct exporting to internal exporting
+    Line 90: direct_export_path variable removed from function call
+
+Changes from version 1.2 to version 1.1 (11/3/2020 7:45 am):
+    Added run number labeling for csv-data exports so data isn't so easily lost
+    Line 88: variable "new_count_number" was added to function pass
+"""
 
 
 

@@ -1,11 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Sat Oct 31 18:13:53 2020
 
-@author: joshuaprince
-"""
-
+vn_report_generator=1.6
 
 import os
 import numpy as np
@@ -16,7 +12,7 @@ from datetime import datetime
 import matplotlib.animation as anim
 from matplotlib.animation import FuncAnimation
 
-def plot_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_path,new_count_number):
+def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N2,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ):
     """Static Plotting (Exported to Word Document)"""
     internal_export_path='/Users/joshuaprince/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Internal Exports' #Indirect Export path for Files, used for outputs which only get using internally
     report=docx.Document()
@@ -25,6 +21,14 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_p
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     date_time_line=report.add_paragraph('Date and Time Report Generated:  ')
     date_time_line.add_run(dt_string)
+    report.add_paragraph(f'N2 version: {vn_N2}')
+    report.add_paragraph(f'Main Code version: {vn_Main_Code}')
+    report.add_paragraph(f'Parameter Matrix Generator version: {vn_parameter_matrix_generator}')
+    report.add_paragraph(f'Parameter Checker version: {vn_parameter_checker}')
+    report.add_paragraph(f'CSV Generator version: {vn_csv_generator}')
+    report.add_paragraph(f'Method of Lines version: {vn_method_of_lines}')
+    report.add_paragraph(f'Residual-Jacobian Calculator version: {vn_RJ}')
+    report.add_paragraph(f'Report Generator version: {vn_report_generator}')
     style=report.styles['Normal']
     font=style.font
     font.name='Arial'
@@ -66,19 +70,22 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_p
         upper_4 = np.amax(cb)*1.1 #Upper bound on Bound Concentration
         upper_5 = np.amax(taverage_conc_overtime)*1.1 #Upper Bound on Average total Concentration
         upper_6 = np.amax(tchange_in_concentration)*1.1 #Upper Bound on total Change in Average Concentration
-        upper_7 = np.amax(logtavg_conc_overtime) #Upper bound on log of total average NP conc
-        upper_8 = np.amax(logtchange_conc) #Upper bound on log of total change in conc
-        
+        upper_7 = np.amax(logtavg_conc_overtime)*1.1 #Upper bound on log of total average NP conc
+        upper_8 = np.amax(logtchange_conc)*1.1 #Upper bound on log of total change in conc
+        lower_7 = np.amin(logtavg_conc_overtime)*1.1 #Lower bound on log of total average NP conc
+        lower_8 = np.amin(logtavg_conc_overtime)*1.1 #Upper bound on log of total change in conc
         
         #Unbound
         #tindex_u=np.array([0,5,10,25,50,75,100,125,150,200,250]) for masnual control over timepoints plotted
         tp_u=10 #number of time points to plot
-        space_u=int((nt-1)/tp_u)
-        tindex_u=np.arange(0,nt,space_u)
+        lognt_u=np.log(nt)
+        logspace_u=round((lognt_u)/tp_u,-3)
+        logtindex_u=np.arange(0,lognt_u,logspace_u)
         plt.figure(7*pc_i+0)
-        for i_u in tindex_u:
+        for logi_u in logtindex_u:
+            i_u=int(10**logi_u)
             cc_u=cu[:,i_u]
-            ti_u=round(t[i_u],4)
+            ti_u=round(t[i_u],5)
             plt.plot(x,cc_u,label='t={}'.format(ti_u))
         plt.xlim(left=0,right=1)
         plt.ylim(bottom=0,top=upper_1)
@@ -91,6 +98,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_p
         unbound_filename_partial=f'Unboundplot{pc_i}.png'
         unbound_filename_full=os.path.join(internal_export_path,unbound_filename_partial)
         plt.savefig(unbound_filename_full)
+        plt.close()
        
         
         #Bound
@@ -100,7 +108,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_p
         plt.figure(7*pc_i+1)
         for i_b in tindex_b:
             cc_b=cb[:,i_b]
-            ti_b=round(t[i_b],1)
+            ti_b=round(t[i_b],5)
             plt.plot(x,cc_b,label='t={}'.format(ti_b))
         plt.xlim(left=0,right=1)
         plt.ylim(bottom=0,top=upper_4)
@@ -113,6 +121,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_p
         bound_filename_partial=f'Boundplot{pc_i}.png'
         bound_filename_full=os.path.join(internal_export_path,bound_filename_partial)
         plt.savefig(bound_filename_full)
+        plt.close()
         pics_paragraph1=report.add_paragraph()
         pic1=pics_paragraph1.add_run()
         pic1.add_picture(unbound_filename_full, width=docx.shared.Inches(3))
@@ -132,6 +141,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_p
         avgunbound_filename_partial=f'Avg Unboundplot{pc_i}.png'
         avgunbound_filename_full=os.path.join(internal_export_path,avgunbound_filename_partial)
         plt.savefig(avgunbound_filename_full)
+        plt.close()
         
         #Unbound NP Change in Concentration vs Concentration
         plt.figure(7*pc_i+3)
@@ -146,6 +156,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_p
         dCunbound_filename_partial=f'dC Unboundplot{pc_i}.png'
         dCunbound_filename_full=os.path.join(internal_export_path,dCunbound_filename_partial)
         plt.savefig(dCunbound_filename_full)
+        plt.close()
         pics_paragraph2=report.add_paragraph()
         pic3=pics_paragraph2.add_run()
         pic3.add_picture(avgunbound_filename_full, width=docx.shared.Inches(3))
@@ -165,6 +176,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_p
         avgtotalNP_filename_partial=f'Avg totolNPplot{pc_i}.png'
         avgtotalNP_filename_full=os.path.join(internal_export_path,avgtotalNP_filename_partial)
         plt.savefig(avgtotalNP_filename_full)
+        plt.close()
         
         #Total NP Change in Concentration vs Concentration
         plt.figure(7*pc_i+5)
@@ -179,6 +191,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_p
         dCtotalNP_filename_partial=f'dC totolNPplot{pc_i}.png'
         dCtotalNP_filename_full=os.path.join(internal_export_path,dCtotalNP_filename_partial)
         plt.savefig(dCtotalNP_filename_full)
+        plt.close()
         pics_paragraph3=report.add_paragraph()
         pic5=pics_paragraph3.add_run()
         pic5.add_picture(avgtotalNP_filename_full, width=docx.shared.Inches(3))
@@ -188,8 +201,8 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_p
         #Logarithms of Total NP Change in Concentration vs Concentration
         plt.figure(7*pc_i+6)
         plt.plot(logtavg_conc_overtime,logtchange_conc)
-        plt.xlim(left=0,right=upper_7)
-        plt.ylim(bottom=0,top=upper_8) 
+        plt.xlim(left=lower_7,right=upper_7)
+        plt.ylim(bottom=lower_8,top=upper_8) 
         plt.xlabel('Log of Dimensionless Concentration',fontsize=14)
         plt.ylabel('Log of Dimensionless Change in Concentration',fontsize=14)
         plt.title('Total log(dC) vs log(C) plot',fontsize=16)
@@ -198,6 +211,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_p
         logdCtotalNP_filename_partial=f'logdC totolNPplot{pc_i}.png'
         logdCtotalNP_filename_full=os.path.join(internal_export_path,logdCtotalNP_filename_partial)
         plt.savefig(logdCtotalNP_filename_full)
+        plt.close()
         pics_paragraph4=report.add_paragraph()
         pic7=pics_paragraph4.add_run()
         pic7.add_picture(logdCtotalNP_filename_full, width=docx.shared.Inches(3))
@@ -221,9 +235,36 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_p
             unbound_anim_holder.set_data((x,c_u_plot))
         unbound_anim=anim.FuncAnimation(unbound_anim_fig,unbound_animate,frames=tp_u_anim,interval=100)
         unbound_anim_filename_partial=f'unboun_anim{pc_i}.gif'
-        unbound_anim_filename_full=os.path.join(direct_export_path,unbound_anim_filename_partial)
+        unbound_anim_filename_full=os.path.join(internal_export_path,unbound_anim_filename_partial)
         unbound_anim.save(unbound_anim_filename_full)
         pic7.add_picture(unbound_anim_filename_full, width=docx.shared.Inches(3))
-        
-    
     return report
+
+
+"""
+Created on Sat Oct 31 18:13:53 2020
+
+@author: joshuaprince
+
+Purpose: Script to auto-generate report from data, including plotting of key figures and generation of an animated plot
+
+Version 1.6
+
+Changes from 1.5 to 1.6 (11/3/2020 5:25 pm):
+    -going from linear discretization of time points to plot to logarthmic discretization
+
+Differences between version 1.4 and 1.5 (11/3/2020 4:35 pm):
+    -Added version number to script, along with reporting versions for each script
+
+Differences between version 1.3 and 1.4 (11/3/2020 8:15 am):
+    -Added plot close functionalities for all plots (python was complaining about holding so many plots in memory)
+    -Lines 109, 132, 152, 167, 187, 202, 222: Added plt.close() 
+
+Differences between 1.2 and 1.3 (11/3/2020 8:00 am)
+-Changed file-path of animated unbound gif from direct export folder to internal export folder, since it is now incorporated into report
+-Line 28: Got rid of direct_export_path from function call (no longer needed)
+-Line 235: Changed "direct_export_path" to "internal_export_path"
+
+Differences between 1.1 and 1.2
+-Added lower bound calculations (needed for log plot), incorporated into log plotting
+"""
