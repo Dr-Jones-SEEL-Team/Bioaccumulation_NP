@@ -23,7 +23,7 @@ def csv_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_pa
         cu_data_filename_partial=f'unbounddata{pc_i}_{new_count_number}.csv'
         cu_data_filename_full=os.path.join(direct_export_path,cu_data_filename_partial)
         cb_data.to_csv(cb_data_filename_full) #Export bound dataframe as csv
-        cu_data.to_csv(cu_data_filename_full) #Export bound dataframe as csv
+        cu_data.to_csv(cu_data_filename_full) #Export unbound dataframe as csv
     return vn_csv_generator
 
 

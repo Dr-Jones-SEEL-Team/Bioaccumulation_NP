@@ -78,15 +78,26 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         #Unbound
         #tindex_u=np.array([0,5,10,25,50,75,100,125,150,200,250]) for masnual control over timepoints plotted
         tp_u=10 #number of time points to plot
-        lognt_u=np.log(nt)
-        logspace_u=round((lognt_u)/tp_u,-3)
-        logtindex_u=np.arange(0,lognt_u,logspace_u)
+        """
+        #Linear discretization of plotted timepionts
+        #space_u=int((nt-1)/tp_u) #Linear discreitzation of timepoints
+        #tindex_b=np.arange(0,nt,space_u) #Linear discreitization of timepoints
+        for i_u in tindex_u:
+            cc_u=cu[:,i_u]
+            ti_u=round(t[i_u],5)
+            plt.plot(x,cc_u,label='t={}'.format(ti_u))
+        """
+        #Logarthmic discreitzation of plotted timepoints
+        lognt_u=np.log10(nt) #Logarthmic timepoints
+        logspace_u=round((lognt_u)/tp_u,3) #Logarthmic timepoints
+        logtindex_u=np.arange(0,lognt_u,logspace_u) #Logarthmic timepoints
         plt.figure(7*pc_i+0)
         for logi_u in logtindex_u:
             i_u=int(10**logi_u)
             cc_u=cu[:,i_u]
             ti_u=round(t[i_u],5)
             plt.plot(x,cc_u,label='t={}'.format(ti_u))
+        
         plt.xlim(left=0,right=1)
         plt.ylim(bottom=0,top=upper_1)
         plt.xlabel('Position',fontsize=14)
@@ -103,13 +114,27 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         
         #Bound
         tp_b=10 #number of time points to plot
-        space_b=int((nt-1)/tp_b)
-        tindex_b=np.arange(0,nt,space_b)
-        plt.figure(7*pc_i+1)
+        """
+        #Linear discretization of plotted timepionts
+        #space_b=int((nt-1)/tp_b) #Linear discreitzation of timepoints
+        #tindex_b=np.arange(0,nt,space_b) #Linear discreitzation of timepoints
         for i_b in tindex_b:
             cc_b=cb[:,i_b]
             ti_b=round(t[i_b],5)
             plt.plot(x,cc_b,label='t={}'.format(ti_b))
+        """
+        
+        #Logarthmic discreitzation of plotted timepoints
+        lognt_b=np.log10(nt) #Logarthmic timepoints
+        logspace_b=round((lognt_b)/tp_b,3) #Logarthmic timepoints
+        logtindex_b=np.arange(0,lognt_b,logspace_b) #Logarthmic timepoints
+        plt.figure(7*pc_i+1)
+        for logi_b in logtindex_b:
+            i_b=int(10**logi_b)
+            cc_b=cb[:,i_b]
+            ti_b=round(t[i_b],5)
+            plt.plot(x,cc_b,label='t={}'.format(ti_b))
+            
         plt.xlim(left=0,right=1)
         plt.ylim(bottom=0,top=upper_4)
         plt.xlabel('Position',fontsize=14)
@@ -132,6 +157,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         plt.figure(7*pc_i+2)
         plt.plot(t,average_conc_overtime)
         plt.xlim(left=parameter_matrix[pc_i,2],right=parameter_matrix[pc_i,3])
+        #plt.xlim(left=0,right=0.0005) #Manual Override of automatic x-axis limits
         plt.ylim(bottom=0,top=upper_2)
         plt.xlabel('Time',fontsize=14)
         plt.ylabel('Dimensionless Concentration',fontsize=14)
@@ -167,6 +193,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         plt.figure(7*pc_i+4)
         plt.plot(t,taverage_conc_overtime)
         plt.xlim(left=parameter_matrix[pc_i,2],right=parameter_matrix[pc_i,3])
+        #plt.xlim(left=0,right=0.0005) #Manual Override of automatic x-axis limits
         plt.ylim(bottom=0,top=upper_5)
         plt.xlabel('Time',fontsize=14)
         plt.ylabel('Dimensionless Concentration',fontsize=14)
