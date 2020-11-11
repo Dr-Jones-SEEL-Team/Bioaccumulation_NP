@@ -43,8 +43,8 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         taverage_conc_overtime=c_set[pc_i][4] #Grab current change in concentration data to plot (total NP)
         tchange_in_concentration=c_set[pc_i][5] #Grab current change in concentration data to plot (Unbound NP)
         npaverage_conc_overtime=np.array(taverage_conc_overtime) #Convert taverage_conc_overtime array into np.array
-        logtavg_conc_overtime=np.log(npaverage_conc_overtime)  #Logarithm taverage change in concentration overtime
-        nptchange_conc=np.log(tchange_in_concentration) #total change in concentration array conerted to numpy array
+        logtavg_conc_overtime=np.log10(npaverage_conc_overtime)  #Logarithm taverage change in concentration overtime
+        nptchange_conc=np.log10(tchange_in_concentration) #total change in concentration array conerted to numpy array
         logtchange_conc=np.array(nptchange_conc) #Convert average_conc_overtime array into np.array
         t=c_set[pc_i][6] #Grab time-vector for this parameter set for plotting
         nt=c_set[pc_i][7] #Grab number of time points for this parameter set for plotting
