@@ -18,6 +18,7 @@ from N2_parameter_tester import *
 from N2_parameter_matrix import *
 from N2_report_generator import *
 from N2_csv_generator import *
+from N2_linear_fitting import *
 
 # %% Start Timer
 t_start=time.time()
@@ -31,16 +32,16 @@ counter_file.write(new_count_number)
 counter_file.close()
 
 # %%Inputs Code Block
-h=np.array([0.0000001]) #Define timesteps to test
+h=np.array([0.001]) #Define timesteps to test
 tol=np.array([10**(-8)])  #Define the tolerance the code will run with when running Newton-Rhapson
 t1=np.array([0]) #Define initialtime vector of values to test
-t2=np.array([0.1]) #Final Time
-nx=np.array([100]) #Mesh size
+t2=np.array([5]) #Final Time
+nx=np.array([200]) #Mesh size
 gam=np.array([0.1]) #Define dimenionless ratio of diffusivities to test
 beta=np.array([0]) #Define the dimensionless ratio of potentials to test
-F=np.array([10]) #Define the dimensionless forward reaction rate constant to test
-Re=np.array([1]) #Define the dimensionless reverse reaction rate constant to test
-n=np.array([0.6]) #Define the hill coeffecient to test
+F=np.array([0.01,0.1,1,10,100]) #Define the dimensionless forward reaction rate constant to test
+Re=np.array([0.0001]) #Define the dimensionless reverse reaction rate constant to test
+n=np.array([0.8]) #Define the hill coeffecient to test
 ci=10**(-10) #Define the inital concentration in the biofilm (Can't be zero, if one wants to be zero, set it to a very small number instead)
 
 
@@ -54,8 +55,11 @@ ci=10**(-10) #Define the inital concentration in the biofilm (Can't be zero, if 
 direct_export_path='/Users/joshuaprince/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Direct Exports' #Direct Export path for Files, used for actual script outputs
 vn_csv_generator = csv_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_path,new_count_number)
 
+# %% Fit model to first order approximation, plot approximation, and determine fit of approximation
+[perc_acc_matrix,vn_linear_fitting]=linear_fit(c_set,parameter_combos_count,parameter_matrix)
+
 # %% Report Generator: Exports Plots as Word Document to Seperate Directory (see file N2_report_generator.py)
-report=plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N2,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ)
+report=plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N2,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,perc_acc_matrix,vn_linear_fitting)
 
 # %% Stop Timer
 #End timer
@@ -75,15 +79,11 @@ Created on Tue Jun 16 16:13:07 2020
 
 @author: joshuaprince
 
-This cell take in the inputs to this code. This does so by:
-1a) takes in the user-specified dimensional values for the code, or 
-1b) takes in user-specified dimensionless numbers then
-2) defines the relevant inputs and outputs which go to the heart of the code 
-
-This is the primary code one should be modifying when testing different physical systems for the model
-
 Overall N2.1 Computer Model Meta-data
-Version 1.6
+Version 1.7
+
+Changes from version 1.6 to 1.7 (11/11/2020 9;00 pm):
+    Added linear fits functions, along with neccesary report plotting
 
 Changes from version 1.5 to 1.6 (11/3/2020 4:35 pm):
     Added version number tracker for all scripts
@@ -100,7 +100,10 @@ Changes from version 1.3 to 1.2: (11/3/2020 7:50 am)
 
 
 Main_Code File Meta-data
-Version 1.4
+Version 1.5
+
+Changes from Version 1.4 to 1.5 (11/11/2020 9:00 pm):
+    Added linear fit function
 
 Changes from Version 1.3 to 1.4 (11/3/2020 9:00 am):
     Added Version number tracker for all scripts

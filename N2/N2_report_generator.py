@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-vn_report_generator=1.6
+vn_report_generator=1.7
 
 import os
 import numpy as np
@@ -12,7 +12,7 @@ from datetime import datetime
 import matplotlib.animation as anim
 from matplotlib.animation import FuncAnimation
 
-def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N2,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ):
+def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N2,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,perc_acc_matrix,vn_linear_fitting):
     """Static Plotting (Exported to Word Document)"""
     internal_export_path='/Users/joshuaprince/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Internal Exports' #Indirect Export path for Files, used for outputs which only get using internally
     report=docx.Document()
@@ -29,6 +29,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
     report.add_paragraph(f'Method of Lines version: {vn_method_of_lines}')
     report.add_paragraph(f'Residual-Jacobian Calculator version: {vn_RJ}')
     report.add_paragraph(f'Report Generator version: {vn_report_generator}')
+    report.add_paragraph(f'Linear Approximator version: {vn_linear_fitting}')
     style=report.styles['Normal']
     font=style.font
     font.name='Arial'
@@ -41,7 +42,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         average_conc_overtime=c_set[pc_i][2] #Grab current average concentration data to plot (Unbound NP)
         change_in_concentration=c_set[pc_i][3] #Grab current change in concentration data to plot (Unbound NP)
         taverage_conc_overtime=c_set[pc_i][4] #Grab current change in concentration data to plot (total NP)
-        tchange_in_concentration=c_set[pc_i][5] #Grab current change in concentration data to plot (Unbound NP)
+        tchange_in_concentration=c_set[pc_i][5] #Grab current change in concentration data to plot (total NP)
         npaverage_conc_overtime=np.array(taverage_conc_overtime) #Convert taverage_conc_overtime array into np.array
         logtavg_conc_overtime=np.log10(npaverage_conc_overtime)  #Logarithm taverage change in concentration overtime
         nptchange_conc=np.log10(tchange_in_concentration) #total change in concentration array conerted to numpy array
@@ -63,7 +64,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         para4=report.add_paragraph(f'Hill coeffecient (n): {parameter_matrix[pc_i,9]}     ')
         para4.add_run(f'Tolerance: {parameter_matrix[pc_i,1]}')
         
-        #Find relelvant maximums and minimums
+        # %%Find relelvant maximums and minimums
         upper_1 = np.amax(cu)*1.1 #Upper bound on Unbound Concentration
         upper_2 = np.amax(average_conc_overtime)*1.1 #Upper Bound on Average Unbound Concentration
         upper_3 = np.amax(change_in_concentration)*1.1 #Upper Bound on Change in Average Concentration
@@ -75,7 +76,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         lower_7 = np.amin(logtavg_conc_overtime)*1.1 #Lower bound on log of total average NP conc
         lower_8 = np.amin(logtavg_conc_overtime)*1.1 #Upper bound on log of total change in conc
         
-        #Unbound
+        # %%Unbound
         #tindex_u=np.array([0,5,10,25,50,75,100,125,150,200,250]) for masnual control over timepoints plotted
         tp_u=10 #number of time points to plot
         """
@@ -112,7 +113,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         plt.close()
        
         
-        #Bound
+        # %%Bound
         tp_b=10 #number of time points to plot
         """
         #Linear discretization of plotted timepionts
@@ -153,7 +154,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         pic2=pics_paragraph1.add_run()
         pic2.add_picture(bound_filename_full, width=docx.shared.Inches(3))
         
-        #Unbound NP Average Concetration Overtime
+        # %%Unbound NP Average Concetration Overtime
         plt.figure(7*pc_i+2)
         plt.plot(t,average_conc_overtime)
         plt.xlim(left=parameter_matrix[pc_i,2],right=parameter_matrix[pc_i,3])
@@ -169,7 +170,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         plt.savefig(avgunbound_filename_full)
         plt.close()
         
-        #Unbound NP Change in Concentration vs Concentration
+        # %%Unbound NP Change in Concentration vs Concentration
         plt.figure(7*pc_i+3)
         plt.plot(average_conc_overtime,change_in_concentration)
         plt.xlim(left=0,right=upper_2)
@@ -189,7 +190,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         pic4=pics_paragraph2.add_run()
         pic4.add_picture(dCunbound_filename_full, width=docx.shared.Inches(3))
         
-        #Total NP Average Concetration Overtime
+        # %%Total NP Average Concetration Overtime
         plt.figure(7*pc_i+4)
         plt.plot(t,taverage_conc_overtime)
         plt.xlim(left=parameter_matrix[pc_i,2],right=parameter_matrix[pc_i,3])
@@ -205,7 +206,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         plt.savefig(avgtotalNP_filename_full)
         plt.close()
         
-        #Total NP Change in Concentration vs Concentration
+        # %%Total NP Change in Concentration vs Concentration
         plt.figure(7*pc_i+5)
         plt.plot(taverage_conc_overtime,tchange_in_concentration)
         plt.xlim(left=0,right=upper_5)
@@ -225,7 +226,9 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         pic6=pics_paragraph3.add_run()
         pic6.add_picture(dCtotalNP_filename_full, width=docx.shared.Inches(3))
         
-        #Logarithms of Total NP Change in Concentration vs Concentration
+        
+        
+        """# %%Logarithms of Total NP Change in Concentration vs Concentration
         plt.figure(7*pc_i+6)
         plt.plot(logtavg_conc_overtime,logtchange_conc)
         plt.xlim(left=lower_7,right=upper_7)
@@ -242,8 +245,8 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         pics_paragraph4=report.add_paragraph()
         pic7=pics_paragraph4.add_run()
         pic7.add_picture(logdCtotalNP_filename_full, width=docx.shared.Inches(3))
-        
-        #Unbound Concentration Animation
+        """
+        # %%Unbound Concentration Animation
         unbound_anim_fig=plt.figure()
         unbound_anim_plot=plt.plot([])
         unbound_anim_holder=unbound_anim_plot[0]
@@ -264,10 +267,87 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         unbound_anim_filename_partial=f'unboun_anim{pc_i}.gif'
         unbound_anim_filename_full=os.path.join(internal_export_path,unbound_anim_filename_partial)
         unbound_anim.save(unbound_anim_filename_full)
+        #Only need these lines if log plot is turned off
+        pics_paragraph4=report.add_paragraph()
+        pic7=pics_paragraph4.add_run()
+        #End of possibly neccesary lines
         pic7.add_picture(unbound_anim_filename_full, width=docx.shared.Inches(3))
+        
+        # %%Total NP Change in Concentration vs Concentration Animation
+        dCvC_anim_fig=plt.figure()
+        dCvC_anim_plot=plt.plot([])
+        dCvC_anim_holder=dCvC_anim_plot[0]
+        plt.xlim(left=0,right=upper_5)
+        plt.ylim(bottom=0,top=upper_6)
+        plt.xlabel('Concentration',fontsize=14)
+        plt.ylabel('Dimensionless Change in Concentration',fontsize=14)
+        plt.title('Total dC vs C plot',fontsize=16)
+        plt.xticks(fontsize=12)
+        plt.yticks(fontsize=12)
+        tp_dCvC_anim=100 #number of time points to plot for the animation for unbound concntration
+        space_dCvC_anim=int((nt-1)/tp_dCvC_anim) #space between timepoints    
+        def dCvC_animate(frame):
+            #update plot
+            dCvC_anim_holder.set_data((taverage_conc_overtime[0:frame*space_dCvC_anim],tchange_in_concentration[0:frame*space_dCvC_anim]))
+        dCvC_anim=anim.FuncAnimation(dCvC_anim_fig,dCvC_animate,frames=tp_dCvC_anim,interval=100)
+        dCvC_anim_filename_partial=f'dCvC_anim{pc_i}.gif'
+        dCvC_anim_filename_full=os.path.join(internal_export_path,dCvC_anim_filename_partial)
+        dCvC_anim.save(dCvC_anim_filename_full)
+        #pics_paragraph5=report.add_paragraph() commented out when no log plot
+        #pic8=pics_paragraph5.add_run()
+        pic7.add_picture(dCvC_anim_filename_full, width=docx.shared.Inches(3))
+        
+        # %%Total NP Concentration vs Time Animation
+        totCvt_anim_fig=plt.figure()
+        totCvt_anim_plot=plt.plot([])
+        totCvt_anim_holder=totCvt_anim_plot[0]
+        plt.xlim(left=parameter_matrix[pc_i,2],right=parameter_matrix[pc_i,3])
+        plt.ylim(bottom=0,top=upper_5)
+        plt.xlabel('Time',fontsize=14)
+        plt.ylabel('Dimensionless Concentration',fontsize=14)
+        plt.title('Average Dimensionless Total Concentration plot',fontsize=16)
+        plt.xticks(fontsize=12)
+        plt.yticks(fontsize=12)
+        tp_totCvt_anim=100 #number of time points to plot for the animation for unbound concntration
+        space_totCvt_anim=int((nt-1)/tp_totCvt_anim) #space between timepoints    
+        def totCvt_animate(frame):
+            #update plot
+            totCvt_anim_holder.set_data((t[0:frame*space_totCvt_anim],taverage_conc_overtime[0:frame*space_totCvt_anim]))
+        totCvt_anim=anim.FuncAnimation(totCvt_anim_fig,totCvt_animate,frames=tp_totCvt_anim,interval=100)
+        totCvt_anim_filename_partial=f'totCvt_anim{pc_i}.gif'
+        totCvt_anim_filename_full=os.path.join(internal_export_path,totCvt_anim_filename_partial)
+        totCvt_anim.save(totCvt_anim_filename_full)
+        pics_paragraph5=report.add_paragraph() #Added when log plot off
+        pic8=pics_paragraph5.add_run() #Added when log plot off
+        pic8.add_picture(totCvt_anim_filename_full, width=docx.shared.Inches(3))
+        
+        # %% Plot Approximation for Total NP conc Overtime
+        linear_filename_partial=f'Linearplot{pc_i}.png'
+        linear_filename_full=os.path.join(internal_export_path,linear_filename_partial)
+        #pics_paragraph6=report.add_paragraph() commented out  when log plots out
+        #pic9=pics_paragraph6.add_run() commented out  when log plots out
+        pic8.add_picture(linear_filename_full,width=docx.shared.Inches(3))
+        
+        # %% Add Table for Fit
+        perc_acc_table=perc_acc_matrix[pc_i][0]
+        [table_rows,table_columns]=perc_acc_table.shape
+        table1=report.add_table(rows=table_rows+1, cols=table_columns)
+        row=table1.rows[0]
+        row.cells[0].text='Percent Accumulated'
+        row.cells[1].text='Time for Model'
+        row.cells[2].text='Time for Approximation'
+        row.cells[3].text='Percent Error'
+        i_v = np.arange(0,table_rows,1) #index for rows of percent accumulation table
+        j_v = np.arange(0,table_columns,1) #inde for columns of percent accumulation table
+        for i in i_v:
+            for j in j_v:
+                cell=table1.cell(i+1,j)
+                cell.text=str(perc_acc_table[i,j])
+        
+        # %%
     return report
 
-
+# %%
 """
 Created on Sat Oct 31 18:13:53 2020
 
@@ -275,7 +355,11 @@ Created on Sat Oct 31 18:13:53 2020
 
 Purpose: Script to auto-generate report from data, including plotting of key figures and generation of an animated plot
 
-Version 1.6
+Version 1.7
+
+Changes from Version 1.6 to 1.7 (11/11/2020 5:15 pm):
+    -Plot the Approximation of file and print the table of fit
+    -Added animation for dC vs C plot and Total NP Concentration Overtime
 
 Changes from 1.5 to 1.6 (11/3/2020 5:25 pm):
     -going from linear discretization of time points to plot to logarthmic discretization
