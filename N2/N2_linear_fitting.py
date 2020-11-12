@@ -55,7 +55,7 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix):
         plt.savefig(linear_filename_full)
         
     # %% Determine fit of first-order approximation
-        percents=[0.4,0.5,0.7,0.8,0.9,0.95,0.97,0.99] #The percent bioaccumulated that will be checked 
+        percents=[0.1,0.5,0.9,0.95] #The percent bioaccumulated that will be checked 
         perc_acc_model=taverage_conc_overtime/Eq #convert concentration vectors to percent accumulated vectors
         perc_acc_approx=fit_conc/Eq 
         perc_acc_table=np.zeros((len(percents),4))
