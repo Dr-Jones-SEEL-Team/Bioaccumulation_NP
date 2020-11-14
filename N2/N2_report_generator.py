@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-vn_report_generator=1.7
+vn_report_generator=1.8
 
 import os
 import numpy as np
@@ -90,7 +90,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         """
         #Logarthmic discreitzation of plotted timepoints
         lognt_u=np.log10(nt) #Logarthmic timepoints
-        logspace_u=round((lognt_u)/tp_u,3) #Logarthmic timepoints
+        logspace_u=round((lognt_u)/tp_u,10) #Logarthmic timepoints
         logtindex_u=np.arange(0,lognt_u,logspace_u) #Logarthmic timepoints
         plt.figure(7*pc_i+0)
         for logi_u in logtindex_u:
@@ -127,7 +127,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         
         #Logarthmic discreitzation of plotted timepoints
         lognt_b=np.log10(nt) #Logarthmic timepoints
-        logspace_b=round((lognt_b)/tp_b,3) #Logarthmic timepoints
+        logspace_b=round((lognt_b)/tp_b,10) #Logarthmic timepoints
         logtindex_b=np.arange(0,lognt_b,logspace_b) #Logarthmic timepoints
         plt.figure(7*pc_i+1)
         for logi_b in logtindex_b:
@@ -169,8 +169,11 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         avgunbound_filename_full=os.path.join(internal_export_path,avgunbound_filename_partial)
         plt.savefig(avgunbound_filename_full)
         plt.close()
+        pics_paragraph2=report.add_paragraph()
+        pic3=pics_paragraph2.add_run()
+        pic3.add_picture(avgunbound_filename_full, width=docx.shared.Inches(3))
         
-        # %%Unbound NP Change in Concentration vs Concentration
+        """# %%Unbound NP Change in Concentration vs Concentration
         plt.figure(7*pc_i+3)
         plt.plot(average_conc_overtime,change_in_concentration)
         plt.xlim(left=0,right=upper_2)
@@ -189,7 +192,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         pic3.add_picture(avgunbound_filename_full, width=docx.shared.Inches(3))
         pic4=pics_paragraph2.add_run()
         pic4.add_picture(dCunbound_filename_full, width=docx.shared.Inches(3))
-        
+        """
         # %%Total NP Average Concetration Overtime
         plt.figure(7*pc_i+4)
         plt.plot(t,taverage_conc_overtime)
@@ -205,8 +208,10 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         avgtotalNP_filename_full=os.path.join(internal_export_path,avgtotalNP_filename_partial)
         plt.savefig(avgtotalNP_filename_full)
         plt.close()
+        pic4=pics_paragraph2.add_run()
+        pic4.add_picture(avgtotalNP_filename_full, width=docx.shared.Inches(3))
         
-        # %%Total NP Change in Concentration vs Concentration
+        """# %%Total NP Change in Concentration vs Concentration
         plt.figure(7*pc_i+5)
         plt.plot(taverage_conc_overtime,tchange_in_concentration)
         plt.xlim(left=0,right=upper_5)
@@ -225,7 +230,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         pic5.add_picture(avgtotalNP_filename_full, width=docx.shared.Inches(3))
         pic6=pics_paragraph3.add_run()
         pic6.add_picture(dCtotalNP_filename_full, width=docx.shared.Inches(3))
-        
+        """
         
         
         """# %%Logarithms of Total NP Change in Concentration vs Concentration
@@ -268,12 +273,13 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         unbound_anim_filename_full=os.path.join(internal_export_path,unbound_anim_filename_partial)
         unbound_anim.save(unbound_anim_filename_full)
         #Only need these lines if log plot is turned off
-        pics_paragraph4=report.add_paragraph()
-        pic7=pics_paragraph4.add_run()
+        pics_paragraph3=report.add_paragraph()
+        pic5=pics_paragraph3.add_run()
         #End of possibly neccesary lines
-        pic7.add_picture(unbound_anim_filename_full, width=docx.shared.Inches(3))
+        pic5.add_picture(unbound_anim_filename_full, width=docx.shared.Inches(3))
+        plt.close()
         
-        # %%Total NP Change in Concentration vs Concentration Animation
+        """# %%Total NP Change in Concentration vs Concentration Animation
         dCvC_anim_fig=plt.figure()
         dCvC_anim_plot=plt.plot([])
         dCvC_anim_holder=dCvC_anim_plot[0]
@@ -296,7 +302,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         #pics_paragraph5=report.add_paragraph() commented out when no log plot
         #pic8=pics_paragraph5.add_run()
         pic7.add_picture(dCvC_anim_filename_full, width=docx.shared.Inches(3))
-        
+        """
         # %%Total NP Concentration vs Time Animation
         totCvt_anim_fig=plt.figure()
         totCvt_anim_plot=plt.plot([])
@@ -317,16 +323,23 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         totCvt_anim_filename_partial=f'totCvt_anim{pc_i}.gif'
         totCvt_anim_filename_full=os.path.join(internal_export_path,totCvt_anim_filename_partial)
         totCvt_anim.save(totCvt_anim_filename_full)
-        pics_paragraph5=report.add_paragraph() #Added when log plot off
-        pic8=pics_paragraph5.add_run() #Added when log plot off
-        pic8.add_picture(totCvt_anim_filename_full, width=docx.shared.Inches(3))
+        #pics_paragraph5=report.add_paragraph() #Added when log plot off
+        pic6=pics_paragraph3.add_run() #Added when log plot off
+        pic6.add_picture(totCvt_anim_filename_full, width=docx.shared.Inches(3))
+        plt.close()
         
         # %% Plot Approximation for Total NP conc Overtime
         linear_filename_partial=f'Linearplot{pc_i}.png'
         linear_filename_full=os.path.join(internal_export_path,linear_filename_partial)
         #pics_paragraph6=report.add_paragraph() commented out  when log plots out
         #pic9=pics_paragraph6.add_run() commented out  when log plots out
-        pic8.add_picture(linear_filename_full,width=docx.shared.Inches(3))
+        pics_paragraph4=report.add_paragraph()
+        pic7=pics_paragraph4.add_run()
+        pic7.add_picture(linear_filename_full,width=docx.shared.Inches(3))
+        log_filename_partial=f'Logplot{pc_i}.png'
+        log_filename_full=os.path.join(internal_export_path,log_filename_partial)
+        pic8=pics_paragraph3.add_run() #Added when log plot off
+        pic8.add_picture(log_filename_full,width=docx.shared.Inches(3))
         
         # %% Add Table for Fit
         perc_acc_table=perc_acc_matrix[pc_i][0]
@@ -355,7 +368,9 @@ Created on Sat Oct 31 18:13:53 2020
 
 Purpose: Script to auto-generate report from data, including plotting of key figures and generation of an animated plot
 
-Version 1.7
+Version 1.8
+
+Changes from Version 1.7 to 1.8 (11/13/2020 2:30 am)
 
 Changes from Version 1.6 to 1.7 (11/11/2020 5:15 pm):
     -Plot the Approximation of file and print the table of fit
