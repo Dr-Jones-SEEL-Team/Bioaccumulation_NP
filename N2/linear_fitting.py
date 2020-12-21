@@ -13,7 +13,7 @@ Version 1.1
 
 Created on Wed Nov 11 10:19:35 2020
 
-@author: joshuaprince
+@author: joshuaprince (prince.j@northeastern.edu)
 """
 
 
