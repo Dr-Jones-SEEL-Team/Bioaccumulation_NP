@@ -36,7 +36,7 @@ counter_file.writelines([new_count_number, author_initials])
 counter_file.close()
 
 # %%Inputs Code Block
-h=np.array([5e-5]) #Define timesteps to test
+h=np.array([0.1]) #Define timesteps to test
 tol=np.array([10**(-8)])  #Define the tolerance the code will run with when running Newton-Rhapson
 t1=np.array([0]) #Define initialtime vector of values to test
 t2=np.array([2]) #Final Time
@@ -66,13 +66,13 @@ phio=(Do-Dmin)*eta/eps0/epsr/zeta #Characteristic potential  for transport [V]
 
 # %% Calculate Dimensionless Parameters
 """gam=np.array([Dmin/(Do-Dmin)]) #Define dimenionless ratio of diffusivities to test""" #hard-coding out proper line for debugging
-gam=np.array([1]) #Define dimenionless ratio of diffusivities to test
+gam=np.array([0.1]) #Define dimenionless ratio of diffusivities to test
 """beta=np.array([phim/phio]) #Define the dimensionless ratio of potentials to test""" #hard-coding out proper line for debugging
-beta=np.array([1]) #Define the dimensionless ratio of potentials to test
+beta=np.array([0]) #Define the dimensionless ratio of potentials to test
 """F=np.array([kf*ct*(Kp*co)**(n-1)*H**2/(Do-Dmin)]) #Define the dimensionless forward reaction rate constant to test""" #hard-coding out proper line for debugging
-F=np.array([1]) #Define the dimensionless forward reaction rate constant to test
+F=np.array([10]) #Define the dimensionless forward reaction rate constant to test
 """Re=np.array([kr*ct*H**2/(Do-Dmin)/Kp/co]) #Define the dimensionless reverse reaction rate constant to test""" #hard-coding out proper line for debugging
-Re=np.array([1]) #Define the dimensionless reverse reaction rate constant to test
+Re=np.array([0.11]) #Define the dimensionless reverse reaction rate constant to test
 n=np.array([n]) #Define hill coeffecient for binding
 
 
