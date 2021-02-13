@@ -3,8 +3,8 @@
 # -*- coding: utf-8 -*-
 
 # %% Code Version Numbers
-vn_N2=1.6 #See meta-data at bottom for details
-vn_Main_Code=1.4 #See meta-data fro details
+vn_N2=1.8 #See meta-data at bottom for details
+vn_Main_Code=1.5 #See meta-data fro details
 
 # %% Current Machine Running Code with neccesary adjustments
 machine_number=4 #Input the machine you are running this code on
