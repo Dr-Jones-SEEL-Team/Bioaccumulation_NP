@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""CURRENTLY UNDER CONSTRUCTION TO PRODUCE DIMENSIONALIZED RESULTS"""
+
 # %% Code Version Numbers
-vn_N2=1.6 #See meta-data at bottom for details
+vn_N2=1.7 #See meta-data at bottom for details
 vn_Main_Code=1.4 #See meta-data fro details
 
 from IPython import get_ipython
@@ -19,6 +21,7 @@ from N2_parameter_matrix import *
 from N2_report_generator import *
 from N2_csv_generator import *
 from N2_linear_fitting import *
+from N2_dim_analysis import *
 
 # %% Start Timer
 t_start=time.time()
@@ -32,17 +35,38 @@ counter_file.write(new_count_number)
 counter_file.close()
 
 # %%Inputs Code Block
-h=np.array([0.001]) #Define timesteps to test
+h=np.array([5e-5]) #Define timesteps to test
 tol=np.array([10**(-8)])  #Define the tolerance the code will run with when running Newton-Rhapson
 t1=np.array([0]) #Define initialtime vector of values to test
-t2=np.array([2.5]) #Final Time
-nx=np.array([200]) #Mesh size
-gam=np.array([0.1]) #Define dimenionless ratio of diffusivities to test
-beta=np.array([0]) #Define the dimensionless ratio of potentials to test
-F=np.array([10]) #Define the dimensionless forward reaction rate constant to test
-Re=np.array([0.001]) #Define the dimensionless reverse reaction rate constant to test
-n=np.array([0.8]) #Define the hill coeffecient to test
+t2=np.array([2]) #Final Time
+nx=np.array([100]) #Mesh size
 ci=10**(-10) #Define the inital concentration in the biofilm (Can't be zero, if one wants to be zero, set it to a very small number instead)
+Do= 10^-10 #Diffisivity of NP in the supernatant [m^2/s]
+Dmin=10^-11 #Diffusivity of NP in biofilm [m^2/s]
+zeta=-0.025 #Zeta potential [Volts, -25 mV] 
+H= 100*10^-6 #Biofilm thickness [m, 100 microns]
+kf= 1 #forward rate constant for binding kinetics [(m^3/s)*(m^3/kg)^(n-1)/(sites)]
+ct= 1 #total concentration of binding sites [sites/m^3]
+Kp= 1 #parition coeffeicent for NP across supernatant-biofilm interface [dimensionless]
+co= 1#Reverse bidning rate constant [1/s]
+phim= 1 #maximum potential in the biofilm [V]
+n= 0.85 #Hill coeffecient
+
+
+
+# %% Physical constants
+eta=0.001  #dyanmic viscosity of water [kg/m/s] (https://www.engineeringtoolbox.com/water-dynamic-kinematic-viscosity-d_596.html)
+eps0=8.85*10^-12 #Permeativity of free space [F/m] https://en.wikipedia.org/wiki/Vacuum_permittivity
+epsr=78.3 #Relative permittivity of water at 25 C [unitless] https://en.wikipedia.org/wiki/Vacuum_permittivity
+phio=(Do-Dmin)*eta/eps0/epsr/zeta #Characteristic potential  for transport [V]
+
+
+# %% Calculate Dimensionless Parameters
+gam=np.array([Dmin/(Do-Dmin)]) #Define dimenionless ratio of diffusivities to test
+beta=np.array([phim/phio]) #Define the dimensionless ratio of potentials to test
+F=np.array([kf*ct*(Kp*co)^(n-1)*H^2/(Do-Dmin)]) #Define the dimensionless forward reaction rate constant to test
+Re=np.array([kr*ct*H^2/(Do-Dmin)/Kp/co]) #Define the dimensionless reverse reaction rate constant to test
+n=np.array([n]) #Define hill coeffecient for binding
 
 
 # %% Generate Parameter Matrix for Testing
@@ -61,6 +85,9 @@ vn_csv_generator = csv_generator(c_set,parameter_combos_count,parameter_matrix,d
 # %% Report Generator: Exports Plots as Word Document to Seperate Directory (see file N2_report_generator.py)
 report=plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N2,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,perc_acc_matrix,vn_linear_fitting)
 
+# %% Dimensional Report Generator: converts data to dimensional form, generates pltos and generates report
+dim_report=dim_analysis(1)
+
 # %% Stop Timer
 #End timer
 t_end=time.time()
@@ -75,6 +102,7 @@ report_filename_full=os.path.join(direct_export_path,report_filename_partial)
 report.save(report_filename_full)
 
 """
+
 Created on Tue Jun 16 16:13:07 2020
 
 @author: joshuaprince
