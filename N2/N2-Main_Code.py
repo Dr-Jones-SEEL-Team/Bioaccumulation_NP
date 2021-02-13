@@ -27,11 +27,12 @@ from N2_dim_analysis import *
 t_start=time.time()
 
 # %% Determine what run number this is then update run number
+author_initials='JP'
 counter_file = open("counter_file.txt",'r+')
-old_count_number=int(counter_file.read())
+old_count_number=int(counter_file.readline(1))
 new_count_number=str(old_count_number+1)
 counter_file = open("counter_file.txt",'w')
-counter_file.write(new_count_number)
+counter_file.writelines([new_count_number, author_initials])
 counter_file.close()
 
 # %%Inputs Code Block
@@ -41,31 +42,37 @@ t1=np.array([0]) #Define initialtime vector of values to test
 t2=np.array([2]) #Final Time
 nx=np.array([100]) #Mesh size
 ci=10**(-10) #Define the inital concentration in the biofilm (Can't be zero, if one wants to be zero, set it to a very small number instead)
-Do= 10^-10 #Diffisivity of NP in the supernatant [m^2/s]
-Dmin=10^-11 #Diffusivity of NP in biofilm [m^2/s]
+Do= 10**-10 #Diffisivity of NP in the supernatant [m^2/s]
+Dmin=10**-11 #Diffusivity of NP in biofilm [m^2/s]
 zeta=-0.025 #Zeta potential [Volts, -25 mV] 
-H= 100*10^-6 #Biofilm thickness [m, 100 microns]
+H= 100*10**-6 #Biofilm thickness [m, 100 microns]
 kf= 1 #forward rate constant for binding kinetics [(m^3/s)*(m^3/kg)^(n-1)/(sites)]
 ct= 1 #total concentration of binding sites [sites/m^3]
-Kp= 1 #parition coeffeicent for NP across supernatant-biofilm interface [dimensionless]
-co= 1#Reverse bidning rate constant [1/s]
+Kp= 10 #parition coeffeicent for NP across supernatant-biofilm interface [dimensionless]
+co= 0.0001 #Concentration of nanoparticle in the supernatant [kg/m^3, 100 ug/L]
+kr= 1 #Reverse bidning rate constant [1/s]
 phim= 1 #maximum potential in the biofilm [V]
-n= 0.85 #Hill coeffecient
+n= 0.85 #Hill coeffecient [Dimensionless]
+dim_param=[Do, Dmin, zeta, h, kf, ct, Kp, co, kr, phim]
 
 
 
 # %% Physical constants
 eta=0.001  #dyanmic viscosity of water [kg/m/s] (https://www.engineeringtoolbox.com/water-dynamic-kinematic-viscosity-d_596.html)
-eps0=8.85*10^-12 #Permeativity of free space [F/m] https://en.wikipedia.org/wiki/Vacuum_permittivity
+eps0=8.85*10**-12 #Permeativity of free space [F/m] https://en.wikipedia.org/wiki/Vacuum_permittivity
 epsr=78.3 #Relative permittivity of water at 25 C [unitless] https://en.wikipedia.org/wiki/Vacuum_permittivity
 phio=(Do-Dmin)*eta/eps0/epsr/zeta #Characteristic potential  for transport [V]
 
 
 # %% Calculate Dimensionless Parameters
-gam=np.array([Dmin/(Do-Dmin)]) #Define dimenionless ratio of diffusivities to test
-beta=np.array([phim/phio]) #Define the dimensionless ratio of potentials to test
-F=np.array([kf*ct*(Kp*co)^(n-1)*H^2/(Do-Dmin)]) #Define the dimensionless forward reaction rate constant to test
-Re=np.array([kr*ct*H^2/(Do-Dmin)/Kp/co]) #Define the dimensionless reverse reaction rate constant to test
+"""gam=np.array([Dmin/(Do-Dmin)]) #Define dimenionless ratio of diffusivities to test""" #hard-coding out proper line for debugging
+gam=np.array([1]) #Define dimenionless ratio of diffusivities to test
+"""beta=np.array([phim/phio]) #Define the dimensionless ratio of potentials to test""" #hard-coding out proper line for debugging
+beta=np.array([1]) #Define the dimensionless ratio of potentials to test
+"""F=np.array([kf*ct*(Kp*co)**(n-1)*H**2/(Do-Dmin)]) #Define the dimensionless forward reaction rate constant to test""" #hard-coding out proper line for debugging
+F=np.array([1]) #Define the dimensionless forward reaction rate constant to test
+"""Re=np.array([kr*ct*H**2/(Do-Dmin)/Kp/co]) #Define the dimensionless reverse reaction rate constant to test""" #hard-coding out proper line for debugging
+Re=np.array([1]) #Define the dimensionless reverse reaction rate constant to test
 n=np.array([n]) #Define hill coeffecient for binding
 
 
@@ -82,11 +89,13 @@ vn_csv_generator = csv_generator(c_set,parameter_combos_count,parameter_matrix,d
 # %% Fit model to first order approximation, plot approximation, and determine fit of approximation
 [perc_acc_matrix,vn_linear_fitting]=linear_fit(c_set,parameter_combos_count,parameter_matrix)
 
+""" Dimensionless Report Generator commented Out whne running dimensional version"
 # %% Report Generator: Exports Plots as Word Document to Seperate Directory (see file N2_report_generator.py)
 report=plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N2,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,perc_acc_matrix,vn_linear_fitting)
+"""
 
 # %% Dimensional Report Generator: converts data to dimensional form, generates pltos and generates report
-dim_report=dim_analysis(1)
+report=dim_analysis(c_set,parameter_combos_count,parameter_matrix,dim_param,new_count_number,vn_N2,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,perc_acc_matrix,vn_linear_fitting)
 
 # %% Stop Timer
 #End timer
