@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-def linear_fit(c_set,parameter_combos_count,parameter_matrix):
+def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_path):
     
     # %% Calculate linear best fit, slope and intercept for each parameter set
     lin_fit=np.zeros((parameter_combos_count,2))#initialize matrix to store linear best fit parameters
@@ -75,7 +75,6 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix):
         plt.legend(loc=(0.5,0.3))
         plt.text(0.4,0.5,f'm={m}, b={b}')
         linear_filename_partial=f'Linearplot{pc_i}.png'
-        internal_export_path='/Users/joshuaprince/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Internal Exports' #Indirect Export path for Files, used for outputs which only get using internally
         linear_filename_full=os.path.join(internal_export_path,linear_filename_partial)
         plt.savefig(linear_filename_full)
         plt.close()
@@ -138,5 +137,4 @@ Created on Wed Nov 11 10:19:35 2020
 
 @author: joshuaprince (prince.j@northeastern.edu)
 """
-
 

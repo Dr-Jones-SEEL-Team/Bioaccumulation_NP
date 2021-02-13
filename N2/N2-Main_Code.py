@@ -7,6 +7,30 @@
 vn_N2=1.7 #See meta-data at bottom for details
 vn_Main_Code=1.4 #See meta-data fro details
 
+# %% Current Machine Running Code with neccesary adjustments
+machine_number=4 #Input the machine you are running this code on
+
+"""Machine codes:
+    Josh's mac- 1
+    Dan's personal machine- 2
+    Alexander von Humboldt - 3
+    Rachel Carson -4
+
+"""
+if machine_number == 1: #Code to assign the right export paths for each machine, since each is unique
+    direct_export_path='/Users/joshuaprince/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Direct Exports' 
+    internal_export_path='/Users/joshuaprince/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Internal Exports'
+elif machine_number == 2:
+    direct_export_path='Dan you will have ot fill this in yourself'
+    internal_export_path='fill it in'
+elif machine_number == 3: 
+    direct_export_path='Since you will mostly be using this, and the log-in you use changes this, you will have to set this'
+    internal_export_path='fill it in'
+elif machine_number == 4:
+    direct_export_path=r'C:\Users\prince.jo\Northeastern University\Jones SEEL Team - Bioremediation of Nanoparticles\Modelling Work\Model Results\N2\Direct Exports'
+    internal_export_path=r'C:\Users\prince.jo\Northeastern University\Jones SEEL Team - Bioremediation of Nanoparticles\Modelling Work\Model Results\N2\Internal Exports'    
+
+# %% I don't remember what this is for but I'm scared to delete it 
 from IPython import get_ipython
 get_ipython().magic('reset -sf')
 
@@ -21,18 +45,16 @@ from N2_parameter_matrix import *
 from N2_report_generator import *
 from N2_csv_generator import *
 from N2_linear_fitting import *
-from N2_dim_analysis import *
 
 # %% Start Timer
 t_start=time.time()
 
 # %% Determine what run number this is then update run number
-author_initials='JP'
-counter_file = open("counter_file.txt",'r+')
-old_count_number=int(counter_file.readline(1))
+counter_file = open(f"counter_file_{machine_number}.txt",'r+')
+old_count_number=int(counter_file.read())
 new_count_number=str(old_count_number+1)
-counter_file = open("counter_file.txt",'w')
-counter_file.writelines([new_count_number, author_initials])
+counter_file = open(f"counter_file_{machine_number}.txt",'w')
+counter_file.write(new_count_number)
 counter_file.close()
 
 # %%Inputs Code Block
@@ -72,7 +94,7 @@ beta=np.array([0]) #Define the dimensionless ratio of potentials to test
 """F=np.array([kf*ct*(Kp*co)**(n-1)*H**2/(Do-Dmin)]) #Define the dimensionless forward reaction rate constant to test""" #hard-coding out proper line for debugging
 F=np.array([10]) #Define the dimensionless forward reaction rate constant to test
 """Re=np.array([kr*ct*H**2/(Do-Dmin)/Kp/co]) #Define the dimensionless reverse reaction rate constant to test""" #hard-coding out proper line for debugging
-Re=np.array([0.11]) #Define the dimensionless reverse reaction rate constant to test
+Re=np.array([0.01]) #Define the dimensionless reverse reaction rate constant to test
 n=np.array([n]) #Define hill coeffecient for binding
 
 
@@ -83,7 +105,6 @@ n=np.array([n]) #Define hill coeffecient for binding
 [c_set,vn_parameter_checker,vn_method_of_lines,vn_RJ] = parameter_checker(parameter_matrix,ci) #output the set of concentration over time and space results for each set of parameters tested
 
 # %% Export results to csv files
-direct_export_path='/Users/joshuaprince/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Direct Exports' #Direct Export path for Files, used for actual script outputs
 vn_csv_generator = csv_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_path,new_count_number)
 
 # %% Fit model to first order approximation, plot approximation, and determine fit of approximation
@@ -106,7 +127,7 @@ print('Total time is {} sec'.format(total_time))
 #%% To export report, turn on this code block
 #Finish Report
 para5=report.add_paragraph(f'Time to Run (sec): {total_time}     ')
-report_filename_partial=f'N2_report{new_count_number}.docx'
+report_filename_partial=f'N2_report{new_count_number}-{machine_number}.docx'
 report_filename_full=os.path.join(direct_export_path,report_filename_partial)
 report.save(report_filename_full)
 

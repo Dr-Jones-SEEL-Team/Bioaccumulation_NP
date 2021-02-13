@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Feb 13 18:10:26 2021
+
+@author: -
+"""
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
@@ -12,15 +19,15 @@ from datetime import datetime
 import matplotlib.animation as anim
 from matplotlib.animation import FuncAnimation
 
-def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N2,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,perc_acc_matrix,vn_linear_fitting):
+def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N2,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,perc_acc_matrix,vn_linear_fitting,machine_number,internal_export_path):
     """Static Plotting (Exported to Word Document)"""
-    internal_export_path='/Users/joshuaprince/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Internal Exports' #Indirect Export path for Files, used for outputs which only get using internally
     report=docx.Document()
-    report.add_heading(f'Results from N2 Run #{new_count_number}',0)
+    report.add_heading(f'Results from N2 Run #{new_count_number}-{machine_number}',0)
     now = datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     date_time_line=report.add_paragraph('Date and Time Report Generated:  ')
     date_time_line.add_run(dt_string)
+    report.add_paragraph(f'Machine number ran on- {machine_number}')
     report.add_paragraph(f'N2 version: {vn_N2}')
     report.add_paragraph(f'Main Code version: {vn_Main_Code}')
     report.add_paragraph(f'Parameter Matrix Generator version: {vn_parameter_matrix_generator}')
