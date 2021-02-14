@@ -7,7 +7,7 @@ vn_N2=1.8 #See meta-data at bottom for details
 vn_Main_Code=1.5 #See meta-data fro details
 
 # %% Current Machine Running Code with neccesary adjustments
-machine_number=4 #Input the machine you are running this code on
+machine_number=2 #Input the machine you are running this code on
 
 """Machine codes:
     Josh's mac- 1
@@ -20,8 +20,8 @@ if machine_number == 1: #Code to assign the right export paths for each machine,
     direct_export_path='/Users/joshuaprince/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Direct Exports' 
     internal_export_path='/Users/joshuaprince/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Internal Exports'
 elif machine_number == 2:
-    direct_export_path='Dan you will have ot fill this in yourself'
-    internal_export_path='fill it in'
+    direct_export_path='C:/Users/dante/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Direct Exports'
+    internal_export_path='C:/Users/dante/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Internal Exports'
 elif machine_number == 3: 
     direct_export_path='Since you will mostly be using this, and the log-in you use changes this, you will have to set this'
     internal_export_path='fill it in'

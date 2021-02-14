@@ -54,6 +54,7 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
             fit_conc[count]=Eq-Eq*np.exp(m*t_i)
             fit_lognorm_avg[count]=m*t_i+b
             count=count+1
+        r_sq=np.corrcoef(fit_lognorm_avg,lognorm_tavg_conc)
             
         
     # %% Generate Plot and save    
@@ -92,6 +93,7 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
         plt.xticks(fontsize=12)
         plt.yticks(fontsize=12)
         plt.legend(loc=(0.5,0.75))
+        plt.text(0.3,-3.7,f'$R^2$={r_sq[0,1]}')
         log_filename_partial=f'Logplot{pc_i}.png'
         log_filename_full=os.path.join(internal_export_path,log_filename_partial)
         plt.savefig(log_filename_full)
@@ -126,15 +128,18 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
 
 
 """
-Purpose: Script to fit concentration data to first-order mass-transfer relation, plot this compared to the model results, and create a percent accumulated table to compare the two
-
-Version 1.2
-
-changes From Version 1 to 2 (11/13/2020 1:12 am):
-    -changing method of fitting. going from fitting the dC vs C plot to fitting log(normalized concentration) plot. 
-
 Created on Wed Nov 11 10:19:35 2020
 
 @author: joshuaprince (prince.j@northeastern.edu)
+
+Purpose: Script to fit concentration data to first-order mass-transfer relation, plot this compared to the model results, and create a percent accumulated table to compare the two
+
+Version 1.3
+
+changes From Version 1.2 (2/13/2021 7:40 pm):
+    -added R^2 value comparing 1st order fit and data on log(normalized concentration) plot.
+
+changes From Version 1.1 to 1.2 (11/13/2020 1:12 am):
+    -changing method of fitting. going from fitting the dC vs C plot to fitting log(normalized concentration) plot. 
 """
 
