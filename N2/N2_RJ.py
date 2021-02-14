@@ -22,22 +22,22 @@ def RJ(x,y,p):
             R[i]=y[i]-1
             J[i,i]=1;
         elif i%2==1 :
-            R[i]=F*y[i-1]**n*(1-y[i])-Re*y[i]
-            J[i,i]=-(F*y[i-1]**n+Re)
-            J[i,i-1]=n*F*y[i-1]**(n-1)*(1-y[i])
+            R[i]=F*y[i-1]**n*(1-y[i]/n)-Re*y[i]
+            J[i,i]=-(F*y[i-1]**n/n+Re)
+            J[i,i-1]=n*F*y[i-1]**(n-1)*(1-y[i]/n)
         elif i==ny:
             l=int(i/2)
-            R[i]=2*(y[i-2]-y[i])/dx**2*(1-x[l]**2+gam)-y[i]*(F*y[i]**(n-1)*(1-y[i+1])-2*beta)+Re*y[i+1]
-            J[i,i]=(-2/dx**2)*(1-x[l]**2+gam)-(n*F*y[i]**(n-1)*(1-y[i-1]-2*beta))
+            R[i]=2*(y[i-2]-y[i])/dx**2*(1-x[l]**2+gam)-y[i]*(F*y[i]**(n-1)*(1-y[i+1]/n)-2*beta)+Re*y[i+1]
+            J[i,i]=(-2/dx**2)*(1-x[l]**2+gam)-(n*F*y[i]**(n-1)*(1-y[i-1]/n-2*beta))
             J[i,i-2]=2/dx**2*(1-x[l]**2+gam)
-            J[i,i+1]=F*y[i]**n+Re
+            J[i,i+1]=F*y[i]**n/n+Re
         elif i%2==0 and i!=0:
             l=int(i/2)
-            R[i]=(y[i+2]-2*y[i]+y[i-2])/dx**2*(1-x[l]**2+gam)-(y[i+2]-y[i-2])/2/dx*(2*x[l]*(1-beta))-y[i]*(F*y[i]**(n-1)*(1-y[i+1])-2*beta)+Re*y[i+1]
-            J[i,i]=(-2/dx**2)*(1-x[l]**2+gam)-(n*F*y[i]**(n-1)*(1-y[i-1]-2*beta))
+            R[i]=(y[i+2]-2*y[i]+y[i-2])/dx**2*(1-x[l]**2+gam)-(y[i+2]-y[i-2])/2/dx*(2*x[l]*(1-beta))-y[i]*(F*y[i]**(n-1)*(1-y[i+1]/n)-2*beta)+Re*y[i+1]
+            J[i,i]=(-2/dx**2)*(1-x[l]**2+gam)-(n*F*y[i]**(n-1)*(1-y[i-1]/n-2*beta))
             J[i,i+2]=1/dx**2*(1-x[l]**2+gam)-1/2/dx*(2*x[l]*(1-beta))
             J[i,i-2]=1/dx**2*(1-x[l]**2+gam)+1/2/dx*(2*x[l]*(1-beta))
-            J[i,i+1]=F*y[i]**n+Re
+            J[i,i+1]=F*y[i]**n/n+Re
         else:
             print('Uh oh')
     return (R,J,vn_RJ)
