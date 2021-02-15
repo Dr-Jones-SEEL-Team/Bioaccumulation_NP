@@ -58,6 +58,7 @@ def dim_analysis(c_set,parameter_combos_count,parameter_matrix,dim_param,new_cou
     para02=report.add_paragraph(f'phim={phim}   ')
     para02.add_run(f'n={n}   ')
     para02.add_run(f'to={to}')
+    para03.add_run(f'Attempts to recreate Miao et al 2015 doi: 10.1007/s11356-014-3952-y')
     
         
     lin_fit=np.zeros((parameter_combos_count,2))#initialize matrix to store linear best fit parameters
@@ -147,12 +148,12 @@ def dim_analysis(c_set,parameter_combos_count,parameter_matrix,dim_param,new_cou
         upper_3 = np.amax(average_unbound_conc)*1.1 #Upper Bound on Change in Average Concentration
         upper_4 = np.amax(average_bound_conc)*1.1 #Upper bound on Bound Concentration
         upper_5 = np.amax(average_total_conc)*1.1 #Upper Bound on Average total Concentration
-        upper_6 = np.amax(log_norm_conc)*0.9 #Upper Bound on log-eq-norm conc plot (should be 0.9 if max is negative, 1.1 if max is positive)
-        lower_6 = np.amin(log_norm_conc)*1.1 #Lower bound on log-eq-norm conc plot (should be 0.9 if min is positive, 1.1 if min is negative)
+        upper_6 = np.amax(log_norm_conc)*1.1 #Upper Bound on log-eq-norm conc plot (should be 0.9 if max is negative, 1.1 if max is positive)
+        lower_6 = np.amin(log_norm_conc)*0.9 #Lower bound on log-eq-norm conc plot (should be 0.9 if min is positive, 1.1 if min is negative)
         upper_7 = np.amax(x) #Maximum position in domain
         upper_8 = np.amax(fit_ct)*1.1 #Upper bound on fit average total concentration overtime
-        upper_9 = np.amax(fit_log_norm_conc)*0.9 #Upper Bound on 1st order fit of log-eq-norm conc plot (should be 0.9 if max is negative, 1.1 if max is positive)
-        lower_9 = np.amin(fit_log_norm_conc)*1.1 #Lower Bound on 1st order fit of log-eq-norm conc plot (should be 0.9 if min is positive, 1.1 if min is negative)
+        upper_9 = np.amax(fit_log_norm_conc)*1.1 #Upper Bound on 1st order fit of log-eq-norm conc plot (should be 0.9 if max is negative, 1.1 if max is positive)
+        lower_9 = np.amin(fit_log_norm_conc)*0.9 #Lower Bound on 1st order fit of log-eq-norm conc plot (should be 0.9 if min is positive, 1.1 if min is negative)
         
         # %%Unbound Concentration vs position plot
         #tindex_u=np.array([0,5,10,25,50,75,100,125,150,200,250]) for masnual control over timepoints plotted
