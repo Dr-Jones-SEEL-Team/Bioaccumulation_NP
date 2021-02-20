@@ -10,7 +10,7 @@ import os
 def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_path):
     
     # %% Calculate linear best fit, slope and intercept for each parameter set
-    lin_fit=np.zeros((parameter_combos_count,2))#initialize matrix to store linear best fit parameters
+    lin_fit=np.zeros((parameter_combos_count,3))#initialize matrix to store linear best fit parameters
     perc_acc_matrix= [[0 for i in range(1)] for j in range(parameter_combos_count)]
     for pc_i in np.arange(0,parameter_combos_count,1): #Begin for loop over different model paramter sets 
         F= parameter_matrix[pc_i,7] #Grab the Dimensionless forward rate constant for parameter set
@@ -54,7 +54,8 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
             fit_conc[count]=Eq-Eq*np.exp(m*t_i)
             fit_lognorm_avg[count]=m*t_i+b
             count=count+1
-        r_sq=np.corrcoef(fit_lognorm_avg,lognorm_tavg_conc)
+        r_sq=np.corrcoef(lognorm_tavg_conc_cutoff,t_cutoff)
+        lin_fit[pc_i,2]=r_sq
             
         
     # %% Generate Plot and save    
