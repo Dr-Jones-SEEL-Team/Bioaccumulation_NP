@@ -50,6 +50,7 @@ from N2_report_generator import *
 from N2_csv_generator import *
 from N2_linear_fitting import *
 
+#for run in np.arange(67,83):
 # %% Start Timer
 t_start=time.time()
 
@@ -62,23 +63,24 @@ counter_file.write(new_count_number)
 counter_file.close()
 
 # %% Open Results Ledger
-loc=("C:/Users/dante/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Saved Exports/Results Ledger.xlsx")
+loc=(r"C:\Users\dante\Northeastern University\Jones SEEL Team - Bioremediation of Nanoparticles\Modelling Work\Model Results\N2\Saved Exports\Results Ledger.xlsx")
 wb=xlrd.open_workbook(loc)
 sheet=wb.sheet_by_index(0)
-print(sheet.cell_value(2,2))
+row_number=34 #Edit desired row number here
+
 
 
 # %%Inputs Code Block
-h=np.array([0.01]) #Define timesteps to test
-tol=np.array([10**(-8)])  #Define the tolerance the code will run with when running Newton-Rhapson
-t1=np.array([0]) #Define initialtime vector of values to test
-t2=np.array([2.5]) #Final Time
-nx=np.array([200]) #Mesh size
-gam=np.array([0.1]) #Define dimenionless ratio of diffusivities to test
+h=np.array([sheet.cell_value(row_number-1,2)]) #Define timesteps to test
+tol=np.array([sheet.cell_value(row_number-1,11)])  #Define the tolerance the code will run with when running Newton-Rhapson
+t1=np.array([sheet.cell_value(row_number-1,3)]) #Define initialtime vector of values to test
+t2=np.array([sheet.cell_value(row_number-1,4)]) #Final Time
+nx=np.array([sheet.cell_value(row_number-1,5)]) #Mesh size
+gam=np.array([sheet.cell_value(row_number-1,6)]) #Define dimenionless ratio of diffusivities to test
 beta=np.array([0]) #Define the dimensionless ratio of potentials to test
-F=np.array([10]) #Define the dimensionless forward reaction rate constant to test
-Re=np.array([0.001]) #Define the dimensionless reverse reaction rate constant to test
-n=np.array([0.95]) #Define the hill coeffecient to test
+F=np.array([sheet.cell_value(row_number-1,8)]) #Define the dimensionless forward reaction rate constant to test
+Re=np.array([sheet.cell_value(row_number-1,9)]) #Define the dimensionless reverse reaction rate constant to test
+n=np.array([sheet.cell_value(row_number-1,10)]) #Define the hill coeffecient to test
 ci=10**(-10) #Define the inital concentration in the biofilm (Can't be zero, if one wants to be zero, set it to a very small number instead)
 
 
@@ -92,7 +94,7 @@ ci=10**(-10) #Define the inital concentration in the biofilm (Can't be zero, if 
 vn_csv_generator = csv_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_path,new_count_number,machine_number)
 
 # %% Fit model to first order approximation, plot approximation, and determine fit of approximation
-[perc_acc_matrix,vn_linear_fitting]=linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_path)
+[perc_acc_matrix,vn_linear_fitting]=linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_path,row_number,loc)
 
 # %% Report Generator: Exports Plots as Word Document to Seperate Directory (see file N2_report_generator.py)
 report=plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N2,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,perc_acc_matrix,vn_linear_fitting,machine_number,internal_export_path)

@@ -6,8 +6,10 @@ vn_linear_fitting=1.2
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+from openpyxl import Workbook
+from openpyxl import load_workbook
 
-def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_path):
+def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_path,row_number,loc):
     
     # %% Calculate linear best fit, slope and intercept for each parameter set
     lin_fit=np.zeros((parameter_combos_count,3))#initialize matrix to store linear best fit parameters
@@ -55,7 +57,7 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
             fit_lognorm_avg[count]=m*t_i+b
             count=count+1
         r_sq=np.corrcoef(lognorm_tavg_conc_cutoff,t_cutoff)
-        lin_fit[pc_i,2]=r_sq
+        lin_fit[pc_i,2]=-r_sq[0,1]
             
         
     # %% Generate Plot and save    
@@ -94,7 +96,7 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
         plt.xticks(fontsize=12)
         plt.yticks(fontsize=12)
         plt.legend(loc=(0.5,0.75))
-        plt.text(0.3,-3.7,f'$R^2$={r_sq[0,1]}')
+        plt.text(0.3,-3.7,f'$R^2$={-r_sq[0,1]}')
         log_filename_partial=f'Logplot{pc_i}.png'
         log_filename_full=os.path.join(internal_export_path,log_filename_partial)
         plt.savefig(log_filename_full)
@@ -124,8 +126,16 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
             perc_acc_table[k,3]=(approx_time-mod_time)/mod_time*100
             k=k+1 #Update counter in percent loop  
         perc_acc_matrix[pc_i][0]=perc_acc_table
+        
+    # %% Record R^2 in Results Ledger
+        wb=load_workbook(loc)
+        ws1=wb.get_sheet_by_name('Sheet1')
+        ws1.cell(row_number,13,-1*(r_sq[0,1]))
+        wb.save(loc)
+    
     return [perc_acc_matrix,vn_linear_fitting]
 
+    
 
 
 """
