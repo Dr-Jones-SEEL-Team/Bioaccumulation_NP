@@ -55,7 +55,7 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
             fit_lognorm_avg[count]=m*t_i+b
             count=count+1
         r_sq=np.corrcoef(lognorm_tavg_conc_cutoff,t_cutoff)
-        lin_fit[pc_i,2]=r_sq
+        lin_fit[pc_i,2]=-r_sq[0,1]
             
         
     # %% Generate Plot and save    
@@ -94,7 +94,7 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
         plt.xticks(fontsize=12)
         plt.yticks(fontsize=12)
         plt.legend(loc=(0.5,0.75))
-        plt.text(0.3,-3.7,f'$R^2$={r_sq[0,1]}')
+        plt.text(0.3,-3.7,f'$R^2$={-r_sq[0,1]}')
         log_filename_partial=f'Logplot{pc_i}.png'
         log_filename_full=os.path.join(internal_export_path,log_filename_partial)
         plt.savefig(log_filename_full)
