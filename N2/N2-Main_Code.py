@@ -7,13 +7,14 @@ vn_N2=1.8 #See meta-data at bottom for details
 vn_Main_Code=1.5 #See meta-data fro details
 
 # %% Current Machine Running Code with neccesary adjustments
-machine_number=2 #Input the machine you are running this code on
+machine_number=5 #Input the machine you are running this code on
 
 """Machine codes:
     Josh's mac- 1
     Dan's personal machine- 2
     Alexander von Humboldt - 3
     Rachel Carson -4
+    Dan's personal machine re-runs -5
 
 """
 if machine_number == 1: #Code to assign the right export paths for each machine, since each is unique
@@ -27,7 +28,10 @@ elif machine_number == 3:
     internal_export_path='fill it in'
 elif machine_number == 4:
     direct_export_path=r'C:\Users\prince.jo\Northeastern University\Jones SEEL Team - Bioremediation of Nanoparticles\Modelling Work\Model Results\N2\Direct Exports'
-    internal_export_path=r'C:\Users\prince.jo\Northeastern University\Jones SEEL Team - Bioremediation of Nanoparticles\Modelling Work\Model Results\N2\Internal Exports'    
+    internal_export_path=r'C:\Users\prince.jo\Northeastern University\Jones SEEL Team - Bioremediation of Nanoparticles\Modelling Work\Model Results\N2\Internal Exports'
+elif machine_number == 5:
+    direct_export_path=r'C:\Users\dante\Northeastern University\Jones SEEL Team - Bioremediation of Nanoparticles\Modelling Work\Model Results\N2\Re-runs\External Exports'
+    internal_export_path=r'C:\Users\dante\Northeastern University\Jones SEEL Team - Bioremediation of Nanoparticles\Modelling Work\Model Results\N2\Re-runs\Internal Exports'    
 
 # %% I don't remember what this is for but I'm scared to delete it 
 from IPython import get_ipython
@@ -37,6 +41,7 @@ get_ipython().magic('reset -sf')
 import time
 import os
 import numpy as np
+import xlrd
 from N2_RJ import *
 from N2_method_of_lines import *
 from N2_parameter_tester import *
@@ -55,6 +60,13 @@ new_count_number=str(old_count_number+1)
 counter_file = open(f"counter_file_{machine_number}.txt",'w')
 counter_file.write(new_count_number)
 counter_file.close()
+
+# %% Open Results Ledger
+loc=("C:/Users/dante/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Saved Exports/Results Ledger.xlsx")
+wb=xlrd.open_workbook(loc)
+sheet=wb.sheet_by_index(0)
+print(sheet.cell_value(2,2))
+
 
 # %%Inputs Code Block
 h=np.array([0.01]) #Define timesteps to test
