@@ -21,7 +21,7 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
         norm_tavg_conc=Eq-tavg_conc #Normalize average concentration by equilibrium concentration
         t=c_set[pc_i][6] #Grab time-vector for this parameter set
         # %% Find the 99% accumulation time and cutoff perc_acc_model
-        cutoff= 0.99 #cutoff percentage to "reach equilibrium" (used to determine where to start fit)
+        cutoff= 0.99*(np.amax(perc_acc_model)) #cutoff percentage to "reach equilibrium" (used to determine where to start fit)
         j=0 #reset counter for time-search loop
         for t_i in t:
             if perc_acc_model[j]>cutoff:
@@ -94,7 +94,7 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
         plt.xticks(fontsize=12)
         plt.yticks(fontsize=12)
         plt.legend(loc=(0.5,0.75))
-        plt.text(0.3,-3.7,f'$R^2$={-r_sq[0,1]}')
+        plt.text(0.2,-1,f'$R^2$={-r_sq[0,1]}')
         log_filename_partial=f'Logplot{pc_i}.png'
         log_filename_full=os.path.join(internal_export_path,log_filename_partial)
         plt.savefig(log_filename_full)

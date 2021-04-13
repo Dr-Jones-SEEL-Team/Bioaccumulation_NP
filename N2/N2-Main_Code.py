@@ -64,10 +64,10 @@ t2=np.array([2.5]) #Final Time
 nx=np.array([200]) #Mesh size
 gam=np.array([0.1]) #Define dimenionless ratio of diffusivities to test
 beta=np.array([0]) #Define the dimensionless ratio of potentials to test
-F=np.array([10]) #Define the dimensionless forward reaction rate constant to test
+F=np.array([1]) #Define the dimensionless forward reaction rate constant to test
 Re=np.array([0.001]) #Define the dimensionless reverse reaction rate constant to test
 n=np.array([0.95]) #Define the hill coeffecient to test
-ci=10**(-10) #Define the inital concentration in the biofilm (Can't be zero, if one wants to be zero, set it to a very small number instead)
+ci=10**(-8) #Define the inital concentration in the biofilm (Can't be zero, if one wants to be zero, set it to a very small number instead)
 
 
 # %% Generate Parameter Matrix for Testing
