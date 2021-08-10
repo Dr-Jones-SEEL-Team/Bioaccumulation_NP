@@ -21,7 +21,7 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
         norm_tavg_conc=Eq-tavg_conc #Normalize average concentration by equilibrium concentration
         t=c_set[pc_i][6] #Grab time-vector for this parameter set
         # %% Find the 99% accumulation time and cutoff perc_acc_model
-        cutoff= 0.4 #cutoff percentage to "reach equilibrium" (used to determine where to start fit)
+        cutoff= 0.99*np.amax(perc_acc_model) #cutoff percentage to "reach equilibrium" (used to determine where to start fit)
         j=0 #reset counter for time-search loop
         for t_i in t:
             if perc_acc_model[j]>cutoff:
