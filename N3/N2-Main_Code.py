@@ -3,31 +3,24 @@
 # -*- coding: utf-8 -*-
 
 # %% Code Version Numbers
-vn_N2=1.8 #See meta-data at bottom for details
-vn_Main_Code=1.5 #See meta-data fro details
+vn_N3=0.1 #See meta-data at bottom for details
+vn_Main_Code=0.1 #See meta-data fro details
 
+
+"""Machine code feature is commented out as we aren't running the code on multiple machines for now, just my local machine Replaced with simple direct_export_path and internal_export_path variables"""
 # %% Current Machine Running Code with neccesary adjustments
-machine_number=2 #Input the machine you are running this code on
+machine_number=1 #Input the machine you are running this code on
 
 """Machine codes:
-    Josh's mac- 1
-    Dan's personal machine- 2
-    Alexander von Humboldt - 3
-    Rachel Carson -4
+    Josh's Thinkpad- 1
 
 """
+
 if machine_number == 1: #Code to assign the right export paths for each machine, since each is unique
-    direct_export_path='/Users/joshuaprince/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Direct Exports' 
-    internal_export_path='/Users/joshuaprince/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Internal Exports'
-elif machine_number == 2:
-    direct_export_path='C:/Users/dante/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Direct Exports'
-    internal_export_path='C:/Users/dante/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Internal Exports'
-elif machine_number == 3: 
-    direct_export_path='Since you will mostly be using this, and the log-in you use changes this, you will have to set this'
-    internal_export_path='fill it in'
-elif machine_number == 4:
-    direct_export_path=r'C:\Users\prince.jo\Northeastern University\Jones SEEL Team - Bioremediation of Nanoparticles\Modelling Work\Model Results\N2\Direct Exports'
-    internal_export_path=r'C:\Users\prince.jo\Northeastern University\Jones SEEL Team - Bioremediation of Nanoparticles\Modelling Work\Model Results\N2\Internal Exports'    
+   direct_export_path=r'C:\Users\joshu\Box Sync\Quantum Biofilms\Raw Data\N3_results\Direct Exports'
+   internal_export_path=r'C:\Users\joshu\Box Sync\Quantum Biofilms\Raw Data\N3_results\Internal Exports' 
+
+   
 
 # %% I don't remember what this is for but I'm scared to delete it 
 from IPython import get_ipython
@@ -37,13 +30,13 @@ get_ipython().magic('reset -sf')
 import time
 import os
 import numpy as np
-from N2_RJ import *
-from N2_method_of_lines import *
-from N2_parameter_tester import *
-from N2_parameter_matrix import *
-from N2_report_generator import *
-from N2_csv_generator import *
-from N2_linear_fitting import *
+from N3_RJ import *
+from N3_method_of_lines import *
+from N3_parameter_checker import *
+from N3_parameter_matrix import *
+from N3_report_generator import *
+from N3_csv_generator import *
+from N3_linear_fitting import *
 
 # %% Start Timer
 t_start=time.time()
@@ -63,15 +56,17 @@ t1=np.array([0]) #Define initialtime vector of values to test
 t2=np.array([2.5]) #Final Time
 nx=np.array([200]) #Mesh size
 gam=np.array([0.1]) #Define dimenionless ratio of diffusivities to test
-beta=np.array([0]) #Define the dimensionless ratio of potentials to test
-F=np.array([10]) #Define the dimensionless forward reaction rate constant to test
-Re=np.array([0.001]) #Define the dimensionless reverse reaction rate constant to test
-n=np.array([0.95]) #Define the hill coeffecient to test
+F=np.array([1]) #Define the dimensionless forward reaction rate constant to test
+K=np.array([1]) #Define the Eqilbrium constant for NP binding
+eps=np.array([1.5]) #Define ratio of total NP binding sites to supernatant NP concentration
+omega=np.array([1]) #Define ratio of NP contribution to electrical potential profile to their electrokinetic mobility
+ups= np.array([1])#Define ratio of Biofilm cotridubtion to electrical potential profile to NP electrokinetic mobility
+Kp= np.array([10]) #Define partition coeffecient of NP into biofilm at water-biofilm interface
 ci=10**(-10) #Define the inital concentration in the biofilm (Can't be zero, if one wants to be zero, set it to a very small number instead)
 
 
 # %% Generate Parameter Matrix for Testing
-[parameter_matrix,parameter_combos_count,vn_parameter_matrix_generator]=parameter_matrix_generator(h,tol,t1,t2,nx,gam,beta,F,Re,n)
+[parameter_matrix,parameter_combos_count,vn_parameter_matrix_generator]=parameter_matrix_generator(h,tol,t1,t2,nx,gam,F,K,eps,omega,ups,Kp)
                     
 # %% Run parameters through numerical model (Heart of the Code)               
 [c_set,vn_parameter_checker,vn_method_of_lines,vn_RJ] = parameter_checker(parameter_matrix,ci) #output the set of concentration over time and space results for each set of parameters tested
@@ -103,50 +98,18 @@ Created on Tue Jun 16 16:13:07 2020
 
 @author: joshuaprince
 
-Overall N2.1 Computer Model Meta-data
-Version 1.8
+Overall N3.1 Computer Model Meta-data
+Version 0.1
 
-Changes from version 1.7 (2/13/2021 4:00 pm):
-    Added new functionalities to run on different machines, including
-    -machine_number variable
-    -new internal/direct export paths for a given machine number
-    -adding machine numbers to the end of all direct exports
-
-Changes from version 1.6 to 1.7 (11/11/2020 9;00 pm):
-    Added linear fits functions, along with neccesary report plotting
-
-Changes from version 1.5 to 1.6 (11/3/2020 4:35 pm):
-    Added version number tracker for all scripts
-
-Changes from  version 1.4 and 1.5 (11/3/2020 8:15 am):
-    In report_generator, added plot close functionalities for all plots (python was complaining about holding so many plots in memory)
-
-Changes from version 1.4 to 1.3: (11/3/2020 8:00 am)
-    Main_code and report_generator were changed so that the unbound animation isn't a direct export, but an internal export, since it is now included in the report.
-    
-Changes from version 1.3 to 1.2: (11/3/2020 7:50 am)
-    Main_Code.py and csv_generator were changed so that when csv files with data were exported, they are labelled with run number so data isn't overridden everytime model is run
-
+This version of our model code improves from N2 by cinorporating electrodynamics via Gauss Law and direct incorporation of electrical potential. 
+Dropped the hill coeffecient binding kinetics because couldn't find examples in enough outside sources. Also made diffusion coeffecient and electrical potential profiles from biofilm linear instead of quadratic because previous literatre indicated they were pretty close to linear. 
 
 
 Main_Code File Meta-data
-Version 1.5
+Version 0.1
 
-Changes from Version 1.4 to 1.5 (11/11/2020 9:00 pm):
-    Added linear fit function
-
-Changes from Version 1.3 to 1.4 (11/3/2020 9:00 am):
-    Added Version number tracker for all scripts
-    Line 5, 6: Added new manual entry variable which tracks version number for overall N2 model and Main_Code
-    
-
-Changes from Version 1.2 to Version 1.3 (11/3/2020 8:00 am):
-    Changed animated gif from direct exporting to internal exporting
-    Line 90: direct_export_path variable removed from function call
-
-Changes from version 1.2 to version 1.1 (11/3/2020 7:45 am):
-    Added run number labeling for csv-data exports so data isn't so easily lost
-    Line 88: variable "new_count_number" was added to function pass
+This main code is what is the script which is actually run to "run the model". Has lots of sub-function calls and such to the core components to the model.
+This is where model parameters are entered. They can be entered as vectors to run the code over mutiple parameter sets. 
 """
 
 

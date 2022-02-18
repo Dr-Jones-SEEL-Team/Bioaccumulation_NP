@@ -39,6 +39,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
     for pc_i in np.arange(0,parameter_combos_count,1): #Begin for loop to plot the different model paramters using MOL 
         cb=c_set[pc_i][0] #Grab current bound concentration data to plot
         cu=c_set[pc_i][1] #Grab current unbound concentration data to plot
+        pot=c_set[pc_i][2] #Grab current potential concentration data to plot
         average_conc_overtime=c_set[pc_i][2] #Grab current average concentration data to plot (Unbound NP)
         change_in_concentration=c_set[pc_i][3] #Grab current change in concentration data to plot (Unbound NP)
         taverage_conc_overtime=c_set[pc_i][4] #Grab current change in concentration data to plot (total NP)
@@ -75,6 +76,8 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         upper_8 = np.amax(logtchange_conc)*1.1 #Upper bound on log of total change in conc
         lower_7 = np.amin(logtavg_conc_overtime)*1.1 #Lower bound on log of total average NP conc
         lower_8 = np.amin(logtavg_conc_overtime)*1.1 #Upper bound on log of total change in conc
+        upper_9 = np.amax(pot)*1.1 #Upper bound on potential
+        lower_9 = np.amin(pot)*1.1 #Lower Bound on potential
         
         # %%Unbound
         #tindex_u=np.array([0,5,10,25,50,75,100,125,150,200,250]) for masnual control over timepoints plotted
@@ -129,7 +132,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         lognt_b=np.log10(nt) #Logarthmic timepoints
         logspace_b=round((lognt_b)/tp_b,10) #Logarthmic timepoints
         logtindex_b=np.arange(0,lognt_b,logspace_b) #Logarthmic timepoints
-        plt.figure(7*pc_i+1)
+        plt.figure(8*pc_i+1)
         for logi_b in logtindex_b:
             i_b=int(10**logi_b)
             cc_b=cb[:,i_b]
@@ -154,8 +157,35 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         pic2=pics_paragraph1.add_run()
         pic2.add_picture(bound_filename_full, width=docx.shared.Inches(3))
         
+        # %%Potential
+        tp_p=10 #number of time points to plot
+        
+        #Logarthmic discreitzation of plotted timepoints
+        lognt_p=np.log10(nt) #Logarthmic timepoints
+        logspace_p=round((lognt_p)/tp_p,10) #Logarthmic timepoints
+        logtindex_p=np.arange(0,lognt_p,logspace_p) #Logarthmic timepoints
+        plt.figure(8*pc_i+2)
+        for logi_p in logtindex_p:
+            i_p=int(10**logi_p)
+            cc_p=pot[:,i_p]
+            ti_p=round(t[i_p],5)
+            plt.plot(x,cc_p,label='t={}'.format(ti_p))
+        
+        plt.xlim(left=0,right=1)
+        plt.ylim(bottom=lower_9,top=upper_9)
+        plt.xlabel('Position',fontsize=14)
+        plt.ylabel('Dimensionless Potential',fontsize=14)
+        plt.title('Dimensionless Potential plot',fontsize=16)
+        plt.xticks(fontsize=12)
+        plt.yticks(fontsize=12)
+        plt.legend(loc=(0.1,0.1))
+        potential_filename_partial=f'Potentialplot{pc_i}.png'
+        Potential_filename_full=os.path.join(internal_export_path,unbound_filename_partial)
+        plt.savefig(Potential_filename_full)
+        plt.close()
+        
         # %%Unbound NP Average Concetration Overtime
-        plt.figure(7*pc_i+2)
+        plt.figure(8*pc_i+3)
         plt.plot(t,average_conc_overtime)
         plt.xlim(left=parameter_matrix[pc_i,2],right=parameter_matrix[pc_i,3])
         #plt.xlim(left=0,right=0.0005) #Manual Override of automatic x-axis limits
@@ -194,7 +224,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         pic4.add_picture(dCunbound_filename_full, width=docx.shared.Inches(3))
         """
         # %%Total NP Average Concetration Overtime
-        plt.figure(7*pc_i+4)
+        plt.figure(8*pc_i+5)
         plt.plot(t,taverage_conc_overtime)
         plt.xlim(left=parameter_matrix[pc_i,2],right=parameter_matrix[pc_i,3])
         #plt.xlim(left=0,right=0.0005) #Manual Override of automatic x-axis limits
@@ -328,34 +358,35 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         pic6.add_picture(totCvt_anim_filename_full, width=docx.shared.Inches(3))
         plt.close()
         
+        """Currently waiting on activitng linear fit functionality"""
         # %% Plot Approximation for Total NP conc Overtime
-        linear_filename_partial=f'Linearplot{pc_i}.png'
-        linear_filename_full=os.path.join(internal_export_path,linear_filename_partial)
-        #pics_paragraph6=report.add_paragraph() commented out  when log plots out
-        #pic9=pics_paragraph6.add_run() commented out  when log plots out
-        pics_paragraph4=report.add_paragraph()
-        pic7=pics_paragraph4.add_run()
-        pic7.add_picture(linear_filename_full,width=docx.shared.Inches(3))
-        log_filename_partial=f'Logplot{pc_i}.png'
-        log_filename_full=os.path.join(internal_export_path,log_filename_partial)
-        pic8=pics_paragraph3.add_run() #Added when log plot off
-        pic8.add_picture(log_filename_full,width=docx.shared.Inches(3))
+        # linear_filename_partial=f'Linearplot{pc_i}.png'
+        # linear_filename_full=os.path.join(internal_export_path,linear_filename_partial)
+        # #pics_paragraph6=report.add_paragraph() commented out  when log plots out
+        # #pic9=pics_paragraph6.add_run() commented out  when log plots out
+        # pics_paragraph4=report.add_paragraph()
+        # pic7=pics_paragraph4.add_run()
+        # pic7.add_picture(linear_filename_full,width=docx.shared.Inches(3))
+        # log_filename_partial=f'Logplot{pc_i}.png'
+        # log_filename_full=os.path.join(internal_export_path,log_filename_partial)
+        # pic8=pics_paragraph3.add_run() #Added when log plot off
+        # pic8.add_picture(log_filename_full,width=docx.shared.Inches(3))
         
         # %% Add Table for Fit
-        perc_acc_table=perc_acc_matrix[pc_i][0]
-        [table_rows,table_columns]=perc_acc_table.shape
-        table1=report.add_table(rows=table_rows+1, cols=table_columns)
-        row=table1.rows[0]
-        row.cells[0].text='Percent Accumulated'
-        row.cells[1].text='Time for Model'
-        row.cells[2].text='Time for Approximation'
-        row.cells[3].text='Percent Error'
-        i_v = np.arange(0,table_rows,1) #index for rows of percent accumulation table
-        j_v = np.arange(0,table_columns,1) #inde for columns of percent accumulation table
-        for i in i_v:
-            for j in j_v:
-                cell=table1.cell(i+1,j)
-                cell.text=str(perc_acc_table[i,j])
+        # perc_acc_table=perc_acc_matrix[pc_i][0]
+        # [table_rows,table_columns]=perc_acc_table.shape
+        # table1=report.add_table(rows=table_rows+1, cols=table_columns)
+        # row=table1.rows[0]
+        # row.cells[0].text='Percent Accumulated'
+        # row.cells[1].text='Time for Model'
+        # row.cells[2].text='Time for Approximation'
+        # row.cells[3].text='Percent Error'
+        # i_v = np.arange(0,table_rows,1) #index for rows of percent accumulation table
+        # j_v = np.arange(0,table_columns,1) #inde for columns of percent accumulation table
+        # for i in i_v:
+        #     for j in j_v:
+        #         cell=table1.cell(i+1,j)
+        #         cell.text=str(perc_acc_table[i,j])
         
         # %%
     return report
