@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-vn_linear_fitting=1.2
+vn_linear_fitting=0.1
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -135,12 +135,8 @@ Created on Wed Nov 11 10:19:35 2020
 
 Purpose: Script to fit concentration data to first-order mass-transfer relation, plot this compared to the model results, and create a percent accumulated table to compare the two
 
-Version 1.3
+Version 0.1
 
-changes From Version 1.2 (2/13/2021 7:40 pm):
-    -added R^2 value comparing 1st order fit and data on log(normalized concentration) plot.
 
-changes From Version 1.1 to 1.2 (11/13/2020 1:12 am):
-    -changing method of fitting. going from fitting the dC vs C plot to fitting log(normalized concentration) plot. 
 """
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-vn_method_of_lines=0.1
+vn_method_of_lines=1.0
 
 import numpy as np
 import scipy as sp
@@ -18,11 +18,11 @@ def method_of_lines(t,x,y,h,p,tol):
         if i==0: continue
         else:
             yold=yw #update the old y-value
-            yw[len(yold)-1]=1 #hardcode in boundary condition
             [R,J,vn_RJ]=RJ(x,yw,yold,p,h); #Calculate Residual and Jacobian from new y value
             k=0
             while np.linalg.norm(R)>tol :
                 k=k+1
+                current_tol=np.linalg.norm(R)
                 J=sp.sparse.csc_matrix(J)
                 dif=-sp.sparse.linalg.spsolve(J,R) #Apply built in sparse Linear solver to find delta from J and R
                 yw=yw+dif ; #Update y
@@ -37,7 +37,11 @@ def method_of_lines(t,x,y,h,p,tol):
 """
 Purpose: Script for running method of lines to solve the equations for the model
 
-Version 0.1
+Version 1.0
+
+Changes from Version 0.1 to 1.0 (2/20/2022 1:30 am)
+    Got initial ocde to run. 
+    
 
 Created on Sat Oct 31 17:25:29 2020
 

@@ -7,28 +7,20 @@ vn_N2=1.8 #See meta-data at bottom for details
 vn_Main_Code=1.5 #See meta-data fro details
 
 # %% Current Machine Running Code with neccesary adjustments
-machine_number=2 #Input the machine you are running this code on
+"""Machine code feature is commented out as we aren't running the code on multiple machines for now, just my local machine Replaced with simple direct_export_path and internal_export_path variables"""
+# %% Current Machine Running Code with neccesary adjustments
+machine_number=1 #Input the machine you are running this code on
 
 """Machine codes:
-    Josh's mac- 1
-    Dan's personal machine- 2
-    Alexander von Humboldt - 3
-    Rachel Carson -4
+    Josh's Thinkpad- 1
 
 """
-if machine_number == 1: #Code to assign the right export paths for each machine, since each is unique
-    direct_export_path='/Users/joshuaprince/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Direct Exports' 
-    internal_export_path='/Users/joshuaprince/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Internal Exports'
-elif machine_number == 2:
-    direct_export_path='C:/Users/dante/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Direct Exports'
-    internal_export_path='C:/Users/dante/Northeastern University/Jones SEEL Team - Bioremediation of Nanoparticles/Modelling Work/Model Results/N2/Internal Exports'
-elif machine_number == 3: 
-    direct_export_path='Since you will mostly be using this, and the log-in you use changes this, you will have to set this'
-    internal_export_path='fill it in'
-elif machine_number == 4:
-    direct_export_path=r'C:\Users\prince.jo\Northeastern University\Jones SEEL Team - Bioremediation of Nanoparticles\Modelling Work\Model Results\N2\Direct Exports'
-    internal_export_path=r'C:\Users\prince.jo\Northeastern University\Jones SEEL Team - Bioremediation of Nanoparticles\Modelling Work\Model Results\N2\Internal Exports'    
 
+if machine_number == 1: #Code to assign the right export paths for each machine, since each is unique
+   direct_export_path=r'C:\Users\joshu\Box Sync\Quantum Biofilms\Raw Data\N2_results\Direct Exports'
+   internal_export_path=r'C:\Users\joshu\Box Sync\Quantum Biofilms\Raw Data\N2_results\Internal Exports' 
+
+   
 # %% I don't remember what this is for but I'm scared to delete it 
 from IPython import get_ipython
 get_ipython().magic('reset -sf')
@@ -130,7 +122,11 @@ Changes from version 1.3 to 1.2: (11/3/2020 7:50 am)
 
 
 Main_Code File Meta-data
-Version 1.5
+Version 1.6
+
+Changes from version 1.5 to 1.6 (2/18/2022 10:44 pm):
+    
+changed machine and export paths for new laptop in Duke system
 
 Changes from Version 1.4 to 1.5 (11/11/2020 9:00 pm):
     Added linear fit function

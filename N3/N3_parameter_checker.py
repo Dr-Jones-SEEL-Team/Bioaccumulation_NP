@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-vn_parameter_tester=0.1
+vn_parameter_tester=1.0
 
 import numpy as np
 from N3_method_of_lines import *
@@ -25,17 +25,22 @@ def parameter_checker(parameter_matrix,ci): #unpack paramteres and test
         omega=parameter_matrix[i,9] #Define ratio of NP contribution to electrical potential profile to their electrokinetic mobility
         ups=parameter_matrix[i,10] #Define ratio of Biofilm cotridubtion to electrical potential profile to NP electrokinetic mobility
         Kp=parameter_matrix[i,11] #Define partition coeffecient of NP into biofilm at water-biofilm interface
+        beta=parameter_matrix[i,12] #Define ratio of medium mobility from diffusion to medium mobility ffrom eletrokinesis
         #Calculate internal paramters to model
         x=np.linspace(0,1,nx+1) #Define x (note, if x doesn't range from 0 to 1, should edit this)
-        c_set[i][8]=x #Pass along x-vector for this parameter set for plotting
+        c_set[i][9]=x #Pass along x-vector for this parameter set for plotting
         t=np.arange(t1,t2+h,h) #Define t
-        c_set[i][6]=t #Pass along t-vector for this parameter set for plotting
+        c_set[i][7]=t #Pass along t-vector for this parameter set for plotting
         ny=3*nx #Solution vector size
         nt=len(t) #Define the number of timepoints
-        c_set[i][7]=nt #Pass along number of time-points used for this parameter set for plotting
+        c_set[i][8]=nt #Pass along number of time-points used for this parameter set for plotting
         y=np.zeros((ny+3,nt)) #Initialize y
         y=y+10**(-8) #Make starting values not exactly equal to zero (divide by zero erros pop up)
-        p=[gam,F,K,eps,omega,ups,Kp] #dimensionless parameter matrix
+        #Define initial condition for electrical potential
+        for j in np.arange(0,len(x),1): #Loop over all nodes
+            l=j*3+2 #Convert node # to corresponding global variables for potential
+            y[l,0]=ups/6*(3*x[j]**2-x[j]**3-2)
+        p=[gam,F,K,eps,omega,ups,Kp,beta] #dimensionless parameter matrix
         #Run calculation for parameters of interest
         [c,whoops,vn_method_of_lines,vn_RJ]=method_of_lines(t,x,y,h,p,tol) #Find the concntration profiles in space and time using Method of Lines (MOL)
         print('you whoopsed {} many times'.format(whoops))
@@ -70,19 +75,19 @@ def parameter_checker(parameter_matrix,ci): #unpack paramteres and test
             change_in_concentration[t3_i]=(average_conc_overtime[t3_i+1]-average_conc_overtime[t3_i])/h
         c_set[i][4]=change_in_concentration
         
-        #Find Average total NP concentration Overtime
-        taverage_conc_overtime=np.zeros(nt)
-        t4index=np.arange(0,nt)
-        for t4_i in t4index:
-            taverage_conc_overtime[t4_i]=np.average(cu[:,t4_i])+np.average(cb[:,t4_i])
-        c_set[i][5]=taverage_conc_overtime
+        #Find Average total NP concentration Overtime (This was always a flawed metric)
+        # taverage_conc_overtime=np.zeros(nt)
+        # t4index=np.arange(0,nt)
+        # for t4_i in t4index:
+        #     taverage_conc_overtime[t4_i]=np.average(cu[:,t4_i])+np.average(cb[:,t4_i])
+        # c_set[i][5]=taverage_conc_overtime
         
         #Find Change in Total NP Concentration overtime
-        tchange_in_concentration=np.zeros(nt)
-        t5index=t4index[:-1].copy()
-        for t5_i in t5index:
-            tchange_in_concentration[t5_i]=(taverage_conc_overtime[t5_i+1]-taverage_conc_overtime[t5_i])/h
-        c_set[i][6]=tchange_in_concentration
+        # tchange_in_concentration=np.zeros(nt)
+        # t5index=t4index[:-1].copy()
+        # for t5_i in t5index:
+        #     tchange_in_concentration[t5_i]=(taverage_conc_overtime[t5_i+1]-taverage_conc_overtime[t5_i])/h
+        # c_set[i][6]=tchange_in_concentration
         
             
     return [c_set,vn_parameter_tester,vn_method_of_lines,vn_RJ]
@@ -91,7 +96,11 @@ def parameter_checker(parameter_matrix,ci): #unpack paramteres and test
 """
 Purpose: Script for running through each parameter combination and passing to method of lines vector. Then unpacks the results into usable numpy arrays for unbound and bound concentrations
 
-Version 0.1
+Version 1.0
+
+Changes from Version 0.1 to 1.0 (2/20/2022 1:30 am)
+    Got initial ocde to run. Had to comment out some functionalities
+    
 
 Created on Sat Oct 31 17:32:29 2020
 
