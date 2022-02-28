@@ -13,8 +13,7 @@ import matplotlib.animation as anim
 from matplotlib.animation import FuncAnimation
 
 "Commenting out correct plot generator function while lienar fitting functionality turned off"
-#def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N2,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,perc_acc_matrix,vn_linear_fitting,machine_number,internal_export_path):
-def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N2,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,machine_number,internal_export_path):
+def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N2,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,perc_acc_matrix,vn_linear_fitting,machine_number,internal_export_path):
     """Static Plotting (Exported to Word Document)"""
     report=docx.Document()
     report.add_heading(f'Results from N2 Run #{new_count_number}-{machine_number}',0)
@@ -31,7 +30,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
     report.add_paragraph(f'Method of Lines version: {vn_method_of_lines}')
     report.add_paragraph(f'Residual-Jacobian Calculator version: {vn_RJ}')
     report.add_paragraph(f'Report Generator version: {vn_report_generator}')
-    #report.add_paragraph(f'Linear Approximator version: {vn_linear_fitting}')
+    report.add_paragraph(f'Linear Approximator version: {vn_linear_fitting}')
     style=report.styles['Normal']
     font=style.font
     font.name='Arial'
@@ -57,7 +56,6 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         para1.add_run(f'Initial time (t1) : {parameter_matrix[pc_i,2]}     ')
         para1.add_run(f'Final time (t2) : {parameter_matrix[pc_i,3]}     ')
         para1.add_run(f'Mesh size (nx) : {parameter_matrix[pc_i,4]}')
-        """Commenting out while dbugging"""
         para2=report.add_paragraph(f'Dimensionless ratio of diffusivity (gamma) : {parameter_matrix[pc_i,5]}     ')
         para2.add_run(f'Dimensionless ratio of potential (beta): {parameter_matrix[pc_i,12]}')
         para3=report.add_paragraph(f'Dimensionless forward rate constant (F): {parameter_matrix[pc_i,6]}     ')
@@ -82,7 +80,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         
         # %%Unbound
         #tindex_u=np.array([0,5,10,25,50,75,100,125,150,200,250]) for masnual control over timepoints plotted
-        tp_u=10 #number of time points to plot
+        tp_u=20 #number of time points to plot
         """
         #Linear discretization of plotted timepionts
         #space_u=int((nt-1)/tp_u) #Linear discreitzation of timepoints
@@ -245,20 +243,20 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         pic6.add_picture(avgtotal_filename_full, width=docx.shared.Inches(3))
         
         # %%Log&Normalized NP Average Concetration Overtime
-        plt.figure(7*pc_i+6)
-        plt.plot(t,lognorm_tconc_overtime)
-        plt.xlim(left=parameter_matrix[pc_i,2],right=parameter_matrix[pc_i,3])
-        #plt.xlim(left=0,right=0.0005) #Manual Override of automatic x-axis limits
-        plt.ylim(bottom=lower_6,top=upper_6)
-        plt.xlabel('Time',fontsize=14)
-        plt.ylabel('Log of Normalized Concentration',fontsize=14)
-        plt.title('First-order Plot',fontsize=16)
-        plt.xticks(fontsize=12)
-        plt.yticks(fontsize=12)
-        lognorm_filename_partial=f'Firstorder{pc_i}.png'
-        lognorm_filename_full=os.path.join(internal_export_path,lognorm_filename_partial)
-        plt.savefig(lognorm_filename_full)
-        plt.close()
+        # plt.figure(7*pc_i+6)
+        # plt.plot(t,lognorm_tconc_overtime)
+        # plt.xlim(left=parameter_matrix[pc_i,2],right=parameter_matrix[pc_i,3])
+        # #plt.xlim(left=0,right=0.0005) #Manual Override of automatic x-axis limits
+        # plt.ylim(bottom=lower_6,top=upper_6)
+        # plt.xlabel('Time',fontsize=14)
+        # plt.ylabel('Log of Normalized Concentration',fontsize=14)
+        # plt.title('First-order Plot',fontsize=16)
+        # plt.xticks(fontsize=12)
+        # plt.yticks(fontsize=12)
+        # lognorm_filename_partial=f'Firstorder{pc_i}.png'
+        # lognorm_filename_full=os.path.join(internal_export_path,lognorm_filename_partial)
+        # plt.savefig(lognorm_filename_full)
+        # plt.close()
  
         # %%Unbound Concentration Animation
         unbound_anim_fig=plt.figure()
@@ -282,12 +280,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         unbound_anim_filename_full=os.path.join(internal_export_path,unbound_anim_filename_partial)
         unbound_anim.save(unbound_anim_filename_full)
         #Only need these lines if log plot is turned off
-        pics_paragraph4=report.add_paragraph()
-        pic7=pics_paragraph4.add_run()
-        pic7.add_picture(unbound_anim_filename_full, width=docx.shared.Inches(3))
-        pic8=pics_paragraph4.add_run()
-        pic8.add_picture(lognorm_filename_full, width=docx.shared.Inches(3))      
-        plt.close()
+
         
         # %%Total NP Concentration vs Time Animation
         totCvt_anim_fig=plt.figure()
@@ -309,40 +302,42 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         totCvt_anim_filename_partial=f'totCvt_anim{pc_i}.gif'
         totCvt_anim_filename_full=os.path.join(internal_export_path,totCvt_anim_filename_partial)
         totCvt_anim.save(totCvt_anim_filename_full)
-        pics_paragraph5=report.add_paragraph() #Added when log plot off
-        pic9=pics_paragraph5.add_run() #Added when log plot off
-        pic9.add_picture(totCvt_anim_filename_full, width=docx.shared.Inches(3))
+
+        pics_paragraph4=report.add_paragraph()
+        pic7=pics_paragraph4.add_run()
+        pic7.add_picture(unbound_anim_filename_full, width=docx.shared.Inches(3))
+        pic8=pics_paragraph4.add_run()
+        pic8.add_picture(totCvt_anim_filename_full, width=docx.shared.Inches(3))      
         plt.close()
         
-        """Currently waiting on activitng linear fit functionality"""
         # %% Plot Approximation for Total NP conc Overtime
-        # linear_filename_partial=f'Linearplot{pc_i}.png'
-        # linear_filename_full=os.path.join(internal_export_path,linear_filename_partial)
-        # #pics_paragraph6=report.add_paragraph() commented out  when log plots out
-        # #pic9=pics_paragraph6.add_run() commented out  when log plots out
-        # pics_paragraph4=report.add_paragraph()
-        # pic7=pics_paragraph4.add_run()
-        # pic7.add_picture(linear_filename_full,width=docx.shared.Inches(3))
-        # log_filename_partial=f'Logplot{pc_i}.png'
-        # log_filename_full=os.path.join(internal_export_path,log_filename_partial)
-        # pic8=pics_paragraph3.add_run() #Added when log plot off
-        # pic8.add_picture(log_filename_full,width=docx.shared.Inches(3))
+        linear_filename_partial=f'Linearplot{pc_i}.png'
+        linear_filename_full=os.path.join(internal_export_path,linear_filename_partial)
+        #pics_paragraph6=report.add_paragraph() commented out  when log plots out
+        #pic9=pics_paragraph6.add_run() commented out  when log plots out
+        pics_paragraph4=report.add_paragraph()
+        pic7=pics_paragraph4.add_run()
+        pic7.add_picture(linear_filename_full,width=docx.shared.Inches(3))
+        log_filename_partial=f'Logplot{pc_i}.png'
+        log_filename_full=os.path.join(internal_export_path,log_filename_partial)
+        pic8=pics_paragraph3.add_run() #Added when log plot off
+        pic8.add_picture(log_filename_full,width=docx.shared.Inches(3))
         
         # %% Add Table for Fit
-        # perc_acc_table=perc_acc_matrix[pc_i][0]
-        # [table_rows,table_columns]=perc_acc_table.shape
-        # table1=report.add_table(rows=table_rows+1, cols=table_columns)
-        # row=table1.rows[0]
-        # row.cells[0].text='Percent Accumulated'
-        # row.cells[1].text='Time for Model'
-        # row.cells[2].text='Time for Approximation'
-        # row.cells[3].text='Percent Error'
-        # i_v = np.arange(0,table_rows,1) #index for rows of percent accumulation table
-        # j_v = np.arange(0,table_columns,1) #inde for columns of percent accumulation table
-        # for i in i_v:
-        #     for j in j_v:
-        #         cell=table1.cell(i+1,j)
-        #         cell.text=str(perc_acc_table[i,j])
+        perc_acc_table=perc_acc_matrix[pc_i][0]
+        [table_rows,table_columns]=perc_acc_table.shape
+        table1=report.add_table(rows=table_rows+1, cols=table_columns)
+        row=table1.rows[0]
+        row.cells[0].text='Percent Accumulated'
+        row.cells[1].text='Time for Model'
+        row.cells[2].text='Time for Approximation'
+        row.cells[3].text='Percent Error'
+        i_v = np.arange(0,table_rows,1) #index for rows of percent accumulation table
+        j_v = np.arange(0,table_columns,1) #inde for columns of percent accumulation table
+        for i in i_v:
+            for j in j_v:
+                cell=table1.cell(i+1,j)
+                cell.text=str(perc_acc_table[i,j])
         
         # %%
     return report

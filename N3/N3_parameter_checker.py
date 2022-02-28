@@ -8,7 +8,7 @@ from N3_method_of_lines import *
 from N3_Newton_Rhapson import *
 
 
-def parameter_checker(parameter_matrix,ci): #unpack paramteres and test
+def parameter_checker(parameter_matrix): #unpack paramteres and test
     
     #Calculate other internal paramters to model
     parameter_combos_count=np.shape(parameter_matrix) [0]

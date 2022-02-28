@@ -7,7 +7,6 @@ vn_N3=1.0 #See meta-data at bottom for details
 vn_Main_Code=1.0 #See meta-data fro details
 
 
-"""Machine code feature is commented out as we aren't running the code on multiple machines for now, just my local machine Replaced with simple direct_export_path and internal_export_path variables"""
 # %% Current Machine Running Code with neccesary adjustments
 machine_number=1 #Input the machine you are running this code on
 
@@ -55,7 +54,7 @@ counter_file.close()
 h=np.array([0.01]) #Define timesteps to test
 tol=np.array([10**(-8)])  #Define the tolerance the code will run with when running Newton-Rhapson
 t1=np.array([0]) #Define initialtime vector of values to test
-t2=np.array([10]) #Final Time
+t2=np.array([1]) #Final Time
 nx=np.array([100]) #Mesh size
 gam=np.array([0.1]) #Define dimenionless ratio of diffusivities to test
 F=np.array([10]) #Define the dimensionless forward reaction rate constant to test
@@ -65,25 +64,21 @@ omega=np.array([1]) #Define contribution of nanoparticle radius to it electrial 
 ups= np.array([1])#Define ratio of biofilm to nanoparticle charge 
 Kp= np.array([10]) #Define partition coeffecient of NP into biofilm at water-biofilm interface
 beta= np.array([10]) #Define ratio of particle mobility due to brownian motion vs elecotrkinesis
-ci=10**(-10) #Define the inital concentration in the biofilm (Can't be zero, if one wants to be zero, set it to a very small number instead)
-
 
 # %% Generate Parameter Matrix for Testing
 [parameter_matrix,parameter_combos_count,vn_parameter_matrix_generator]=parameter_matrix_generator(h,tol,t1,t2,nx,gam,F,K,eps,omega,ups,Kp,beta)
                     
 # %% Run parameters through numerical model (Heart of the Code)               
-[c_set,vn_parameter_checker,vn_method_of_lines,vn_RJ] = parameter_checker(parameter_matrix,ci) #output the set of concentration over time and space results for each set of parameters tested
+[c_set,vn_parameter_checker,vn_method_of_lines,vn_RJ] = parameter_checker(parameter_matrix) #output the set of concentration over time and space results for each set of parameters tested
 
 # %% Export results to csv files
 vn_csv_generator = csv_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_path,new_count_number,machine_number)
 
-"turning off linear fit while I try to get solver to work"
 # %% Fit model to first order approximation, plot approximation, and determine fit of approximation
-#[perc_acc_matrix,vn_linear_fitting]=linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_path)
+[perc_acc_matrix,vn_linear_fitting]=linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_path)
 
 # %% Report Generator: Exports Plots as Word Document to Seperate Directory (see file N2_report_generator.py)
-#(With linear fitting off, need to modify this slightly) report=plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N2,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,perc_acc_matrix,vn_linear_fitting,machine_number,internal_export_path)
-report=plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N3,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,machine_number,internal_export_path)
+report=plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N3,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,perc_acc_matrix,vn_linear_fitting,machine_number,internal_export_path)
 
 
 # %% Stop Timer
