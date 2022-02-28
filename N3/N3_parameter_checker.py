@@ -88,7 +88,7 @@ def parameter_checker(parameter_matrix,ci): #unpack paramteres and test
         c_set[i][12]=pot_ss
         average_uconc_ss=np.average(cu_ss)
         average_bconc_ss=np.average(cb_ss)
-        average_tconc_ss=average_uconc_ss+average_bconc_ss
+        average_tconc_ss=Kp*average_uconc_ss+average_bconc_ss
         c_set[i][13]=average_tconc_ss
     
         #Find NP Concentrations Overtime
@@ -101,7 +101,7 @@ def parameter_checker(parameter_matrix,ci): #unpack paramteres and test
             average_uconc_overtime[t_i]=np.average(cu[:,t_i])
             average_bconc_overtime[t_i]=np.average(cb[:,t_i])
             average_tconc_overtime[t_i]=Kp*average_uconc_overtime[t_i]+average_bconc_overtime[t_i]
-            lognorm_tconc_overtime[t_i]=np.log(average_tconc_ss-average_tconc_overtime[t_i])
+            lognorm_tconc_overtime[t_i]=np.log(round(average_tconc_ss,3)+0.00000001-round(average_tconc_overtime[t_i],3))
         c_set[i][3]=average_uconc_overtime
         c_set[i][4]=average_bconc_overtime
         c_set[i][5]=average_tconc_overtime

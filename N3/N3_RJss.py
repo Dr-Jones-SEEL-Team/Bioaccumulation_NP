@@ -53,7 +53,7 @@ def RJss(x,y,yold,p):
             J[i,i-2]=1/dx**2
             J[i,i-1]=omega*(Kp+eps*K/(y[i-1]+K)**2)
             J[i,i]=-2/dx**2
-            J[i,i+1]=1/dx**2
+            J[i,i+2]=1/dx**2
 
         else:
             print('Uh oh')
