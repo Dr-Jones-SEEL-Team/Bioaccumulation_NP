@@ -37,6 +37,8 @@ from N3_parameter_matrix import *
 from N3_report_generator import *
 from N3_csv_generator import *
 from N3_linear_fitting import *
+from N3_Newton_Rhapson import *
+from N3_RJss import *
 
 # %% Start Timer
 t_start=time.time()
@@ -59,7 +61,7 @@ gam=np.array([0.1]) #Define dimenionless ratio of diffusivities to test
 F=np.array([10]) #Define the dimensionless forward reaction rate constant to test
 K=np.array([10]) #Define the Eqilbrium constant for NP binding
 eps=np.array([10]) #Define ratio of total NP binding sites to supernatant NP concentration
-omega=np.array([1,10]) #Define contribution of nanoparticle radius to it electrial ptoential impacts
+omega=np.array([1]) #Define contribution of nanoparticle radius to it electrial ptoential impacts
 ups= np.array([1])#Define ratio of biofilm to nanoparticle charge 
 Kp= np.array([10]) #Define partition coeffecient of NP into biofilm at water-biofilm interface
 beta= np.array([10]) #Define ratio of particle mobility due to brownian motion vs elecotrkinesis

@@ -5,13 +5,14 @@ vn_parameter_tester=1.0
 
 import numpy as np
 from N3_method_of_lines import *
+from N3_Newton_Rhapson import *
 
 
 def parameter_checker(parameter_matrix,ci): #unpack paramteres and test
     
     #Calculate other internal paramters to model
     parameter_combos_count=np.shape(parameter_matrix) [0]
-    c_set = [[0 for i in range(12)] for j in range(parameter_combos_count)]
+    c_set = [[0 for i in range(15)] for j in range(parameter_combos_count)] #Number in the i-range bracket is number of matrices being sotred in c_set. Can always makde more than used
     for i in np.arange(0,parameter_combos_count,1): #Begin for loop to test the different model paramters using Newton-Rhapson with Implicit Euler
         h=parameter_matrix[i,0] #Define timesteps to test
         tol=parameter_matrix[i,1] #Define tolerance to test
@@ -36,20 +37,23 @@ def parameter_checker(parameter_matrix,ci): #unpack paramteres and test
         c_set[i][8]=nt #Pass along number of time-points used for this parameter set for plotting
         y=np.zeros((ny+3,nt)) #Initialize y
         y=y+10**(-8) #Make starting values not exactly equal to zero (divide by zero erros pop up)
+        yss=np.zeros(2*nx+2)
+        yss=yss+10**(-8)
         #Define initial condition for electrical potential
         for j in np.arange(0,len(x),1): #Loop over all nodes
             l=j*3+2 #Convert node # to corresponding global variables for potential
             y[l,0]=ups/6*(3*x[j]**2-x[j]**3-2)
         p=[gam,F,K,eps,omega,ups,Kp,beta] #dimensionless parameter matrix
         #Run calculation for parameters of interest
-        [c,whoops,vn_method_of_lines,vn_RJ]=method_of_lines(t,x,y,h,p,tol) #Find the concntration profiles in space and time using Method of Lines (MOL)
+        [c,whoops,vn_method_of_lines,vn_RJ]=method_of_lines(t,x,y,h,p,tol) #Find the concntration profiles in space and time using Implicit Euler 
         print('you whoopsed {} many times'.format(whoops))
         
-        #Unpack the data
+        #Unpack the time-data
         cb=np.zeros((nx+1,nt)) #Initalize new concentration array where bound and unbound NP concentrations are "unpacked" such that they occupy two different matrices in the same 3-D array 
         cu=np.zeros((nx+1,nt))
         pot=np.zeros((nx+1,nt))
         xindex=np.arange(0,nx+1)
+        yss_guess=np.zeros(2*nx+2)
         for x_i in xindex:
             j=3*x_i #secondary index (position of unbound NP concentration in original concentration matrix)
             k=3*x_i+1 #Secondary index (position of bound NP concentration in original concentration matrix)
@@ -57,23 +61,52 @@ def parameter_checker(parameter_matrix,ci): #unpack paramteres and test
             cu[x_i,:]=c[j,:]
             cb[x_i,:]=c[k,:]
             pot[x_i,:]=c[l,:]
+            j_guess=2*x_i
+            l_guess=2*x_i+1
+            yss_guess[j_guess]=c[j,nt-1]
+            yss_guess[l_guess]=c[l,nt-1]
         c_set[i][0]=cb
         c_set[i][1]=cu
         c_set[i][2]=pot
+
+        # solve for steady-state starting with final value from time-solution
+        [css,whoops2,vn_Newton_Rhapson,vn_RJss]=Newton_Rhapson(x,yss_guess,p,tol) #Find concentration profile at steady-state using Newton-Rhapson method
+        print('you were bamboozled on ss calc {} many times'.format(whoops2))
+        #Unpack the steady-state data and do basic data analysis
+        cu_ss=np.zeros(nx+1)
+        cb_ss=np.zeros(nx+1)
+        pot_ss=np.zeros(nx+1)
+        xindex=np.arange(0,nx+1)
+        for x_i in xindex:
+            j=2*x_i #Secondary index (posotion of unbound NP in original cocnentration matrix)
+            l=2*x_i+1 #Secondary index (position of potential value in original concentration matrix)
+            cu_ss[x_i]=css[j] 
+            cb_ss[x_i]=cu_ss[x_i]*(eps-cu_ss[x_i])/K #Calculate bound NP cocnentration from unbound
+            pot_ss[x_i]=css[l]
+        c_set[i][10]=cu_ss
+        c_set[i][11]=cb_ss
+        c_set[i][12]=pot_ss
+        average_uconc_ss=np.average(cu_ss)
+        average_bconc_ss=np.average(cb_ss)
+        average_tconc_ss=average_uconc_ss+average_bconc_ss
+        c_set[i][13]=average_tconc_ss
     
-        #Find Average Unbound Concentration Overtime
-        average_conc_overtime=np.zeros(nt)
-        t2index=np.arange(0,nt)
-        for t2_i in t2index:
-            average_conc_overtime[t2_i]=np.average(cu[:,t2_i])
-        c_set[i][3]=average_conc_overtime
+        #Find NP Concentrations Overtime
+        average_uconc_overtime=np.zeros(nt)
+        average_bconc_overtime=np.zeros(nt)
+        average_tconc_overtime=np.zeros(nt)
+        lognorm_tconc_overtime=np.zeros(nt)
+        tindex=np.arange(0,nt)
+        for t_i in tindex:
+            average_uconc_overtime[t_i]=np.average(cu[:,t_i])
+            average_bconc_overtime[t_i]=np.average(cb[:,t_i])
+            average_tconc_overtime[t_i]=Kp*average_uconc_overtime[t_i]+average_bconc_overtime[t_i]
+            lognorm_tconc_overtime[t_i]=np.log(average_tconc_ss-average_tconc_overtime[t_i])
+        c_set[i][3]=average_uconc_overtime
+        c_set[i][4]=average_bconc_overtime
+        c_set[i][5]=average_tconc_overtime
+        c_set[i][6]=lognorm_tconc_overtime
         
-        #Find Change in Concentration overtime
-        change_in_concentration=np.zeros(nt)
-        t3index=t2index[:-1].copy()
-        for t3_i in t3index:
-            change_in_concentration[t3_i]=(average_conc_overtime[t3_i+1]-average_conc_overtime[t3_i])/h
-        c_set[i][4]=change_in_concentration
         
         #Find Average total NP concentration Overtime (This was always a flawed metric)
         # taverage_conc_overtime=np.zeros(nt)
