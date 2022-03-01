@@ -1,17 +1,26 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-vn_linear_fitting=0.1
+vn_linear_fitting=1.0
 
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import numpy as np
+import pandas as pd
+import sklearn
+from sklearn import linear_model
 
-def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_path):
+def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_path,gam):
+    
+    
+    # %%Initialize Sherwood Relations plots
+    
     
     # %% Calculate linear best fit, slope and intercept for each parameter set
-    lin_fit=np.zeros((parameter_combos_count,3))#initialize matrix to store linear best fit parameters
-    perc_acc_matrix= [[0 for i in range(1)] for j in range(parameter_combos_count)]
+    lin_fit=np.zeros((parameter_combos_count,11))#initialize matrix to store linear best fit parameters
+    lin_fit[:,3:]=parameter_matrix[:,5:]
+    perc_acc_matrix= [[0 for i in range(5)] for j in range(parameter_combos_count)]
     for pc_i in np.arange(0,parameter_combos_count,1): #Begin for loop over different model paramter sets 
         Eq=c_set[pc_i][13] #Grab Equilibrium total concentration value (assumes thetaequilibrates to one, which it is defined to)
         tavg_conc=c_set[pc_i][5] #Grab current total average concentration data to plot 
@@ -25,6 +34,7 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
             if perc_acc_model[j]>cutoff:
                 mod_cutoff=j #Index neccesary for model to reach evaluated percent accumulated
                 break
+            else: mod_cutoff=len(t)
             j=j+1 #Update counter in time search loop
         t_cutoff=t[:mod_cutoff]
         norm_tavg_conc_cutoff=norm_tavg_conc[:mod_cutoff]
@@ -98,9 +108,9 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
         plt.close()
         
     # %% Determine fit of first-order approximation
-        percents=[0.1,0.5,0.9,0.95] #The percent bioaccumulated that will be checked 
+        percents=[0.5,0.8,0.9,0.95,0.99] #The percent bioaccumulated that will be checked 
         perc_acc_approx=fit_conc/Eq 
-        perc_acc_table=np.zeros((len(percents),4))
+        perc_acc_table=np.zeros((len(percents),5))
         k=0 #counter for percents for loop
         for p_i in percents:
             j=0 #reset counter for time-search loop
@@ -121,6 +131,101 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
             perc_acc_table[k,3]=(approx_time-mod_time)/mod_time*100
             k=k+1 #Update counter in percent loop  
         perc_acc_matrix[pc_i][0]=perc_acc_table
+    
+    
+    
+    plt.figure(1000)
+    #gam=parameter_matrix[:,5] #Dimensionless numbers checked (getting gamma directly right now)
+    Sh1=np.zeros(int(parameter_combos_count/4))
+    Sh2=np.zeros(int(parameter_combos_count/4))
+    Sh3=np.zeros(int(parameter_combos_count/4))
+    Sh4=np.zeros(int(parameter_combos_count/4))
+    for i in np.arange(0,parameter_combos_count):
+        if i%4==0:
+            Sh1[int(i/4)]=-lin_fit[i,0] #Sherwood #'s from calculations
+        elif i%4==1:
+            Sh2[int((i-1)/4)]=-lin_fit[i,0] #Sherwood #'s from calculations
+        elif i%4==2:
+            Sh3[int((i-2)/4)]=-lin_fit[i,0] #Sherwood #'s from calculations
+        else:
+            Sh4[int((i-3)/4)]=-lin_fit[i,0] #Sherwood #'s from calculations
+    [m1,b1]=np.polyfit(gam,Sh1,1) #Find linear fit for plot
+    [m2,b2]=np.polyfit(gam,Sh2,1) #Find linear fit for plot
+    [m3,b3]=np.polyfit(gam,Sh3,1) #Find linear fit for plot
+    [m4,b4]=np.polyfit(gam,Sh4,1) #Find linear fit for plot
+    r_sq1=np.corrcoef(gam,Sh1)
+    r_sq2=np.corrcoef(gam,Sh2)
+    r_sq3=np.corrcoef(gam,Sh3)
+    r_sq4=np.corrcoef(gam,Sh4)
+    perc_acc_matrix[0][4]=[[m1,b1,r_sq1],[m2,b2,r_sq2],[m3,b3,r_sq3],[m4,b4,r_sq4]]
+    plt.scatter(gam,Sh1,label='F=5 , ups=1') #Plot Varied Dimensionless number vs Sh. 
+    plt.scatter(gam,Sh2, label='F=5 , ups=5') #Plot Varied Dimensionless number vs Sh.
+    plt.scatter(gam,Sh3, label='F=10 , ups=1') #Plot Varied Dimensionless number vs Sh.
+    plt.scatter(gam,Sh4, label='F=10 , ups=5') #Plot Varied Dimensionless number vs Sh.
+    plt.plot(gam,m1*gam+b1) #Plot best fit line
+    plt.plot(gam,m2*gam+b2) #Plot best fit line
+    plt.plot(gam,m3*gam+b3) #Plot best fit line
+    plt.plot(gam,m4*gam+b4) #Plot best fit line
+    plt.loglog(basex=10, basey=10)
+    upper_2 = np.amax(gam)*1.1 #Upper bound on fit average total concentration overtime
+    lower_2 = np.amin(gam)*0.9  #Lower Bound on fit average total concentration overtime
+    upper_3 = np.amax(Sh4)*1.1 #Upper bound on fit average total concentration overtime
+    lower_3 = np.amin(Sh1)*0.9  #Lower Bound on fit average total concentration overtime
+    plt.xlim(left=lower_2,right=upper_2)  
+    plt.ylim(bottom=lower_3,top=upper_3)
+    plt.xlabel('Dimenionless Diffusion Constant',fontsize=14)
+    plt.ylabel('Modelled Sherwood #',fontsize=14)
+    plt.title('Sherwood # vs Diffusion Constant',fontsize=16)
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
+    plt.legend()
+    sherwood_filename_partial=f'Sherwdoodplot{pc_i}.png'
+    sherwood_filename_full=os.path.join(internal_export_path,sherwood_filename_partial)
+    plt.savefig(sherwood_filename_full)
+    plt.close()
+    
+    """Multiple linear regression approach not working. going to just check indivdual variables to make it more sensible"""
+    # %% run Multiple linear regression on Sherwood vs log10 of dimensionless numbers 
+    # X=np.log10(lin_fit[:,3:])
+    # y=np.log10(-lin_fit[:,0])
+    # model_ols = linear_model.Lasso(normalize=True, alpha=0.55)
+    # model_ols.fit(X,y) 
+    # R2=model_ols.score(X,y)
+    # coef = model_ols.coef_
+    # perc_acc_matrix[0][1]=coef
+    # intercept = model_ols.intercept_
+    # perc_acc_matrix[0][2]=intercept
+    # perc_acc_matrix[0][3]=R2
+    
+    # # %% Calculate predicted sherwood number based on inputs
+    # logSh_Pred=np.zeros(parameter_combos_count)
+    # Sh_Pred=np.zeros(parameter_combos_count)
+    # Sh_Act=-lin_fit[:,0]
+    # for pc_i in np.arange(0,parameter_combos_count,1):
+    #     logSh_Pred[pc_i]=intercept
+    #     for i in np.arange(0,len(coef)):
+    #         logSh_Pred[pc_i]=coef[i]*np.log(lin_fit[pc_i,i+3])+logSh_Pred[pc_i]
+    # Sh_Pred=10**logSh_Pred
+    
+    # plt.figure(1000)
+    # plt.scatter(Sh_Pred,Sh_Act)
+    # upper_2 = np.amax(Sh_Pred)*1.1 #Upper bound on fit average total concentration overtime
+    # lower_2 = np.amin(Sh_Pred)*0.9  #Lower Bound on fit average total concentration overtime
+    # upper_3 = np.amax(Sh_Act)*1.1 #Upper bound on fit average total concentration overtime
+    # lower_3 = np.amin(Sh_Act)*0.9  #Lower Bound on fit average total concentration overtime
+    # plt.xlim(left=lower_2,right=upper_2)  
+    # plt.ylim(bottom=lower_3,top=upper_3)
+    # plt.xlabel('Linear Regression Sherwood #',fontsize=14)
+    # plt.ylabel('Modelled Sherwood #',fontsize=14)
+    # plt.title('Linear Regression Sherwood vs Modelled',fontsize=16)
+    # plt.xticks(fontsize=12)
+    # plt.yticks(fontsize=12)
+    # sherwood_filename_partial=f'Sherwdoodplot{pc_i}.png'
+    # sherwood_filename_full=os.path.join(internal_export_path,sherwood_filename_partial)
+    # plt.savefig(sherwood_filename_full)
+    # plt.close()
+        
+    
     return [perc_acc_matrix,vn_linear_fitting]
 
 

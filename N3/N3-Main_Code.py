@@ -56,12 +56,12 @@ tol=np.array([10**(-8)])  #Define the tolerance the code will run with when runn
 t1=np.array([0]) #Define initialtime vector of values to test
 t2=np.array([1]) #Final Time
 nx=np.array([100]) #Mesh size
-gam=np.array([0.1]) #Define dimenionless ratio of diffusivities to test
-F=np.array([10]) #Define the dimensionless forward reaction rate constant to test
-K=np.array([10]) #Define the Eqilbrium constant for NP binding
+gam=np.array([0.01,0.02,0.04,0.08,0.16,0.32,0.64,1]) #Define dimenionless ratio of diffusivities to test
+F=np.array([5,10]) #Define the dimensionless forward reaction rate constant to test
+K=np.array([100]) #Define the Eqilbrium constant for NP binding
 eps=np.array([10]) #Define ratio of total NP binding sites to supernatant NP concentration
 omega=np.array([1]) #Define contribution of nanoparticle radius to it electrial ptoential impacts
-ups= np.array([1])#Define ratio of biofilm to nanoparticle charge 
+ups= np.array([1,5])#Define ratio of biofilm to nanoparticle charge 
 Kp= np.array([10]) #Define partition coeffecient of NP into biofilm at water-biofilm interface
 beta= np.array([10]) #Define ratio of particle mobility due to brownian motion vs elecotrkinesis
 
@@ -75,7 +75,7 @@ beta= np.array([10]) #Define ratio of particle mobility due to brownian motion v
 vn_csv_generator = csv_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_path,new_count_number,machine_number)
 
 # %% Fit model to first order approximation, plot approximation, and determine fit of approximation
-[perc_acc_matrix,vn_linear_fitting]=linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_path)
+[perc_acc_matrix,vn_linear_fitting]=linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_path,gam)
 
 # %% Report Generator: Exports Plots as Word Document to Seperate Directory (see file N2_report_generator.py)
 report=plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N3,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,perc_acc_matrix,vn_linear_fitting,machine_number,internal_export_path)
@@ -90,7 +90,7 @@ print('Total time is {} sec'.format(total_time))
 #%% To export report, turn on this code block
 #Finish Report
 para5=report.add_paragraph(f'Time to Run (sec): {total_time}     ')
-report_filename_partial=f'N2_report{new_count_number}-{machine_number}.docx'
+report_filename_partial=f'N3_report{new_count_number}-{machine_number}.docx'
 report_filename_full=os.path.join(direct_export_path,report_filename_partial)
 report.save(report_filename_full)
 
