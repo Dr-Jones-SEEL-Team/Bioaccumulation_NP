@@ -28,7 +28,7 @@ def RJss(x,y,yold,p):
             J[i,2]=2*gam/dx**2
             J[i,3]=2*beta*y[0]/dx**2
         elif i==1 : #solid-biofilm interface node for Gauss' Law
-            R[i]=2*(y[3]-y[1])/dx**2-ups+omega*y[0]*(Kp+eps/(y[0]+K))
+            R[i]=2*(y[3]-y[1])/dx**2-1+omega*y[0]*(Kp+eps/(y[0]+K))
             J[i,0]=omega*(Kp+eps*K/(y[0]+K)**2)
             J[i,1]=-2/dx**2
             J[i,3]=2/dx**2
@@ -49,7 +49,7 @@ def RJss(x,y,yold,p):
             J[i,i+3]=beta*y[i]/dx**2+(y[i+2]-y[i-2])/(4*dx**2)
         elif i%2==1 : #interior biofilm nodes for Gauss' Law
             l=int((i-1)/2)
-            R[i]=(y[i+2]-2*y[i]+y[i-2])/dx**2-ups*(1-x[l])+omega*y[i-1]*(Kp+eps/(y[i-1]+K))
+            R[i]=(y[i+2]-2*y[i]+y[i-2])/dx**2-(1-x[l])+omega*y[i-1]*(Kp+eps/(y[i-1]+K))
             J[i,i-2]=1/dx**2
             J[i,i-1]=omega*(Kp+eps*K/(y[i-1]+K)**2)
             J[i,i]=-2/dx**2

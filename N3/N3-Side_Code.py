@@ -3,8 +3,7 @@
 # -*- coding: utf-8 -*-
 
 # %% Code Version Numbers
-vn_N3=1.0 #See meta-data at bottom for details
-vn_Main_Code=1.0 #See meta-data fro details
+vn_Side_Code=1.0 #See meta-data fro details
 
 
 # %% Current Machine Running Code with neccesary adjustments
@@ -51,17 +50,17 @@ counter_file.write(new_count_number)
 counter_file.close()
 
 # %%Inputs Code Block
-h=np.array([0.002]) #Define timesteps to test
+h=np.array([0.01]) #Define timesteps to test
 tol=np.array([10**(-8)])  #Define the tolerance the code will run with when running Newton-Rhapson
 t1=np.array([0]) #Define initialtime vector of values to test
-t2=np.array([0.5]) #Final Time
+t2=np.array([1]) #Final Time
 nx=np.array([100]) #Mesh size
 gam=np.array([0.1,0.2,0.4,0.8,1.6,3.2,6.4,10]) #Define dimenionless ratio of diffusivities to test
-F=np.array([10]) #Define the dimensionless forward reaction rate constant to test
-K=np.array([100,1000]) #Define the Eqilbrium constant for NP binding
-eps=np.array([10,100]) #Define ratio of total NP binding sites to supernatant NP concentration
-omega=np.array([1]) #Define contribution of nanoparticle to biofilm to electrical potential profile
-ups= np.array([1])#Define ratio of biofilm to nanoparticle charge 
+F=np.array([1,10]) #Define the dimensionless forward reaction rate constant to test
+K=np.array([100]) #Define the Eqilbrium constant for NP binding
+eps=np.array([10]) #Define ratio of total NP binding sites to supernatant NP concentration
+omega=np.array([1]) #Define contribution of nanoparticle radius to it electrial ptoential impacts
+ups= np.array([1,5])#Define ratio of biofilm to nanoparticle charge 
 Kp= np.array([10]) #Define partition coeffecient of NP into biofilm at water-biofilm interface
 beta= np.array([10]) #Define ratio of particle mobility due to brownian motion vs elecotrkinesis
 

@@ -33,7 +33,7 @@ def RJ(x,y,yold,p,h):
             J[i,0]=-h*F*(eps-y[1])
             J[i,1]=1+h*F*(K+y[0])
         elif i==2 : #solid-biofilm interface node for Gauss' Law
-            R[i]=2*(y[5]-y[2])/dx**2-ups+omega*(Kp*y[0]+y[1])
+            R[i]=2*(y[5]-y[2])/dx**2-1+omega*(Kp*y[0]+y[1])
             J[i,0]=omega*Kp
             J[i,1]=omega
             J[i,2]=-2/dx**2
@@ -65,7 +65,7 @@ def RJ(x,y,yold,p,h):
             J[i,i]=1+h*F*(y[i-1]+K)
         elif i%3==2 : #interior biofilm nodes for Gauss' Law
             l=int((i-2)/3)
-            R[i]=(y[i+3]-2*y[i]+y[i-3])/dx**2-ups*(1-x[l])+omega*(Kp*y[i-2]+y[i-1])
+            R[i]=(y[i+3]-2*y[i]+y[i-3])/dx**2-(1-x[l])+omega*(Kp*y[i-2]+y[i-1])
             J[i,i-3]=1/dx**2
             J[i,i-2]=omega*Kp
             J[i,i-1]=omega

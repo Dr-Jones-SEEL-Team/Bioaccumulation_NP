@@ -310,18 +310,18 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         # pic8.add_picture(totCvt_anim_filename_full, width=docx.shared.Inches(3))      
         # plt.close()
         
-        # # %% Plot Approximation for Total NP conc Overtime
-        # linear_filename_partial=f'Linearplot{pc_i}.png'
-        # linear_filename_full=os.path.join(internal_export_path,linear_filename_partial)
-        # #pics_paragraph6=report.add_paragraph() commented out  when log plots out
-        # #pic9=pics_paragraph6.add_run() commented out  when log plots out
-        # pics_paragraph5=report.add_paragraph()
-        # pic9=pics_paragraph5.add_run()
-        # pic9.add_picture(linear_filename_full,width=docx.shared.Inches(3))
-        # log_filename_partial=f'Logplot{pc_i}.png'
-        # log_filename_full=os.path.join(internal_export_path,log_filename_partial)
-        # pic10=pics_paragraph5.add_run() #Added when log plot off
-        # pic10.add_picture(log_filename_full,width=docx.shared.Inches(3))
+        # %% Plot Approximation for Total NP conc Overtime
+        linear_filename_partial=f'Linearplot{pc_i}.png'
+        linear_filename_full=os.path.join(internal_export_path,linear_filename_partial)
+        #pics_paragraph6=report.add_paragraph() commented out  when log plots out
+        #pic9=pics_paragraph6.add_run() commented out  when log plots out
+        pics_paragraph5=report.add_paragraph()
+        pic9=pics_paragraph5.add_run()
+        pic9.add_picture(linear_filename_full,width=docx.shared.Inches(3))
+        log_filename_partial=f'Logplot{pc_i}.png'
+        log_filename_full=os.path.join(internal_export_path,log_filename_partial)
+        pic10=pics_paragraph5.add_run() #Added when log plot off
+        pic10.add_picture(log_filename_full,width=docx.shared.Inches(3))
         
         # # %% Add Table for Fit
         # perc_acc_table=perc_acc_matrix[pc_i][0]
@@ -346,6 +346,13 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
     pic11.add_picture(sherwood_filename_full,width=docx.shared.Inches(3))
     report.add_paragraph(f'Slope/interecpt/R^2 is: {perc_acc_matrix[0][4]}')
     #para7=report.add_paragraph(f'R^2={perc_acc_matrix[0][3]}     ')
+    
+    logsherwood_filename_partial=f'LogSherwdoodplot{pc_i}.png'
+    logsherwood_filename_full=os.path.join(internal_export_path,logsherwood_filename_partial)
+    pics_paragraph6=report.add_paragraph()
+    pic11=pics_paragraph6.add_run()
+    pic11.add_picture(logsherwood_filename_full,width=docx.shared.Inches(3))
+    report.add_paragraph(f'Slope/interecpt/R^2 is: {perc_acc_matrix[0][5]}')
     
     # %% Add Table for Multiple Linear Regression
     # coef_multreg=perc_acc_matrix[0][1]
