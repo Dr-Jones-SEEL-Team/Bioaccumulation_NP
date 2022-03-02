@@ -339,20 +339,20 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         #         cell=table1.cell(i+1,j)
         #         cell.text=str(perc_acc_table[i,j])
             
-    sherwood_filename_partial=f'Sherwdoodplot{pc_i}.png'
-    sherwood_filename_full=os.path.join(internal_export_path,sherwood_filename_partial)
-    pics_paragraph6=report.add_paragraph()
-    pic11=pics_paragraph6.add_run()
-    pic11.add_picture(sherwood_filename_full,width=docx.shared.Inches(3))
-    report.add_paragraph(f'Slope/interecpt/R^2 is: {perc_acc_matrix[0][4]}')
-    #para7=report.add_paragraph(f'R^2={perc_acc_matrix[0][3]}     ')
+    # sherwood_filename_partial=f'Sherwdoodplot{pc_i}.png'
+    # sherwood_filename_full=os.path.join(internal_export_path,sherwood_filename_partial)
+    # pics_paragraph6=report.add_paragraph()
+    # pic11=pics_paragraph6.add_run()
+    # pic11.add_picture(sherwood_filename_full,width=docx.shared.Inches(3))
+    # report.add_paragraph(f'Slope/interecpt/R^2 is: {perc_acc_matrix[0][4]}')
+    # #para7=report.add_paragraph(f'R^2={perc_acc_matrix[0][3]}     ')
     
-    logsherwood_filename_partial=f'LogSherwdoodplot{pc_i}.png'
-    logsherwood_filename_full=os.path.join(internal_export_path,logsherwood_filename_partial)
-    pics_paragraph6=report.add_paragraph()
-    pic11=pics_paragraph6.add_run()
-    pic11.add_picture(logsherwood_filename_full,width=docx.shared.Inches(3))
-    report.add_paragraph(f'Slope/interecpt/R^2 is: {perc_acc_matrix[0][5]}')
+    # logsherwood_filename_partial=f'LogSherwdoodplot{pc_i}.png'
+    # logsherwood_filename_full=os.path.join(internal_export_path,logsherwood_filename_partial)
+    # pics_paragraph6=report.add_paragraph()
+    # pic11=pics_paragraph6.add_run()
+    # pic11.add_picture(logsherwood_filename_full,width=docx.shared.Inches(3))
+    # report.add_paragraph(f'Slope/interecpt/R^2 is: {perc_acc_matrix[0][5]}')
     
     # %% Add Table for Multiple Linear Regression
     # coef_multreg=perc_acc_matrix[0][1]

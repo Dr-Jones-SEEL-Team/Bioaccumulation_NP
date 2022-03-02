@@ -133,145 +133,162 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
     
     
     
-    plt.figure(1000)
-    #gam=parameter_matrix[:,5] #Dimensionless numbers checked (getting gamma directly right now)
-    Sh1=np.zeros(int(parameter_combos_count/4))
-    Sh2=np.zeros(int(parameter_combos_count/4))
-    Sh3=np.zeros(int(parameter_combos_count/4))
-    Sh4=np.zeros(int(parameter_combos_count/4))
-    for i in np.arange(0,parameter_combos_count):
-        if i%4==0:
-            Sh1[int(i/4)]=-lin_fit[i,0] #Sherwood #'s from calculations
-        elif i%4==1:
-            Sh2[int((i-1)/4)]=-lin_fit[i,0] #Sherwood #'s from calculations
-        elif i%4==2:
-            Sh3[int((i-2)/4)]=-lin_fit[i,0] #Sherwood #'s from calculations
-        else:
-            Sh4[int((i-3)/4)]=-lin_fit[i,0] #Sherwood #'s from calculations
-    [m1,b1]=np.polyfit(gam,Sh1,1) #Find linear fit for plot
-    [m2,b2]=np.polyfit(gam,Sh2,1) #Find linear fit for plot
-    [m3,b3]=np.polyfit(gam,Sh3,1) #Find linear fit for plot
-    [m4,b4]=np.polyfit(gam,Sh4,1) #Find linear fit for plot
-    r_sq1=np.corrcoef(gam,Sh1)
-    r_sq2=np.corrcoef(gam,Sh2)
-    r_sq3=np.corrcoef(gam,Sh3)
-    r_sq4=np.corrcoef(gam,Sh4)
-    perc_acc_matrix[0][4]=[[m1,b1,r_sq1],[m2,b2,r_sq2],[m3,b3,r_sq3],[m4,b4,r_sq4]]
-    plt.scatter(gam,Sh1,label='K=100 , epsilon=10') #Plot Varied Dimensionless number vs Sh. 
-    plt.scatter(gam,Sh2, label='K=100 , epsilon=100') #Plot Varied Dimensionless number vs Sh.
-    plt.scatter(gam,Sh3, label='K=1000 , epsilon=10') #Plot Varied Dimensionless number vs Sh.
-    plt.scatter(gam,Sh4, label='K=1000 , epsilon=100') #Plot Varied Dimensionless number vs Sh.
-    plt.plot(gam,m1*gam+b1) #Plot best fit line
-    plt.plot(gam,m2*gam+b2) #Plot best fit line
-    plt.plot(gam,m3*gam+b3) #Plot best fit line
-    plt.plot(gam,m4*gam+b4) #Plot best fit line
-    #plt.loglog(basex=10, basey=10)
-    upper_2 = np.amax(gam)*1.1 #Upper bound on fit average total concentration overtime
-    lower_2 = np.amin(gam)*0.9  #Lower Bound on fit average total concentration overtime
-    upper_3 = np.amax(Sh3)*1.1 #Upper bound on fit average total concentration overtime
-    lower_3 = np.amin(Sh2)*0.9  #Lower Bound on fit average total concentration overtime
-    plt.xlim(left=lower_2,right=upper_2)  
-    plt.ylim(bottom=lower_3,top=upper_3)
-    plt.xlabel('Dimenionless Diffusion Constant',fontsize=14)
-    plt.ylabel('Modelled Sherwood #',fontsize=14)
-    #plt.title('Sherwood # vs Diffusion Constant',fontsize=16)
-    plt.xticks(fontsize=12)
-    plt.yticks(fontsize=12)
-    plt.legend()
-    sherwood_filename_partial=f'Sherwdoodplot{pc_i}.png'
-    sherwood_filename_full=os.path.join(internal_export_path,sherwood_filename_partial)
-    plt.savefig(sherwood_filename_full, bbox_inches='tight')
-    plt.close()
-    
-    plt.figure(1001)
-    loggam=np.log10(gam) #Dimensionless numbers checked (getting gamma directly right now)
-    logSh1=np.zeros(int(parameter_combos_count/4))
-    logSh2=np.zeros(int(parameter_combos_count/4))
-    logSh3=np.zeros(int(parameter_combos_count/4))
-    logSh4=np.zeros(int(parameter_combos_count/4))
-    for i in np.arange(0,parameter_combos_count):
-        if i%4==0:
-            logSh1[int(i/4)]=np.log10(-lin_fit[i,0]) #Sherwood #'s from calculations
-        elif i%4==1:
-            logSh2[int((i-1)/4)]=np.log10(-lin_fit[i,0]) #Sherwood #'s from calculations
-        elif i%4==2:
-            logSh3[int((i-2)/4)]=np.log10(-lin_fit[i,0]) #Sherwood #'s from calculations
-        else:
-            logSh4[int((i-3)/4)]=np.log10(-lin_fit[i,0]) #Sherwood #'s from calculations
-    [m1,b1]=np.polyfit(loggam,logSh1,1) #Find linear fit for plot
-    [m2,b2]=np.polyfit(loggam,logSh2,1) #Find linear fit for plot
-    [m3,b3]=np.polyfit(loggam,logSh3,1) #Find linear fit for plot
-    [m4,b4]=np.polyfit(loggam,logSh4,1) #Find linear fit for plot
-    r_sq1=np.corrcoef(loggam,logSh1)
-    r_sq2=np.corrcoef(loggam,logSh2)
-    r_sq3=np.corrcoef(loggam,logSh3)
-    r_sq4=np.corrcoef(loggam,logSh4)
-    perc_acc_matrix[0][5]=[[m1,b1,r_sq1],[m2,b2,r_sq2],[m3,b3,r_sq3],[m4,b4,r_sq4]]
-    plt.scatter(loggam,logSh1,label='K=100 , epsilon=10') #Plot Varied Dimensionless number vs Sh. 
-    plt.scatter(loggam,logSh2, label='K=100 , epsilon=100') #Plot Varied Dimensionless number vs Sh.
-    plt.scatter(loggam,logSh3, label='K=1000 , epsilon=10') #Plot Varied Dimensionless number vs Sh.
-    plt.scatter(loggam,logSh4, label='K=1000 , epsilon=100') #Plot Varied Dimensionless number vs Sh.
-    plt.plot(loggam,m1*loggam+b1) #Plot best fit line
-    plt.plot(loggam,m2*loggam+b2) #Plot best fit line
-    plt.plot(loggam,m3*loggam+b3) #Plot best fit line
-    plt.plot(loggam,m4*loggam+b4) #Plot best fit line
-    upper_2 = np.amax(loggam)*1.1 #Upper bound on fit average total concentration overtime
-    lower_2 = np.amin(loggam)*1.1  #Lower Bound on fit average total concentration overtime
-    upper_3 = np.amax(logSh3)*1.1 #Upper bound on fit average total concentration overtime
-    lower_3 = np.amin(logSh2)*0.9  #Lower Bound on fit average total concentration overtime
-    plt.xlim(left=lower_2,right=upper_2)  
-    plt.ylim(bottom=lower_3,top=upper_3)
-    plt.xlabel('Log of Dimenionless Diffusion Constant',fontsize=14)
-    plt.ylabel('Log Modelled Sherwood #',fontsize=14)
-    plt.title('Sherwood # vs Diffusion Constant',fontsize=16)
-    plt.xticks(fontsize=12)
-    plt.yticks(fontsize=12)
-    plt.legend()
-    logsherwood_filename_partial=f'LogSherwdoodplot{pc_i}.png'
-    logsherwood_filename_full=os.path.join(internal_export_path,logsherwood_filename_partial)
-    plt.savefig(logsherwood_filename_full, bbox_inches='tight')
-    plt.close()
-    
-    """Multiple linear regression approach not working. going to just check indivdual variables to make it more sensible"""
-    # %% run Multiple linear regression on Sherwood vs log10 of dimensionless numbers 
-    # X=np.log10(lin_fit[:,3:])
-    # y=np.log10(-lin_fit[:,0])
-    # model_ols = linear_model.Lasso(normalize=True, alpha=0.55)
-    # model_ols.fit(X,y) 
-    # R2=model_ols.score(X,y)
-    # coef = model_ols.coef_
-    # perc_acc_matrix[0][1]=coef
-    # intercept = model_ols.intercept_
-    # perc_acc_matrix[0][2]=intercept
-    # perc_acc_matrix[0][3]=R2
-    
-    # # %% Calculate predicted sherwood number based on inputs
-    # logSh_Pred=np.zeros(parameter_combos_count)
-    # Sh_Pred=np.zeros(parameter_combos_count)
-    # Sh_Act=-lin_fit[:,0]
-    # for pc_i in np.arange(0,parameter_combos_count,1):
-    #     logSh_Pred[pc_i]=intercept
-    #     for i in np.arange(0,len(coef)):
-    #         logSh_Pred[pc_i]=coef[i]*np.log(lin_fit[pc_i,i+3])+logSh_Pred[pc_i]
-    # Sh_Pred=10**logSh_Pred
-    
     # plt.figure(1000)
-    # plt.scatter(Sh_Pred,Sh_Act)
-    # upper_2 = np.amax(Sh_Pred)*1.1 #Upper bound on fit average total concentration overtime
-    # lower_2 = np.amin(Sh_Pred)*0.9  #Lower Bound on fit average total concentration overtime
-    # upper_3 = np.amax(Sh_Act)*1.1 #Upper bound on fit average total concentration overtime
-    # lower_3 = np.amin(Sh_Act)*0.9  #Lower Bound on fit average total concentration overtime
+    # #gam=parameter_matrix[:,5] #Dimensionless numbers checked (getting gamma directly right now)
+    # Sh1=np.zeros(int(parameter_combos_count/4))
+    # Sh2=np.zeros(int(parameter_combos_count/4))
+    # Sh3=np.zeros(int(parameter_combos_count/4))
+    # Sh4=np.zeros(int(parameter_combos_count/4))
+    # for i in np.arange(0,parameter_combos_count):
+    #     # if i%4==0:
+    #     #     Sh1[int(i/4)]=-lin_fit[i,0] #Sherwood #'s from calculations
+    #     # elif i%4==1:
+    #     #     Sh2[int((i-1)/4)]=-lin_fit[i,0] #Sherwood #'s from calculations
+    #     # elif i%4==2:
+    #     #     Sh3[int((i-2)/4)]=-lin_fit[i,0] #Sherwood #'s from calculations
+    #     # else:
+    #     #     Sh4[int((i-3)/4)]=-lin_fit[i,0] #Sherwood #'s from calculations
+
+    #     if i<8:
+    #         Sh1[int(i)]=-lin_fit[i,0] #Sherwood #'s from calculations
+    #     elif i<16:
+    #         Sh2[int(i-8)]=-lin_fit[i,0] #Sherwood #'s from calculations
+    #     elif i<24:
+    #         Sh3[int(i-16)]=-lin_fit[i,0] #Sherwood #'s from calculations
+    #     else:
+    #         Sh4[int(i-24)]=-lin_fit[i,0] #Sherwood #'s from calculations
+    # [m1,b1]=np.polyfit(gam,Sh1,1) #Find linear fit for plot
+    # [m2,b2]=np.polyfit(gam,Sh2,1) #Find linear fit for plot
+    # [m3,b3]=np.polyfit(gam,Sh3,1) #Find linear fit for plot
+    # [m4,b4]=np.polyfit(gam,Sh4,1) #Find linear fit for plot
+    # r_sq1=np.corrcoef(gam,Sh1)
+    # r_sq2=np.corrcoef(gam,Sh2)
+    # r_sq3=np.corrcoef(gam,Sh3)
+    # r_sq4=np.corrcoef(gam,Sh4)
+    # perc_acc_matrix[0][4]=[[m1,b1,r_sq1],[m2,b2,r_sq2],[m3,b3,r_sq3],[m4,b4,r_sq4]]
+    # plt.scatter(gam,Sh1, label='epsilon=10 , omega=0.1') #Plot Varied Dimensionless number vs Sh. 
+    # plt.scatter(gam,Sh2, label='epsilon=10 , omega=10') #Plot Varied Dimensionless number vs Sh.
+    # plt.scatter(gam,Sh3, label='epsilon=100 , omega=0.1') #Plot Varied Dimensionless number vs Sh.
+    # plt.scatter(gam,Sh4, label='epsilon=100 , omega=10') #Plot Varied Dimensionless number vs Sh.
+    # plt.plot(gam,m1*gam+b1) #Plot best fit line
+    # plt.plot(gam,m2*gam+b2) #Plot best fit line
+    # plt.plot(gam,m3*gam+b3) #Plot best fit line
+    # plt.plot(gam,m4*gam+b4) #Plot best fit line
+    # #plt.loglog(basex=10, basey=10)
+    # upper_2 = np.amax(gam)*1.1 #Upper bound on fit average total concentration overtime
+    # lower_2 = np.amin(gam)*0.9  #Lower Bound on fit average total concentration overtime
+    # upper_3 = np.amax(np.concatenate((Sh1,Sh2,Sh3,Sh4)))*1.1 #Upper bound on fit average total concentration overtime
+    # lower_3 = np.amin(np.concatenate((Sh1,Sh2,Sh3,Sh4)))*0.9  #Lower Bound on fit average total concentration overtime
     # plt.xlim(left=lower_2,right=upper_2)  
     # plt.ylim(bottom=lower_3,top=upper_3)
-    # plt.xlabel('Linear Regression Sherwood #',fontsize=14)
+    # plt.xlabel('Dimenionless Ratio of Electrophoresis to Diffusion',fontsize=14)
     # plt.ylabel('Modelled Sherwood #',fontsize=14)
-    # plt.title('Linear Regression Sherwood vs Modelled',fontsize=16)
+    # #plt.title('Sherwood # vs Diffusion Constant',fontsize=16)
     # plt.xticks(fontsize=12)
     # plt.yticks(fontsize=12)
+    # plt.legend()
     # sherwood_filename_partial=f'Sherwdoodplot{pc_i}.png'
     # sherwood_filename_full=os.path.join(internal_export_path,sherwood_filename_partial)
-    # plt.savefig(sherwood_filename_full)
+    # plt.savefig(sherwood_filename_full, bbox_inches='tight')
     # plt.close()
+    
+    # plt.figure(1001)
+    # loggam=np.log10(gam) #Dimensionless numbers checked (getting gamma directly right now)
+    # logSh1=np.zeros(int(parameter_combos_count/4))
+    # logSh2=np.zeros(int(parameter_combos_count/4))
+    # logSh3=np.zeros(int(parameter_combos_count/4))
+    # logSh4=np.zeros(int(parameter_combos_count/4))
+    # for i in np.arange(0,parameter_combos_count):
+    #     # if i%4==0:
+    #     #     logSh1[int((i-0)/4)]=np.log10(-lin_fit[i,0]) #Sherwood #'s from calculations
+    #     # elif i%4==1:
+    #     #     logSh2[int((i-1)/4)]=np.log10(-lin_fit[i,0]) #Sherwood #'s from calculations
+    #     # elif i%4==2:
+    #     #     logSh3[int((i-2)/4)]=np.log(-lin_fit[i,0]) #Sherwood #'s from calculations
+    #     # else:
+    #     #     logSh4[int((i-3)/4)]=np.log10(-lin_fit[i,0]) #Sherwood #'s from calculations
+   
+    #     if i<8:
+    #         logSh1[int(i)]=np.log10(-lin_fit[i,0]) #Sherwood #'s from calculations
+    #     elif i<16:
+    #         logSh2[int(i-8)]=np.log10(-lin_fit[i,0]) #Sherwood #'s from calculations
+    #     elif i<24:
+    #         logSh3[int(i-16)]=np.log(-lin_fit[i,0]) #Sherwood #'s from calculations
+    #     else:
+    #         logSh4[int(i-24)]=np.log10(-lin_fit[i,0]) #Sherwood #'s from calculations
+    # [m1,b1]=np.polyfit(loggam,logSh1,1) #Find linear fit for plot
+    # [m2,b2]=np.polyfit(loggam,logSh2,1) #Find linear fit for plot
+    # [m3,b3]=np.polyfit(loggam,logSh3,1) #Find linear fit for plot
+    # [m4,b4]=np.polyfit(loggam,logSh4,1) #Find linear fit for plot
+    # r_sq1=np.corrcoef(loggam,logSh1)
+    # r_sq2=np.corrcoef(loggam,logSh2)
+    # r_sq3=np.corrcoef(loggam,logSh3)
+    # r_sq4=np.corrcoef(loggam,logSh4)
+    # perc_acc_matrix[0][5]=[[m1,b1,r_sq1],[m2,b2,r_sq2],[m3,b3,r_sq3],[m4,b4,r_sq4]]
+    # plt.scatter(loggam,logSh1,label='epsilon=10 , omega=0.1') #Plot Varied Dimensionless number vs Sh. 
+    # plt.scatter(loggam,logSh2, label='epsilon=10 , omega=10') #Plot Varied Dimensionless number vs Sh.
+    # plt.scatter(loggam,logSh3, label='epsilon=100 , omega=0.1') #Plot Varied Dimensionless number vs Sh.
+    # plt.scatter(loggam,logSh4, label='epsilon=100 , omega=10') #Plot Varied Dimensionless number vs Sh.
+    # plt.plot(loggam,m1*loggam+b1) #Plot best fit line
+    # plt.plot(loggam,m2*loggam+b2) #Plot best fit line
+    # plt.plot(loggam,m3*loggam+b3) #Plot best fit line
+    # plt.plot(loggam,m4*loggam+b4) #Plot best fit line
+    # upper_2 = np.amax(loggam)*1.1 #Upper bound on fit average total concentration overtime
+    # lower_2 = np.amin(loggam)*1.1  #Lower Bound on fit average total concentration overtime
+    # upper_3 = np.amax(np.concatenate((logSh1,logSh2,logSh3,logSh4)))*1.1 #Upper bound on fit average total concentration overtime
+    # lower_3 = np.amin(np.concatenate((logSh1,logSh2,logSh3,logSh4)))*0.9  #Lower Bound on fit average total concentration overtime
+    # plt.xlim(left=lower_2,right=upper_2)  
+    # plt.ylim(bottom=lower_3,top=upper_3)
+    # plt.xlabel('Log of Dimenionless Ratio of Electrophoresis to Diffusion',fontsize=14)
+    # plt.ylabel('Log Modelled Sherwood #',fontsize=14)
+    # plt.xticks(fontsize=12)
+    # plt.yticks(fontsize=12)
+    # plt.legend()
+    # logsherwood_filename_partial=f'LogSherwdoodplot{pc_i}.png'
+    # logsherwood_filename_full=os.path.join(internal_export_path,logsherwood_filename_partial)
+    # plt.savefig(logsherwood_filename_full, bbox_inches='tight')
+    # plt.close()
+    
+    """Multiple linear regression approach not working. going to just check indivdual variables to make it more sensible"""
+    #%% run Multiple linear regression on Sherwood vs log10 of dimensionless numbers 
+    X=np.log10(lin_fit[:,3:])
+    y=np.log10(-lin_fit[:,0])
+    model_ols = linear_model.Lasso(normalize=True, alpha=0.55)
+    model_ols.fit(X,y) 
+    R2=model_ols.score(X,y)
+    coef = model_ols.coef_
+    perc_acc_matrix[0][1]=coef
+    intercept = model_ols.intercept_
+    perc_acc_matrix[0][2]=intercept
+    perc_acc_matrix[0][3]=R2
+    
+    # %% Calculate predicted sherwood number based on inputs
+    logSh_Pred=np.zeros(parameter_combos_count)
+    Sh_Pred=np.zeros(parameter_combos_count)
+    Sh_Act=-lin_fit[:,0]
+    for pc_i in np.arange(0,parameter_combos_count,1):
+        logSh_Pred[pc_i]=intercept
+        for i in np.arange(0,len(coef)):
+            logSh_Pred[pc_i]=coef[i]*np.log(lin_fit[pc_i,i+3])+logSh_Pred[pc_i]
+    Sh_Pred=10**logSh_Pred
+    
+    plt.figure(1000)
+    plt.scatter(Sh_Pred,Sh_Act)
+    upper_2 = np.amax(Sh_Pred)*1.1 #Upper bound on fit average total concentration overtime
+    lower_2 = np.amin(Sh_Pred)*0.9  #Lower Bound on fit average total concentration overtime
+    upper_3 = np.amax(Sh_Act)*1.1 #Upper bound on fit average total concentration overtime
+    lower_3 = np.amin(Sh_Act)*0.9  #Lower Bound on fit average total concentration overtime
+    plt.xlim(left=lower_2,right=upper_2)  
+    plt.ylim(bottom=lower_3,top=upper_3)
+    plt.xlabel('Linear Regression Sherwood #',fontsize=14)
+    plt.ylabel('Modelled Sherwood #',fontsize=14)
+    plt.title('Linear Regression Sherwood vs Modelled',fontsize=16)
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
+    sherwood_filename_partial=f'Sherwdoodplot{pc_i}.png'
+    sherwood_filename_full=os.path.join(internal_export_path,sherwood_filename_partial)
+    plt.savefig(sherwood_filename_full)
+    plt.close()
         
     
     return [perc_acc_matrix,vn_linear_fitting]
