@@ -107,29 +107,29 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
         plt.close()
         
     # %% Determine fit of first-order approximation
-        percents=[0.5,0.8,0.9,0.95,0.99] #The percent bioaccumulated that will be checked 
-        perc_acc_approx=fit_conc/Eq 
-        perc_acc_table=np.zeros((len(percents),5))
-        k=0 #counter for percents for loop
-        for p_i in percents:
-            j=0 #reset counter for time-search loop
-            for t_i in t:
-                if perc_acc_model[j]>p_i:
-                    mod_time=t_i #Time neccesary for model to reach evaluated percent accumulated
-                    break
-                j=j+1 #Update counter in time search loop
-            j=0 #reset counter for time-search loop
-            for t_i in t:
-                if perc_acc_approx[j]>p_i:
-                    approx_time=t_i #time neccesary for first-order approximation to reach evaluated percent accumulated
-                    break
-                j=j+1 #Update counter in time search loop
-            perc_acc_table[k,0]=p_i
-            perc_acc_table[k,1]=mod_time
-            perc_acc_table[k,2]=approx_time
-            perc_acc_table[k,3]=(approx_time-mod_time)/mod_time*100
-            k=k+1 #Update counter in percent loop  
-        perc_acc_matrix[pc_i][0]=perc_acc_table
+        # percents=[0.5,0.8,0.9,0.95,0.99] #The percent bioaccumulated that will be checked 
+        # perc_acc_approx=fit_conc/Eq 
+        # perc_acc_table=np.zeros((len(percents),5))
+        # k=0 #counter for percents for loop
+        # for p_i in percents:
+        #     j=0 #reset counter for time-search loop
+        #     for t_i in t:
+        #         if perc_acc_model[j]>p_i:
+        #             mod_time=t_i #Time neccesary for model to reach evaluated percent accumulated
+        #             break
+        #         j=j+1 #Update counter in time search loop
+        #     j=0 #reset counter for time-search loop
+        #     for t_i in t:
+        #         if perc_acc_approx[j]>p_i:
+        #             approx_time=t_i #time neccesary for first-order approximation to reach evaluated percent accumulated
+        #             break
+        #         j=j+1 #Update counter in time search loop
+        #     perc_acc_table[k,0]=p_i
+        #     perc_acc_table[k,1]=mod_time
+        #     perc_acc_table[k,2]=approx_time
+        #     perc_acc_table[k,3]=(approx_time-mod_time)/mod_time*100
+        #     k=k+1 #Update counter in percent loop  
+        # perc_acc_matrix[pc_i][0]=perc_acc_table
     
     
     
@@ -251,44 +251,44 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
     
     """Multiple linear regression approach not working. going to just check indivdual variables to make it more sensible"""
     #%% run Multiple linear regression on Sherwood vs log10 of dimensionless numbers 
-    X=np.log10(lin_fit[:,3:])
-    y=np.log10(-lin_fit[:,0])
-    model_ols = linear_model.Lasso(normalize=True, alpha=0.55)
-    model_ols.fit(X,y) 
-    R2=model_ols.score(X,y)
-    coef = model_ols.coef_
-    perc_acc_matrix[0][1]=coef
-    intercept = model_ols.intercept_
-    perc_acc_matrix[0][2]=intercept
-    perc_acc_matrix[0][3]=R2
+    # X=np.log10(lin_fit[:,3:])
+    # y=np.log10(-lin_fit[:,0])
+    # model_ols = linear_model.Lasso(normalize=True, alpha=0.55)
+    # model_ols.fit(X,y) 
+    # R2=model_ols.score(X,y)
+    # coef = model_ols.coef_
+    # perc_acc_matrix[0][1]=coef
+    # intercept = model_ols.intercept_
+    # perc_acc_matrix[0][2]=intercept
+    # perc_acc_matrix[0][3]=R2
     
-    # %% Calculate predicted sherwood number based on inputs
-    logSh_Pred=np.zeros(parameter_combos_count)
-    Sh_Pred=np.zeros(parameter_combos_count)
-    Sh_Act=-lin_fit[:,0]
-    for pc_i in np.arange(0,parameter_combos_count,1):
-        logSh_Pred[pc_i]=intercept
-        for i in np.arange(0,len(coef)):
-            logSh_Pred[pc_i]=coef[i]*np.log(lin_fit[pc_i,i+3])+logSh_Pred[pc_i]
-    Sh_Pred=10**logSh_Pred
+    # # %% Calculate predicted sherwood number based on inputs
+    # logSh_Pred=np.zeros(parameter_combos_count)
+    # Sh_Pred=np.zeros(parameter_combos_count)
+    # Sh_Act=-lin_fit[:,0]
+    # for pc_i in np.arange(0,parameter_combos_count,1):
+    #     logSh_Pred[pc_i]=intercept
+    #     for i in np.arange(0,len(coef)):
+    #         logSh_Pred[pc_i]=`coef[i]*np.log(lin_fit[pc_i,i+3])+logSh_Pred[pc_i]
+    # Sh_Pred=10**logSh_Pred
     
-    plt.figure(1000)
-    plt.scatter(Sh_Pred,Sh_Act)
-    upper_2 = np.amax(Sh_Pred)*1.1 #Upper bound on fit average total concentration overtime
-    lower_2 = np.amin(Sh_Pred)*0.9  #Lower Bound on fit average total concentration overtime
-    upper_3 = np.amax(Sh_Act)*1.1 #Upper bound on fit average total concentration overtime
-    lower_3 = np.amin(Sh_Act)*0.9  #Lower Bound on fit average total concentration overtime
-    plt.xlim(left=lower_2,right=upper_2)  
-    plt.ylim(bottom=lower_3,top=upper_3)
-    plt.xlabel('Linear Regression Sherwood #',fontsize=14)
-    plt.ylabel('Modelled Sherwood #',fontsize=14)
-    plt.title('Linear Regression Sherwood vs Modelled',fontsize=16)
-    plt.xticks(fontsize=12)
-    plt.yticks(fontsize=12)
-    sherwood_filename_partial=f'Sherwdoodplot{pc_i}.png'
-    sherwood_filename_full=os.path.join(internal_export_path,sherwood_filename_partial)
-    plt.savefig(sherwood_filename_full)
-    plt.close()
+    # plt.figure(1000)
+    # plt.scatter(Sh_Pred,Sh_Act)
+    # upper_2 = np.amax(Sh_Pred)*1.1 #Upper bound on fit average total concentration overtime
+    # lower_2 = np.amin(Sh_Pred)*0.9  #Lower Bound on fit average total concentration overtime
+    # upper_3 = np.amax(Sh_Act)*1.1 #Upper bound on fit average total concentration overtime
+    # lower_3 = np.amin(Sh_Act)*0.9  #Lower Bound on fit average total concentration overtime
+    # plt.xlim(left=lower_2,right=upper_2)  
+    # plt.ylim(bottom=lower_3,top=upper_3)
+    # plt.xlabel('Linear Regression Sherwood #',fontsize=14)
+    # plt.ylabel('Modelled Sherwood #',fontsize=14)
+    # plt.title('Linear Regression Sherwood vs Modelled',fontsize=16)
+    # plt.xticks(fontsize=12)
+    # plt.yticks(fontsize=12)
+    # sherwood_filename_partial=f'Sherwdoodplot{pc_i}.png'
+    # sherwood_filename_full=os.path.join(internal_export_path,sherwood_filename_partial)
+    # plt.savefig(sherwood_filename_full)
+    # plt.close()
         
     
     return [perc_acc_matrix,vn_linear_fitting]

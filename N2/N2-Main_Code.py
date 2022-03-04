@@ -52,13 +52,13 @@ counter_file.close()
 h=np.array([0.01]) #Define timesteps to test
 tol=np.array([10**(-8)])  #Define the tolerance the code will run with when running Newton-Rhapson
 t1=np.array([0]) #Define initialtime vector of values to test
-t2=np.array([1]) #Final Time
+t2=np.array([10]) #Final Time
 nx=np.array([200]) #Mesh size
 gam=np.array([0.1]) #Define dimenionless ratio of diffusivities to test
 beta=np.array([0]) #Define the dimensionless ratio of potentials to test
 F=np.array([10]) #Define the dimensionless forward reaction rate constant to test
 Re=np.array([0.001]) #Define the dimensionless reverse reaction rate constant to test
-n=np.array([0.95]) #Define the hill coeffecient to test
+n=np.array([1]) #Define the hill coeffecient to test
 ci=10**(-10) #Define the inital concentration in the biofilm (Can't be zero, if one wants to be zero, set it to a very small number instead)
 
 

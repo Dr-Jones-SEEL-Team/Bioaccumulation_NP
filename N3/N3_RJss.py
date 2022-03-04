@@ -40,12 +40,12 @@ def RJss(x,y,yold,p):
             J[i,i]=1
         elif i%2==0 : #interior biofilm nodes for unbound NP balance
             l=int(i/2)
-            R[i]=(y[i+2]-2*y[i]+y[i-2])*(x[l]+gam)/dx**2+(y[i+2]-y[i-2])*(1+beta*(y[i+3]-y[i-1])/(2*dx))/(2*dx)+y[i]*beta*(y[i+3]-2*y[i+1]+y[i-1])/dx**2
-            J[i,i-2]=(x[l]+gam)/dx**2-(1+beta*(y[i+3]-y[i-1])/(2*dx))/(2*dx)
+            R[i]=(y[i+2]-2*y[i]+y[i-2])*(x[l]**2+gam)/dx**2+(y[i+2]-y[i-2])*(2*x[l]+beta*(y[i+3]-y[i-1])/(2*dx))/(2*dx)+y[i]*beta*(y[i+3]-2*y[i+1]+y[i-1])/dx**2
+            J[i,i-2]=(x[l]**2+gam)/dx**2-(2*x[l]+beta*(y[i+3]-y[i-1])/(2*dx))/(2*dx)
             J[i,i-1]=beta*y[i]/dx**2-(y[i+2]-y[i-2])/(4*dx**2)
-            J[i,i]=-2*(x[l]+gam)/dx**2+beta*(y[i+3]-2*y[i+1]+y[i-1])/dx**2
+            J[i,i]=-2*(x[l]**2+gam)/dx**2+beta*(y[i+3]-2*y[i+1]+y[i-1])/dx**2
             J[i,i+1]=-beta*2*y[i]/dx**2
-            J[i,i+2]=(x[l]+gam)/dx**2+(1+beta*(y[i+3]-y[i-1])/(2*dx))/(2*dx)
+            J[i,i+2]=(x[l]**2+gam)/dx**2+(2*x[l]+beta*(y[i+3]-y[i-1])/(2*dx))/(2*dx)
             J[i,i+3]=beta*y[i]/dx**2+(y[i+2]-y[i-2])/(4*dx**2)
         elif i%2==1 : #interior biofilm nodes for Gauss' Law
             l=int((i-1)/2)
