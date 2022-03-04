@@ -22,8 +22,9 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
     lin_fit[:,3:]=parameter_matrix[:,5:]
     perc_acc_matrix= [[0 for i in range(6)] for j in range(parameter_combos_count)]
     for pc_i in np.arange(0,parameter_combos_count,1): #Begin for loop over different model paramter sets 
-        Eq=c_set[pc_i][13] #Grab Equilibrium total concentration value (assumes thetaequilibrates to one, which it is defined to)
+        #Eq=c_set[pc_i][13] #Grab Equilibrium total concentration value (assumes thetaequilibrates to one, which it is defined to)
         tavg_conc=c_set[pc_i][5] #Grab current total average concentration data to plot 
+        Eq=np.amax(tavg_conc) #Calculate steady-state value
         perc_acc_model=tavg_conc/Eq #convert concentration vectors to percent accumulated vectors
         norm_tavg_conc=Eq-tavg_conc #Normalize average concentration by equilibrium concentration
         t=c_set[pc_i][7] #Grab time-vector for this parameter set
@@ -251,44 +252,44 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
     
     """Multiple linear regression approach not working. going to just check indivdual variables to make it more sensible"""
     #%% run Multiple linear regression on Sherwood vs log10 of dimensionless numbers 
-    X=np.log10(lin_fit[:,3:])
-    y=np.log10(-lin_fit[:,0])
-    model_ols = linear_model.Lasso(normalize=True, alpha=0.55)
-    model_ols.fit(X,y) 
-    R2=model_ols.score(X,y)
-    coef = model_ols.coef_
-    perc_acc_matrix[0][1]=coef
-    intercept = model_ols.intercept_
-    perc_acc_matrix[0][2]=intercept
-    perc_acc_matrix[0][3]=R2
+    # X=np.log10(lin_fit[:,3:])
+    # y=np.log10(-lin_fit[:,0])
+    # model_ols = linear_model.Lasso(normalize=True, alpha=0.55)
+    # model_ols.fit(X,y) 
+    # R2=model_ols.score(X,y)
+    # coef = model_ols.coef_
+    # perc_acc_matrix[0][1]=coef
+    # intercept = model_ols.intercept_
+    # perc_acc_matrix[0][2]=intercept
+    # perc_acc_matrix[0][3]=R2
     
     # %% Calculate predicted sherwood number based on inputs
-    logSh_Pred=np.zeros(parameter_combos_count)
-    Sh_Pred=np.zeros(parameter_combos_count)
-    Sh_Act=-lin_fit[:,0]
-    for pc_i in np.arange(0,parameter_combos_count,1):
-        logSh_Pred[pc_i]=intercept
-        for i in np.arange(0,len(coef)):
-            logSh_Pred[pc_i]=coef[i]*np.log(lin_fit[pc_i,i+3])+logSh_Pred[pc_i]
-    Sh_Pred=10**logSh_Pred
+    # logSh_Pred=np.zeros(parameter_combos_count)
+    # Sh_Pred=np.zeros(parameter_combos_count)
+    # Sh_Act=-lin_fit[:,0]
+    # for pc_i in np.arange(0,parameter_combos_count,1):
+    #     logSh_Pred[pc_i]=intercept
+    #     for i in np.arange(0,len(coef)):
+    #         logSh_Pred[pc_i]=coef[i]*np.log(lin_fit[pc_i,i+3])+logSh_Pred[pc_i]
+    # Sh_Pred=10**logSh_Pred
     
-    plt.figure(1000)
-    plt.scatter(Sh_Pred,Sh_Act)
-    upper_2 = np.amax(Sh_Pred)*1.1 #Upper bound on fit average total concentration overtime
-    lower_2 = np.amin(Sh_Pred)*0.9  #Lower Bound on fit average total concentration overtime
-    upper_3 = np.amax(Sh_Act)*1.1 #Upper bound on fit average total concentration overtime
-    lower_3 = np.amin(Sh_Act)*0.9  #Lower Bound on fit average total concentration overtime
-    plt.xlim(left=lower_2,right=upper_2)  
-    plt.ylim(bottom=lower_3,top=upper_3)
-    plt.xlabel('Linear Regression Sherwood #',fontsize=14)
-    plt.ylabel('Modelled Sherwood #',fontsize=14)
-    plt.title('Linear Regression Sherwood vs Modelled',fontsize=16)
-    plt.xticks(fontsize=12)
-    plt.yticks(fontsize=12)
-    sherwood_filename_partial=f'Sherwdoodplot{pc_i}.png'
-    sherwood_filename_full=os.path.join(internal_export_path,sherwood_filename_partial)
-    plt.savefig(sherwood_filename_full)
-    plt.close()
+    # plt.figure(1000)
+    # plt.scatter(Sh_Pred,Sh_Act)
+    # upper_2 = np.amax(Sh_Pred)*1.1 #Upper bound on fit average total concentration overtime
+    # lower_2 = np.amin(Sh_Pred)*0.9  #Lower Bound on fit average total concentration overtime
+    # upper_3 = np.amax(Sh_Act)*1.1 #Upper bound on fit average total concentration overtime
+    # lower_3 = np.amin(Sh_Act)*0.9  #Lower Bound on fit average total concentration overtime
+    # plt.xlim(left=lower_2,right=upper_2)  
+    # plt.ylim(bottom=lower_3,top=upper_3)
+    # plt.xlabel('Linear Regression Sherwood #',fontsize=14)
+    # plt.ylabel('Modelled Sherwood #',fontsize=14)
+    # plt.title('Linear Regression Sherwood vs Modelled',fontsize=16)
+    # plt.xticks(fontsize=12)
+    # plt.yticks(fontsize=12)
+    # sherwood_filename_partial=f'Sherwdoodplot{pc_i}.png'
+    # sherwood_filename_full=os.path.join(internal_export_path,sherwood_filename_partial)
+    # plt.savefig(sherwood_filename_full)
+    # plt.close()
         
     
     return [perc_acc_matrix,vn_linear_fitting]

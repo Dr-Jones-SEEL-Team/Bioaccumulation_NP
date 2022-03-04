@@ -34,6 +34,7 @@ def parameter_checker(parameter_matrix,ci): #unpack paramteres and test
         y=np.zeros((ny+2,nt)) #Initialize y
         y=y+10**(-8) #Make starting values not exactly equal to zero (divide by zero erros pop up)
         p=[gam,beta,F,Re,n] #dimensionless parameter matrix
+        Kp=10 #PArtition coeffecient
         #Run calculation for parameters of interest
         [c,whoops,vn_method_of_lines,vn_RJ]=method_of_lines(t,x,y,h,p,tol) #Find the concntration profiles in space and time using Method of Lines (MOL)
         print('you whoopsed {} many times'.format(whoops))
@@ -68,7 +69,7 @@ def parameter_checker(parameter_matrix,ci): #unpack paramteres and test
         taverage_conc_overtime=np.zeros(nt)
         t4index=np.arange(0,nt)
         for t4_i in t4index:
-            taverage_conc_overtime[t4_i]=np.average(cu[:,t4_i])+np.average(cb[:,t4_i])
+            taverage_conc_overtime[t4_i]=np.average(Kp*cu[:,t4_i])+np.average(cb[:,t4_i])
         c_set[i][4]=taverage_conc_overtime
         
         #Find Change in Total NP Concentration overtime

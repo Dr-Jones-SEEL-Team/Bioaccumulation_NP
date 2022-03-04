@@ -15,13 +15,14 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
     for pc_i in np.arange(0,parameter_combos_count,1): #Begin for loop over different model paramter sets 
         F= parameter_matrix[pc_i,7] #Grab the Dimensionless forward rate constant for parameter set
         Re= parameter_matrix[pc_i,8] #Grab the Dimensionless reverse rate constant for parameter set
-        Eq=F/(F+Re)+1 #Calculate Equilibrium total concentration value (assumes thetaequilibrates to one, which it is defined to)
+        Kp=10
+        Eq=F/(F+Re)+Kp #Calculate Equilibrium total concentration value (assumes thetaequilibrates to one, which it is defined to)
         tavg_conc=c_set[pc_i][4] #Grab current change in concentration data to plot (total NP)
         perc_acc_model=tavg_conc/Eq #convert concentration vectors to percent accumulated vectors
         norm_tavg_conc=Eq-tavg_conc #Normalize average concentration by equilibrium concentration
         t=c_set[pc_i][6] #Grab time-vector for this parameter set
         # %% Find the 99% accumulation time and cutoff perc_acc_model
-        cutoff= 0.99 #cutoff percentage to "reach equilibrium" (used to determine where to start fit)
+        cutoff= 0.95 #cutoff percentage to "reach equilibrium" (used to determine where to start fit)
         j=0 #reset counter for time-search loop
         for t_i in t:
             if perc_acc_model[j]>cutoff:
@@ -82,11 +83,11 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
         plt.close()
         
         plt.figure(1001+pc_i)
-        plt.plot(t,lognorm_tavg_conc,label='Model Results')
-        plt.plot(t,fit_lognorm_avg,label='First-Order Approximation')
-        upper_1 = np.amax(lognorm_tavg_conc)*1.1 #Upper bound on fit average total concentration overtime
-        lower_1 = np.amin(lognorm_tavg_conc)*1.1  #Lower Bound on fit average total concentration overtime
-        plt.xlim(left=parameter_matrix[pc_i,2],right=parameter_matrix[pc_i,3])  
+        plt.plot(t_cutoff,lognorm_tavg_conc[:mod_cutoff],label='Model Results')
+        plt.plot(t_cutoff,fit_lognorm_avg[:mod_cutoff],label='First-Order Approximation')
+        upper_1 = np.amax(lognorm_tavg_conc[:mod_cutoff])*1.1 #Upper bound on fit average total concentration overtime
+        lower_1 = np.amin(lognorm_tavg_conc[:mod_cutoff])*1.1  #Lower Bound on fit average total concentration overtime
+        plt.xlim(left=0,right=np.amax(t_cutoff))  
         plt.ylim(bottom=lower_1,top=upper_1)
         plt.xlabel('Time',fontsize=14)
         plt.ylabel('log(Normalized Average Concentration',fontsize=14)
