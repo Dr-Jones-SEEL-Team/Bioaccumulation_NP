@@ -22,8 +22,9 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
     lin_fit[:,3:]=parameter_matrix[:,5:]
     perc_acc_matrix= [[0 for i in range(6)] for j in range(parameter_combos_count)]
     for pc_i in np.arange(0,parameter_combos_count,1): #Begin for loop over different model paramter sets 
-        Eq=c_set[pc_i][13] #Grab Equilibrium total concentration value (assumes thetaequilibrates to one, which it is defined to)
+        #Eq=c_set[pc_i][13] #Grab Equilibrium total concentration value (assumes thetaequilibrates to one, which it is defined to)
         tavg_conc=c_set[pc_i][5] #Grab current total average concentration data to plot 
+        Eq=np.amax(tavg_conc)
         perc_acc_model=tavg_conc/Eq #convert concentration vectors to percent accumulated vectors
         norm_tavg_conc=Eq-tavg_conc #Normalize average concentration by equilibrium concentration
         t=c_set[pc_i][7] #Grab time-vector for this parameter set
@@ -90,8 +91,8 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
         plt.figure(2*pc_i+1)
         plt.plot(t,lognorm_tavg_conc,label='Model Results')
         plt.plot(t,fit_lognorm_avg,label='First-Order Approximation')
-        upper_1 = np.amax(lognorm_tavg_conc_cutoff)*0.9 #Upper bound on fit average total concentration overtime
-        lower_1 = np.amin(lognorm_tavg_conc_cutoff)*1.1  #Lower Bound on fit average total concentration overtime
+        upper_1 = np.amax(lognorm_tavg_conc_cutoff)*1.1 #Upper bound on fit average total concentration overtime
+        lower_1 = np.amin(lognorm_tavg_conc_cutoff)*0.9  #Lower Bound on fit average total concentration overtime
         plt.xlim(left=parameter_matrix[pc_i,2],right=np.amax(t_cutoff))  
         plt.ylim(bottom=lower_1,top=upper_1)
         plt.xlabel('Time',fontsize=14)

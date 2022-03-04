@@ -54,12 +54,12 @@ counter_file.close()
 h=np.array([0.01]) #Define timesteps to test
 tol=np.array([10**(-8)])  #Define the tolerance the code will run with when running Newton-Rhapson
 t1=np.array([0]) #Define initialtime vector of values to test
-t2=np.array([10]) #Final Time
+t2=np.array([25]) #Final Time
 nx=np.array([100]) #Mesh size
 gam=np.array([0.1]) #Define dimenionless ratio of diffusivities to test
 F=np.array([10]) #Define the dimensionless forward reaction rate constant to test
-K=np.array([100]) #Define the Eqilbrium constant for NP binding
-eps=np.array([10]) #Define ratio of total NP binding sites to supernatant NP concentration
+K=np.array([0.001]) #Define the Eqilbrium constant for NP binding
+eps=np.array([1]) #Define ratio of total NP binding sites to supernatant NP concentration
 omega=np.array([1]) #Define contribution of nanoparticle to biofilm to electrical potential profile
 ups= np.array([1])#Define ratio of biofilm to nanoparticle charge 
 Kp= np.array([10]) #Define partition coeffecient of NP into biofilm at water-biofilm interface
