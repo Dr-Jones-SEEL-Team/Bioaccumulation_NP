@@ -74,7 +74,7 @@ beta= np.array([0.001]) #Define ratio of electrophoresis to diffusivity in syste
 # %% Export results to csv files
 vn_csv_generator = csv_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_path,new_count_number,machine_number)
 
-# %% Grab Experimental Results to
+# %% Grab Experimental Results to fit to model
 
 # %% Fit model to first order approximation, plot approximation, and determine fit of approximation
 [perc_acc_matrix,vn_linear_fitting]=linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_path,beta)
