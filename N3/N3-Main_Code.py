@@ -16,8 +16,8 @@ machine_number=1 #Input the machine you are running this code on
 """
 
 if machine_number == 1: #Code to assign the right export paths for each machine, since each is unique
-   direct_export_path=r'C:\Users\joshu\Box Sync\Quantum Biofilms\Raw Data\N3_results\Direct Exports'
-   internal_export_path=r'C:\Users\joshu\Box Sync\Quantum Biofilms\Raw Data\N3_results\Internal Exports' 
+   direct_export_path=r'C:\Users\joshu\Box\Quantum Biofilms\Raw Data\N3_results\Direct Exports'
+   internal_export_path=r'C:\Users\joshu\Box\Quantum Biofilms\Raw Data\N3_results\Internal Exports' 
 
    
 
