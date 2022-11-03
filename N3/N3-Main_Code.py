@@ -39,6 +39,7 @@ from N3_linear_fitting import *
 from N3_Newton_Rhapson import *
 from N3_RJss import *
 from N3_experimental_data_extractor import *
+from N3_exp_data_fitter import *
 
 # %% Start Timer
 t_start=time.time()
@@ -80,7 +81,7 @@ experimental_data_file=r'C:\Users\joshu\Box\Quantum Biofilms\Processed Data\Extr
 experimental_results = experimental_data_extractor(experimental_data_file)
 
 # %% Fit Model to Experimental Data
-
+fitting_results=exp_data_fitter(c_set,experimental_results,parameter_combos_count)
 
 # %% Fit model to first order approximation, plot approximation, and determine fit of approximation
 [perc_acc_matrix,vn_linear_fitting]=linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_path,beta)

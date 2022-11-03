@@ -52,6 +52,7 @@ def parameter_checker(parameter_matrix): #unpack paramteres and test
         cb=np.zeros((nx+1,nt)) #Initalize new concentration array where bound and unbound NP concentrations are "unpacked" such that they occupy two different matrices in the same 3-D array 
         cu=np.zeros((nx+1,nt))
         pot=np.zeros((nx+1,nt))
+        ct=np.zeros((nx+1,nt))
         xindex=np.arange(0,nx+1)
         yss_guess=np.zeros(2*nx+2)
         for x_i in xindex:
@@ -61,6 +62,7 @@ def parameter_checker(parameter_matrix): #unpack paramteres and test
             cu[x_i,:]=c[j,:]
             cb[x_i,:]=c[k,:]
             pot[x_i,:]=c[l,:]
+            ct[x_i,:]=Kp*c[j,:]+c[k,:]
             j_guess=2*x_i
             l_guess=2*x_i+1
             yss_guess[j_guess]=c[j,nt-1]
@@ -68,6 +70,7 @@ def parameter_checker(parameter_matrix): #unpack paramteres and test
         c_set[i][0]=cb
         c_set[i][1]=cu
         c_set[i][2]=pot
+        c_set[i][14]=ct
 
         # solve for steady-state starting with final value from time-solution
         [css,whoops2,vn_Newton_Rhapson,vn_RJss]=Newton_Rhapson(x,yss_guess,p,tol) #Find concentration profile at steady-state using Newton-Rhapson method
