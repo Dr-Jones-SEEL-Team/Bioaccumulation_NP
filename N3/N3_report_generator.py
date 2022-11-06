@@ -183,64 +183,74 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         plt.savefig(potential_filename_full)
         plt.close()
         
-        # %%Unbound NP Average Concetration Overtime
-        plt.figure(7*pc_i+3)
-        plt.plot(t,average_uconc_overtime)
-        plt.xlim(left=parameter_matrix[pc_i,2],right=parameter_matrix[pc_i,3])
-        #plt.xlim(left=0,right=0.0005) #Manual Override of automatic x-axis limits
-        plt.ylim(bottom=0,top=upper_2)
-        plt.xlabel('Time',fontsize=14)
-        plt.ylabel('Dimensionless Concentration',fontsize=14)
-        plt.title('Average Dimensionless Unbound Concentration plot',fontsize=16)
-        plt.xticks(fontsize=12)
-        plt.yticks(fontsize=12)
-        avgunbound_filename_partial=f'AvgUnboundplot{pc_i}.png'
-        avgunbound_filename_full=os.path.join(internal_export_path,avgunbound_filename_partial)
-        plt.savefig(avgunbound_filename_full)
-        plt.close()
         pics_paragraph2=report.add_paragraph()
         pic3=pics_paragraph2.add_run()
         pic3.add_picture(potential_filename_full, width=docx.shared.Inches(3))
-        pic4=pics_paragraph2.add_run()
-        pic4.add_picture(avgunbound_filename_full, width=docx.shared.Inches(3))
+        
+        pics_paragraph4=report.add_paragraph()
+        modelfit_filename_partial=f'Modelfitplot{pc_i}.png'
+        modelfit_filename_full=os.path.join(internal_export_path,modelfit_filename_partial)
+        pic4=pics_paragraph4.add_run()
+        pic4.add_picture(modelfit_filename_full, width=docx.shared.Inches(6))
+        
+        # %%Unbound NP Average Concetration Overtime
+        # plt.figure(7*pc_i+3)
+        # plt.plot(t,average_uconc_overtime)
+        # plt.xlim(left=parameter_matrix[pc_i,2],right=parameter_matrix[pc_i,3])
+        # #plt.xlim(left=0,right=0.0005) #Manual Override of automatic x-axis limits
+        # plt.ylim(bottom=0,top=upper_2)
+        # plt.xlabel('Time',fontsize=14)
+        # plt.ylabel('Dimensionless Concentration',fontsize=14)
+        # plt.title('Average Dimensionless Unbound Concentration plot',fontsize=16)
+        # plt.xticks(fontsize=12)
+        # plt.yticks(fontsize=12)
+        # avgunbound_filename_partial=f'AvgUnboundplot{pc_i}.png'
+        # avgunbound_filename_full=os.path.join(internal_export_path,avgunbound_filename_partial)
+        # plt.savefig(avgunbound_filename_full)
+        # plt.close()
+        # pics_paragraph2=report.add_paragraph()
+        # pic3=pics_paragraph2.add_run()
+        # pic3.add_picture(potential_filename_full, width=docx.shared.Inches(3))
+        # pic4=pics_paragraph2.add_run()
+        # pic4.add_picture(avgunbound_filename_full, width=docx.shared.Inches(3))
         
         # %%Bound NP Average Concetration Overtime
-        plt.figure(7*pc_i+4)
-        plt.plot(t,average_bconc_overtime)
-        plt.xlim(left=parameter_matrix[pc_i,2],right=parameter_matrix[pc_i,3])
-        #plt.xlim(left=0,right=0.0005) #Manual Override of automatic x-axis limits
-        plt.ylim(bottom=0,top=upper_3)
-        plt.xlabel('Time',fontsize=14)
-        plt.ylabel('Dimensionless Concentration',fontsize=14)
-        plt.title('Average Dimensionless Bound Concentration plot',fontsize=16)
-        plt.xticks(fontsize=12)
-        plt.yticks(fontsize=12)
-        avgbound_filename_partial=f'AvgBoundplot{pc_i}.png'
-        avgbound_filename_full=os.path.join(internal_export_path,avgbound_filename_partial)
-        plt.savefig(avgbound_filename_full)
-        plt.close()
+        # plt.figure(7*pc_i+4)
+        # plt.plot(t,average_bconc_overtime)
+        # plt.xlim(left=parameter_matrix[pc_i,2],right=parameter_matrix[pc_i,3])
+        # #plt.xlim(left=0,right=0.0005) #Manual Override of automatic x-axis limits
+        # plt.ylim(bottom=0,top=upper_3)
+        # plt.xlabel('Time',fontsize=14)
+        # plt.ylabel('Dimensionless Concentration',fontsize=14)
+        # plt.title('Average Dimensionless Bound Concentration plot',fontsize=16)
+        # plt.xticks(fontsize=12)
+        # plt.yticks(fontsize=12)
+        # avgbound_filename_partial=f'AvgBoundplot{pc_i}.png'
+        # avgbound_filename_full=os.path.join(internal_export_path,avgbound_filename_partial)
+        # plt.savefig(avgbound_filename_full)
+        # plt.close()
         
         # %%Total NP Average Concetration Overtime
-        plt.figure(7*pc_i+5)
-        plt.plot(t,average_tconc_overtime)
-        plt.xlim(left=parameter_matrix[pc_i,2],right=parameter_matrix[pc_i,3])
-        #plt.xlim(left=0,right=0.0005) #Manual Override of automatic x-axis limits
-        plt.ylim(bottom=0,top=upper_5)
-        plt.xlabel('Time',fontsize=14)
-        plt.ylabel('Dimensionless Concentration',fontsize=14)
-        plt.title('Average Dimensionless Total Concentration plot',fontsize=16)
-        plt.xticks(fontsize=12)
-        plt.yticks(fontsize=12)
-        avgtotal_filename_partial=f'AvgTotalplot{pc_i}.png'
-        avgtotal_filename_full=os.path.join(internal_export_path,avgtotal_filename_partial)
-        plt.savefig(avgtotal_filename_full)
-        plt.close()
+        # plt.figure(7*pc_i+5)
+        # plt.plot(t,average_tconc_overtime)
+        # plt.xlim(left=parameter_matrix[pc_i,2],right=parameter_matrix[pc_i,3])
+        # #plt.xlim(left=0,right=0.0005) #Manual Override of automatic x-axis limits
+        # plt.ylim(bottom=0,top=upper_5)
+        # plt.xlabel('Time',fontsize=14)
+        # plt.ylabel('Dimensionless Concentration',fontsize=14)
+        # plt.title('Average Dimensionless Total Concentration plot',fontsize=16)
+        # plt.xticks(fontsize=12)
+        # plt.yticks(fontsize=12)
+        # avgtotal_filename_partial=f'AvgTotalplot{pc_i}.png'
+        # avgtotal_filename_full=os.path.join(internal_export_path,avgtotal_filename_partial)
+        # plt.savefig(avgtotal_filename_full)
+        # plt.close()
         
-        pics_paragraph3=report.add_paragraph()
-        pic5=pics_paragraph3.add_run()
-        pic5.add_picture(avgbound_filename_full, width=docx.shared.Inches(3))
-        pic6=pics_paragraph3.add_run()
-        pic6.add_picture(avgtotal_filename_full, width=docx.shared.Inches(3))
+        # pics_paragraph3=report.add_paragraph()
+        # pic5=pics_paragraph3.add_run()
+        # pic5.add_picture(avgbound_filename_full, width=docx.shared.Inches(3))
+        # pic6=pics_paragraph3.add_run()
+        # pic6.add_picture(avgtotal_filename_full, width=docx.shared.Inches(3))
         
         # # %%Log&Normalized NP Average Concetration Overtime
         # plt.figure(7*pc_i+6)

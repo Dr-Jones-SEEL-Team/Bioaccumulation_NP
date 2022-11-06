@@ -10,7 +10,7 @@ from scipy.sparse import linalg
 
 from N3_RJ import *
 
-def method_of_lines(t,x,y,h,p,tol):
+def method_of_lines(t,x,y,h,p,tol,fit_coeff):
     yw=y[:,0] #Initalize the working concentration vector
     index=np.arange(0,len(t)) #Creater index vector
     whoops=0 #initialize error function
@@ -18,7 +18,7 @@ def method_of_lines(t,x,y,h,p,tol):
         if i==0: continue
         else:
             yold=yw #update the old y-value
-            [R,J,vn_RJ]=RJ(x,yw,yold,p,h); #Calculate Residual and Jacobian from new y value
+            [R,J,vn_RJ]=RJ(x,yw,yold,p,h,t[i],fit_coeff); #Calculate Residual and Jacobian from new y value
             k=0
             while np.linalg.norm(R)>tol :
                 k=k+1
@@ -26,7 +26,7 @@ def method_of_lines(t,x,y,h,p,tol):
                 J=sp.sparse.csc_matrix(J)
                 dif=-sp.sparse.linalg.spsolve(J,R) #Apply built in sparse Linear solver to find delta from J and R
                 yw=yw+dif ; #Update y
-                [R,J,nv_RJ]=RJ(x,yw,yold,p,h); #Calculate Residual and Jacobian from new y value
+                [R,J,nv_RJ]=RJ(x,yw,yold,p,h,t[i],fit_coeff); #Calculate Residual and Jacobian from new y value
                 if k>100:
                     print('Whoops')
                     whoops=whoops+1

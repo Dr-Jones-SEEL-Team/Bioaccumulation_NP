@@ -14,7 +14,7 @@ from matplotlib.animation import FuncAnimation
 import pandas as pd
 
 
-def exp_data_fitter(c_set,exp_data,parameter_combos_count,internal_export_path):
+def boundary_condition_calc(c_set,exp_data,parameter_combos_count,internal_export_path):
     
     for pc_i in np.arange(0,parameter_combos_count,1): #Begin for loop to plot the different model paramters tested
     
@@ -25,7 +25,7 @@ def exp_data_fitter(c_set,exp_data,parameter_combos_count,internal_export_path):
         
         # %% Convert dimensionless mdoel results inot dimenional model results
         to= 5 #guess at dimensionless time [min]
-        kconv=25 #guess at absorbance units-NP concentration conversion factor
+        kconv=200 #guess at absorbance units-NP concentration conversion factor
         t_d=t*to #convert dimensionless time into dimensional time [min]
         ct_d=kconv*ct #convert dimensionless total concentration to absorbance units
         
@@ -82,7 +82,7 @@ def exp_data_fitter(c_set,exp_data,parameter_combos_count,internal_export_path):
                 ti_old=ti_new
                 collated_subset=collated_results[collated_results[:, 0] == ti_old, :] #grab only experimental values at that time-point
                 plt.figure(0)
-                plt.plot(collated_subset[:,1],collated_subset[:,2],'bo',label=f'Literature value for t={ti_old}')
+                plt.plot(collated_subset[:,1],collated_subset[:,2],label=f'Literature value for t={ti_old}')
                 plt.plot(collated_subset[:,1],collated_subset[:,3],label=f'Model Value for t={ti_old}')
         plt.legend()
         

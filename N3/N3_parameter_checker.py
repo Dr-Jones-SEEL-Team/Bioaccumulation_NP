@@ -8,7 +8,7 @@ from N3_method_of_lines import *
 from N3_Newton_Rhapson import *
 
 
-def parameter_checker(parameter_matrix): #unpack paramteres and test
+def parameter_checker(parameter_matrix,fit_coeff): #unpack paramteres and test
     
     #Calculate other internal paramters to model
     parameter_combos_count=np.shape(parameter_matrix) [0]
@@ -45,7 +45,7 @@ def parameter_checker(parameter_matrix): #unpack paramteres and test
             y[l,0]=ups/6*(3*x[j]**2-x[j]**3-2)
         p=[gam,F,K,eps,omega,ups,Kp,beta] #dimensionless parameter matrix
         #Run calculation for parameters of interest
-        [c,whoops,vn_method_of_lines,vn_RJ]=method_of_lines(t,x,y,h,p,tol) #Find the concntration profiles in space and time using Implicit Euler 
+        [c,whoops,vn_method_of_lines,vn_RJ]=method_of_lines(t,x,y,h,p,tol,fit_coeff) #Find the concntration profiles in space and time using Implicit Euler 
         print('you whoopsed {} many times'.format(whoops))
         
         #Unpack the time-data
