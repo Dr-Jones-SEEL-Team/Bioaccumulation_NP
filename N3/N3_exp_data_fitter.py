@@ -24,8 +24,8 @@ def exp_data_fitter(c_set,exp_data,parameter_combos_count,internal_export_path):
         t=c_set[pc_i][7] #Grab time-vector for this parameter set for plotting
         
         # %% Convert dimensionless mdoel results inot dimenional model results
-        to= 5 #guess at dimensionless time [min]
-        kconv=1 #guess at absorbance units-NP concentration conversion factor
+        to= 1 #guess at dimensionless time [min]
+        kconv=0.5 #guess at absorbance units-NP concentration conversion factor
         t_d=t*to #convert dimensionless time into dimensional time [min]
         ct_d=kconv*ct #convert dimensionless total concentration to absorbance units
         
@@ -62,9 +62,9 @@ def exp_data_fitter(c_set,exp_data,parameter_combos_count,internal_export_path):
                 t_exp_subset=collated_results[collated_results[:, 0] == ti_old, :] #grab only experimental values at that time-point
                 t_mod_subset=mod_data[mod_data[:, 0] == ti_old, :] #grab model values at this timepoint
                 if ti_old==14:
-                    t_mod_subset=mod_data[14280:14330,:]
+                    t_mod_subset=mod_data[71400:71450,:]
                 elif ti_old==28:
-                    t_mod_subset=mod_data[28560:28610,:]
+                    t_mod_subset=mod_data[142800:142850,:]
                 for j in np.arange(0,len(t_exp_subset)):
                     x_inter=t_exp_subset[j,1] #position value which needs its corresponding model value interpolated
                     for k in np.arange(0,len(t_mod_subset)):
@@ -81,11 +81,12 @@ def exp_data_fitter(c_set,exp_data,parameter_combos_count,internal_export_path):
             else: #when we have a new time to extract
                 ti_old=ti_new
                 collated_subset=collated_results[collated_results[:, 0] == ti_old, :] #grab only experimental values at that time-point
-                plt.figure(0)
+                plt.figure(0, figsize=[6, 6])
                 plt.plot(collated_subset[:,1],collated_subset[:,2],'o',label=f'Literature value for t={ti_old}')
                 plt.plot(collated_subset[:,1],collated_subset[:,3],label=f'Model Value for t={ti_old}')
-        plt.legend()
-        
+        plt.legend(loc=[0.75,0],fontsize=7)
+        plt.xlim(left=0,right=1.4)
+        plt.rcParams['figure.dpi'] = 300
         modelfit_filename_partial=f'Modelfitplot{pc_i}.png'
         modelfit_filename_full=os.path.join(internal_export_path,modelfit_filename_partial)
         plt.savefig(modelfit_filename_full)
