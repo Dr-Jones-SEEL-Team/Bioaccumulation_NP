@@ -40,8 +40,8 @@ def RJ(x,y,yold,p,h,t,fit_coeff):
             J[i,2]=-2/dx**2
             J[i,5]=2/dx**2
         elif i==ny-3: #water-biofilm interface node for unbound NP balance
-            R[i]=y[i]-1
-            #R[i]=y[i]-BCcalc(t,fit_coeff)
+            #R[i]=y[i]-1
+            R[i]=y[i]-BCcalc(t,fit_coeff)
             test=BCcalc(t,fit_coeff)
             J[i,i]=1
         elif i==ny-2: #water-biofilm interface node for bound NP balance

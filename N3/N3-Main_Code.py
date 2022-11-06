@@ -53,19 +53,19 @@ counter_file.write(new_count_number)
 counter_file.close()
 
 # %%Inputs Code Block
-h=np.array([0.001]) #Define timesteps to test
-tol=np.array([10**(-8)])  #Define the tolerance the code will run with when running Newton-Rhapson
+h=np.array([0.01]) #Define timesteps to test
+tol=np.array([10**(-6)])  #Define the tolerance the code will run with when running Newton-Rhapson
 t1=np.array([0]) #Define initialtime vector of values to test
-t2=np.array([1]) #Final Time
-nx=np.array([50]) #Mesh size
+t2=np.array([10]) #Final Time
+nx=np.array([50]) #Mesh size 
 gam=np.array([0.1]) #Define dimenionless ratio of diffusivities to test
 F=np.array([10]) #Define the dimensionless forward reaction rate constant to test
-K=np.array([0.01]) #Define the Eqilbrium constant for NP binding
+K=np.array([10]) #Define the Eqilbrium constant for NP binding
 eps=np.array([0.1]) #Define ratio of total NP binding sites to supernatant NP concentration
 omega=np.array([0.0001]) #Define contribution of nanoparticle to biofilm to electrical potential profile
-ups= np.array([1])#Define ratio of biofilm to nanoparticle charge 
-Kp= np.array([10]) #Define partition coeffecient of NP into biofilm at water-biofilm interface
-beta= np.array([0.1]) #Define ratio of electrophoresis to diffusivity in system    
+ups= np.array([1])#Define ratio of biofilm to nanoparticle charge (Defunct parameter from previous version of the model)
+Kp= np.array([1]) #Define partition coeffecient of NP into biofilm at water-biofilm interface
+beta= np.array([-2]) #Define ratio of electrophoresis to diffusivity in system    
 
 # %% Grab Experimental Results to fit to model
 experimental_data_file=r'C:\Users\joshu\Box\Quantum Biofilms\Processed Data\Extracted data from literature\tseng_fits_Fig2B_Cy5_incubation.csv'
@@ -84,10 +84,11 @@ vn_csv_generator = csv_generator(c_set,parameter_combos_count,parameter_matrix,d
 fitting_results=exp_data_fitter(c_set,experimental_results,parameter_combos_count,internal_export_path)
 
 # %% Fit model to first order approximation, plot approximation, and determine fit of approximation
-[perc_acc_matrix,vn_linear_fitting]=linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_path,beta)
+#[perc_acc_matrix,vn_linear_fitting]=linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_path,beta)
 
 # %% Report Generator: Exports Plots as Word Document to Seperate Directory (see file N2_report_generator.py)
-report=plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N3,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,perc_acc_matrix,vn_linear_fitting,machine_number,internal_export_path)
+#report=plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N3,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,perc_acc_matrix,vn_linear_fitting,machine_number,internal_export_path)
+report=plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N3,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,machine_number,internal_export_path)
 
 # %% Stop Timer
 #End timer
