@@ -24,8 +24,8 @@ def exp_data_fitter(c_set,exp_data,parameter_combos_count,internal_export_path):
         t=c_set[pc_i][7] #Grab time-vector for this parameter set for plotting
         
         # %% Convert dimensionless mdoel results inot dimenional model results
-        to= 1 #guess at dimensionless time [min]
-        kconv=0.5 #guess at absorbance units-NP concentration conversion factor
+        to= 0.5 #guess at dimensionless time [min]
+        kconv=0.75 #guess at absorbance units-NP concentration conversion factor
         t_d=t*to #convert dimensionless time into dimensional time [min]
         ct_d=kconv*ct #convert dimensionless total concentration to absorbance units
         

@@ -251,33 +251,33 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         pic7=pics_paragraph4.add_run()
         pic7.add_picture(logdCtotalNP_filename_full, width=docx.shared.Inches(3))
         """
-        # %%Unbound Concentration Animation
-        unbound_anim_fig=plt.figure()
-        unbound_anim_plot=plt.plot([])
-        unbound_anim_holder=unbound_anim_plot[0]
-        plt.xlim(left=0,right=1)
-        plt.ylim(bottom=0,top=upper_1)
-        plt.xlabel('Position',fontsize=14)
-        plt.ylabel('Dimensionless Concentration',fontsize=14)
-        plt.title('Dimensionless Unbound Concentration',fontsize=16)
-        plt.xticks(fontsize=12)
-        plt.yticks(fontsize=12)
-        tp_u_anim=100 #number of time points to plot for the animation for unbound concntration
-        space_u_anim=int((nt-1)/tp_u_anim) #space between timepoints    
-        def unbound_animate(frame):
-            #update plot
-            c_u_plot=cu[:,frame*space_u_anim]
-            unbound_anim_holder.set_data((x,c_u_plot))
-        unbound_anim=anim.FuncAnimation(unbound_anim_fig,unbound_animate,frames=tp_u_anim,interval=100)
-        unbound_anim_filename_partial=f'unboun_anim{pc_i}.gif'
-        unbound_anim_filename_full=os.path.join(internal_export_path,unbound_anim_filename_partial)
-        unbound_anim.save(unbound_anim_filename_full)
-        #Only need these lines if log plot is turned off
-        pics_paragraph3=report.add_paragraph()
-        pic5=pics_paragraph3.add_run()
-        #End of possibly neccesary lines
-        pic5.add_picture(unbound_anim_filename_full, width=docx.shared.Inches(3))
-        plt.close()
+        # # %%Unbound Concentration Animation
+        # unbound_anim_fig=plt.figure()
+        # unbound_anim_plot=plt.plot([])
+        # unbound_anim_holder=unbound_anim_plot[0]
+        # plt.xlim(left=0,right=1)
+        # plt.ylim(bottom=0,top=upper_1)
+        # plt.xlabel('Position',fontsize=14)
+        # plt.ylabel('Dimensionless Concentration',fontsize=14)
+        # plt.title('Dimensionless Unbound Concentration',fontsize=16)
+        # plt.xticks(fontsize=12)
+        # plt.yticks(fontsize=12)
+        # tp_u_anim=100 #number of time points to plot for the animation for unbound concntration
+        # space_u_anim=int((nt-1)/tp_u_anim) #space between timepoints    
+        # def unbound_animate(frame):
+        #     #update plot
+        #     c_u_plot=cu[:,frame*space_u_anim]
+        #     unbound_anim_holder.set_data((x,c_u_plot))
+        # unbound_anim=anim.FuncAnimation(unbound_anim_fig,unbound_animate,frames=tp_u_anim,interval=100)
+        # unbound_anim_filename_partial=f'unboun_anim{pc_i}.gif'
+        # unbound_anim_filename_full=os.path.join(internal_export_path,unbound_anim_filename_partial)
+        # unbound_anim.save(unbound_anim_filename_full)
+        # #Only need these lines if log plot is turned off
+        # pics_paragraph3=report.add_paragraph()
+        # pic5=pics_paragraph3.add_run()
+        # #End of possibly neccesary lines
+        # pic5.add_picture(unbound_anim_filename_full, width=docx.shared.Inches(3))
+        # plt.close()
         
         """# %%Total NP Change in Concentration vs Concentration Animation
         dCvC_anim_fig=plt.figure()
@@ -303,30 +303,30 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         #pic8=pics_paragraph5.add_run()
         pic7.add_picture(dCvC_anim_filename_full, width=docx.shared.Inches(3))
         """
-        # %%Total NP Concentration vs Time Animation
-        totCvt_anim_fig=plt.figure()
-        totCvt_anim_plot=plt.plot([])
-        totCvt_anim_holder=totCvt_anim_plot[0]
-        plt.xlim(left=parameter_matrix[pc_i,2],right=parameter_matrix[pc_i,3])
-        plt.ylim(bottom=0,top=upper_5)
-        plt.xlabel('Time',fontsize=14)
-        plt.ylabel('Dimensionless Concentration',fontsize=14)
-        plt.title('Average Dimensionless Total Concentration plot',fontsize=16)
-        plt.xticks(fontsize=12)
-        plt.yticks(fontsize=12)
-        tp_totCvt_anim=100 #number of time points to plot for the animation for unbound concntration
-        space_totCvt_anim=int((nt-1)/tp_totCvt_anim) #space between timepoints    
-        def totCvt_animate(frame):
-            #update plot
-            totCvt_anim_holder.set_data((t[0:frame*space_totCvt_anim],taverage_conc_overtime[0:frame*space_totCvt_anim]))
-        totCvt_anim=anim.FuncAnimation(totCvt_anim_fig,totCvt_animate,frames=tp_totCvt_anim,interval=100)
-        totCvt_anim_filename_partial=f'totCvt_anim{pc_i}.gif'
-        totCvt_anim_filename_full=os.path.join(internal_export_path,totCvt_anim_filename_partial)
-        totCvt_anim.save(totCvt_anim_filename_full)
-        #pics_paragraph5=report.add_paragraph() #Added when log plot off
-        pic6=pics_paragraph3.add_run() #Added when log plot off
-        pic6.add_picture(totCvt_anim_filename_full, width=docx.shared.Inches(3))
-        plt.close()
+        # # %%Total NP Concentration vs Time Animation
+        # totCvt_anim_fig=plt.figure()
+        # totCvt_anim_plot=plt.plot([])
+        # totCvt_anim_holder=totCvt_anim_plot[0]
+        # plt.xlim(left=parameter_matrix[pc_i,2],right=parameter_matrix[pc_i,3])
+        # plt.ylim(bottom=0,top=upper_5)
+        # plt.xlabel('Time',fontsize=14)
+        # plt.ylabel('Dimensionless Concentration',fontsize=14)
+        # plt.title('Average Dimensionless Total Concentration plot',fontsize=16)
+        # plt.xticks(fontsize=12)
+        # plt.yticks(fontsize=12)
+        # tp_totCvt_anim=100 #number of time points to plot for the animation for unbound concntration
+        # space_totCvt_anim=int((nt-1)/tp_totCvt_anim) #space between timepoints    
+        # def totCvt_animate(frame):
+        #     #update plot
+        #     totCvt_anim_holder.set_data((t[0:frame*space_totCvt_anim],taverage_conc_overtime[0:frame*space_totCvt_anim]))
+        # totCvt_anim=anim.FuncAnimation(totCvt_anim_fig,totCvt_animate,frames=tp_totCvt_anim,interval=100)
+        # totCvt_anim_filename_partial=f'totCvt_anim{pc_i}.gif'
+        # totCvt_anim_filename_full=os.path.join(internal_export_path,totCvt_anim_filename_partial)
+        # totCvt_anim.save(totCvt_anim_filename_full)
+        # #pics_paragraph5=report.add_paragraph() #Added when log plot off
+        # pic6=pics_paragraph3.add_run() #Added when log plot off
+        # pic6.add_picture(totCvt_anim_filename_full, width=docx.shared.Inches(3))
+        # plt.close()
         
         # %% Plot Approximation for Total NP conc Overtime
         linear_filename_partial=f'Linearplot{pc_i}.png'
@@ -338,6 +338,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         pic7.add_picture(linear_filename_full,width=docx.shared.Inches(3))
         log_filename_partial=f'Logplot{pc_i}.png'
         log_filename_full=os.path.join(internal_export_path,log_filename_partial)
+        pics_paragraph3=report.add_paragraph() #Added when log plot off
         pic8=pics_paragraph3.add_run() #Added when log plot off
         pic8.add_picture(log_filename_full,width=docx.shared.Inches(3))
         

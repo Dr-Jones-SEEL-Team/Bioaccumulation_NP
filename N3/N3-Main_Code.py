@@ -56,19 +56,19 @@ counter_file.close()
 h=np.array([0.01]) #Define timesteps to test
 tol=np.array([10**(-6)])  #Define the tolerance the code will run with when running Newton-Rhapson
 t1=np.array([0]) #Define initialtime vector of values to test
-t2=np.array([30]) #Final Time
-nx=np.array([50]) #Mesh size 
-gam=np.array([0.2]) #Define dimenionless ratio of diffusivities to test
-F=np.array([10]) #Define the dimensionless forward reaction rate constant to test
-K=np.array([10]) #Define the Eqilbrium constant for NP binding
-eps=np.array([0.1]) #Define ratio of total NP binding sites to supernatant NP concentration
-omega=np.array([0.0001]) #Define contribution of nanoparticle to biofilm to electrical potential profile
+t2=np.array([10]) #Final Time
+nx=np.array([100]) #Mesh size 
+gam=np.array([0.5]) #Define dimenionless ratio of diffusivities to test
+F=np.array([50]) #Define the dimensionless forward reaction rate constant to test
+K=np.array([1]) #Define the Eqilbrium constant for NP binding
+eps=np.array([50]) #Define ratio of total NP binding sites to supernatant NP concentration
+omega=np.array([0.1]) #Define contribution of nanoparticle to biofilm to electrical potential profile
 ups= np.array([1])#Define ratio of biofilm to nanoparticle charge (Defunct parameter from previous version of the model)
 Kp= np.array([1]) #Define partition coeffecient of NP into biofilm at water-biofilm interface
-beta= np.array([-1.5]) #Define ratio of electrophoresis to diffusivity in system    
+beta= np.array([1]) #Define ratio of electrophoresis to diffusivity in system    
 
 # %% Grab Experimental Results to fit to model
-experimental_data_file=r'C:\Users\joshu\Box\Quantum Biofilms\Processed Data\Extracted data from literature\tseng_fits_Fig2B_Cy5_incubation_      2.csv'
+experimental_data_file=r'C:\Users\joshu\Box\Quantum Biofilms\Processed Data\Extracted data from literature\tseng_fits_Fig2B_Cy5_incubation_2.csv'
 [experimental_results,fit_coeff] = experimental_data_extractor(experimental_data_file)
 
 # %% Generate Parameter Matrix for Testing
@@ -81,14 +81,14 @@ experimental_data_file=r'C:\Users\joshu\Box\Quantum Biofilms\Processed Data\Extr
 vn_csv_generator = csv_generator(c_set,parameter_combos_count,parameter_matrix,direct_export_path,new_count_number,machine_number)
 
 # %% Fit Model to Experimental Data
-fitting_results=exp_data_fitter(c_set,experimental_results,parameter_combos_count,internal_export_path)
+# fitting_results=exp_data_fitter(c_set,experimental_results,parameter_combos_count,internal_export_path)
 
 # %% Fit model to first order approximation, plot approximation, and determine fit of approximation
-#[perc_acc_matrix,vn_linear_fitting]=linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_path,beta)
+[perc_acc_matrix,vn_linear_fitting]=linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_path,beta)
 
 # %% Report Generator: Exports Plots as Word Document to Seperate Directory (see file N2_report_generator.py)
-#report=plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N3,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,perc_acc_matrix,vn_linear_fitting,machine_number,internal_export_path)
-report=plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N3,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,machine_number,internal_export_path)
+report=plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N3,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,perc_acc_matrix,vn_linear_fitting,machine_number,internal_export_path)
+# report=plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N3,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,machine_number,internal_export_path)
 
 # %% Stop Timer
 #End timer

@@ -13,8 +13,8 @@ import matplotlib.animation as anim
 from matplotlib.animation import FuncAnimation
 
 "Commenting out correct plot generator function while lienar fitting functionality turned off"
-#def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N2,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,perc_acc_matrix,vn_linear_fitting,machine_number,internal_export_path):
-def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N2,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,machine_number,internal_export_path):
+def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N2,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,perc_acc_matrix,vn_linear_fitting,machine_number,internal_export_path):
+# def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_number,vn_N2,vn_Main_Code,vn_parameter_matrix_generator,vn_parameter_checker,vn_csv_generator,vn_method_of_lines,vn_RJ,machine_number,internal_export_path):
     """Static Plotting (Exported to Word Document)"""
     report=docx.Document()
     report.add_heading(f'Results from N2 Run #{new_count_number}-{machine_number}',0)
@@ -83,6 +83,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         #tindex_u=np.array([0,5,10,25,50,75,100,125,150,200,250]) for masnual control over timepoints plotted
         tp_u=10 #number of time points to plot
 
+        """
         #Linear discretization of plotted timepionts
         space_u=int((nt-1)/tp_u) #Linear discreitzation of timepoints
         tindex_u=np.arange(0,nt,space_u) #Linear discreitization of timepoints
@@ -101,7 +102,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
             cc_u=cu[:,i_u]
             ti_u=round(t[i_u],5)
             plt.plot(x,cc_u,label='t={}'.format(ti_u))
-        """
+        
         plt.xlim(left=0,right=1)
         plt.ylim(bottom=0,top=upper_1)
         plt.xlabel('Position',fontsize=14)
@@ -119,15 +120,15 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         # %%Bound
         tp_b=10 #number of time points to plot
 
-        #Linear discretization of plotted timepionts
-        space_b=int((nt-1)/tp_b) #Linear discreitzation of timepoints
-        tindex_b=np.arange(0,nt,space_b) #Linear discreitzation of timepoints
-        for i_b in tindex_b:
-            cc_b=cb[:,i_b]
-            ti_b=round(t[i_b],5)
-            plt.plot(x,cc_b,label='t={}'.format(ti_b))
-        """
-        
+    
+        # #Linear discretization of plotted timepionts
+        # space_b=int((nt-1)/tp_b) #Linear discreitzation of timepoints
+        # tindex_b=np.arange(0,nt,space_b) #Linear discreitzation of timepoints
+        # for i_b in tindex_b:
+        #     cc_b=cb[:,i_b]
+        #     ti_b=round(t[i_b],5)
+        #     plt.plot(x,cc_b,label='t={}'.format(ti_b))
+
         #Logarthmic discreitzation of plotted timepoints
         lognt_b=np.log10(nt) #Logarthmic timepoints
         logspace_b=round((lognt_b)/tp_b,10) #Logarthmic timepoints
@@ -138,7 +139,7 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
             cc_b=cb[:,i_b]
             ti_b=round(t[i_b],5)
             plt.plot(x,cc_b,label='t={}'.format(ti_b))
-        """    
+   
         plt.xlim(left=0,right=1)
         plt.ylim(bottom=0,top=upper_4)
         plt.xlabel('Position',fontsize=14)
@@ -243,28 +244,28 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         pic6=pics_paragraph3.add_run()
         pic6.add_picture(avgtotal_filename_full, width=docx.shared.Inches(3))
         
-        # %% Model fit Plot
-        pics_paragraph4=report.add_paragraph()
-        modelfit_filename_partial=f'Modelfitplot{pc_i}.png'
-        modelfit_filename_full=os.path.join(internal_export_path,modelfit_filename_partial)
-        pic4=pics_paragraph4.add_run()
-        pic4.add_picture(modelfit_filename_full, width=docx.shared.Inches(6))
+        # # %% Model fit Plot
+        # pics_paragraph4=report.add_paragraph()
+        # modelfit_filename_partial=f'Modelfitplot{pc_i}.png'
+        # modelfit_filename_full=os.path.join(internal_export_path,modelfit_filename_partial)
+        # pic4=pics_paragraph4.add_run()
+        # pic4.add_picture(modelfit_filename_full, width=docx.shared.Inches(6))
         
-        # # %%Log&Normalized NP Average Concetration Overtime
-        # plt.figure(7*pc_i+6)
-        # plt.plot(t,lognorm_tconc_overtime)
-        # plt.xlim(left=parameter_matrix[pc_i,2],right=parameter_matrix[pc_i,3])
-        # #plt.xlim(left=0,right=0.0005) #Manual Override of automatic x-axis limits
-        # plt.ylim(bottom=lower_6,top=upper_6)
-        # plt.xlabel('Time',fontsize=14)
-        # plt.ylabel('Log of Normalized Concentration',fontsize=14)
-        # plt.title('First-order Plot',fontsize=16)
-        # plt.xticks(fontsize=12)
-        # plt.yticks(fontsize=12)
-        # lognorm_filename_partial=f'Firstorder{pc_i}.png'
-        # lognorm_filename_full=os.path.join(internal_export_path,lognorm_filename_partial)
-        # plt.savefig(lognorm_filename_full)
-        # plt.close()
+        # %%Log&Normalized NP Average Concetration Overtime
+        plt.figure(7*pc_i+6)
+        plt.plot(t,lognorm_tconc_overtime)
+        plt.xlim(left=parameter_matrix[pc_i,2],right=parameter_matrix[pc_i,3])
+        #plt.xlim(left=0,right=0.0005) #Manual Override of automatic x-axis limits
+        plt.ylim(bottom=lower_6,top=upper_6)
+        plt.xlabel('Time',fontsize=14)
+        plt.ylabel('Log of Normalized Concentration',fontsize=14)
+        plt.title('First-order Plot',fontsize=16)
+        plt.xticks(fontsize=12)
+        plt.yticks(fontsize=12)
+        lognorm_filename_partial=f'Firstorder{pc_i}.png'
+        lognorm_filename_full=os.path.join(internal_export_path,lognorm_filename_partial)
+        plt.savefig(lognorm_filename_full)
+        plt.close()
  
         # # %%Unbound Concentration Animation
         # unbound_anim_fig=plt.figure()
@@ -290,46 +291,46 @@ def plot_generator(c_set,parameter_combos_count,parameter_matrix,new_count_numbe
         # #Only need these lines if log plot is turned off
 
         
-        # # %%Total NP Concentration vs Time Animation
-        # totCvt_anim_fig=plt.figure()
-        # totCvt_anim_plot=plt.plot([])
-        # totCvt_anim_holder=totCvt_anim_plot[0]
-        # plt.xlim(left=parameter_matrix[pc_i,2],right=parameter_matrix[pc_i,3])
-        # plt.ylim(bottom=0,top=upper_5)
-        # plt.xlabel('Time',fontsize=14)
-        # plt.ylabel('Dimensionless Concentration',fontsize=14)
-        # plt.title('Average Dimensionless Total Concentration plot',fontsize=16)
-        # plt.xticks(fontsize=12)
-        # plt.yticks(fontsize=12)
-        # tp_totCvt_anim=100 #number of time points to plot for the animation for unbound concntration
-        # space_totCvt_anim=int((nt-1)/tp_totCvt_anim) #space between timepoints    
-        # def totCvt_animate(frame):
-        #     #update plot
-        #     totCvt_anim_holder.set_data((t[0:frame*space_totCvt_anim],average_tconc_overtime[0:frame*space_totCvt_anim]))
-        # totCvt_anim=anim.FuncAnimation(totCvt_anim_fig,totCvt_animate,frames=tp_totCvt_anim,interval=100)
-        # totCvt_anim_filename_partial=f'totCvt_anim{pc_i}.gif'
-        # totCvt_anim_filename_full=os.path.join(internal_export_path,totCvt_anim_filename_partial)
+        # %%Total NP Concentration vs Time Animation
+        totCvt_anim_fig=plt.figure()
+        totCvt_anim_plot=plt.plot([])
+        totCvt_anim_holder=totCvt_anim_plot[0]
+        plt.xlim(left=parameter_matrix[pc_i,2],right=parameter_matrix[pc_i,3])
+        plt.ylim(bottom=0,top=upper_5)
+        plt.xlabel('Time',fontsize=14)
+        plt.ylabel('Dimensionless Concentration',fontsize=14)
+        plt.title('Average Dimensionless Total Concentration plot',fontsize=16)
+        plt.xticks(fontsize=12)
+        plt.yticks(fontsize=12)
+        tp_totCvt_anim=100 #number of time points to plot for the animation for unbound concntration
+        space_totCvt_anim=int((nt-1)/tp_totCvt_anim) #space between timepoints    
+        def totCvt_animate(frame):
+            #update plot
+            totCvt_anim_holder.set_data((t[0:frame*space_totCvt_anim],average_tconc_overtime[0:frame*space_totCvt_anim]))
+        totCvt_anim=anim.FuncAnimation(totCvt_anim_fig,totCvt_animate,frames=tp_totCvt_anim,interval=100)
+        totCvt_anim_filename_partial=f'totCvt_anim{pc_i}.gif'
+        totCvt_anim_filename_full=os.path.join(internal_export_path,totCvt_anim_filename_partial)
         # totCvt_anim.save(totCvt_anim_filename_full)
 
-        # pics_paragraph4=report.add_paragraph()
-        # pic7=pics_paragraph4.add_run()
-        # pic7.add_picture(unbound_anim_filename_full, width=docx.shared.Inches(3))
-        # pic8=pics_paragraph4.add_run()
-        # pic8.add_picture(totCvt_anim_filename_full, width=docx.shared.Inches(3))      
-        # plt.close()
+        pics_paragraph4=report.add_paragraph()
+        pic7=pics_paragraph4.add_run()
+        pic7.add_picture(lognorm_filename_full, width=docx.shared.Inches(3))
+        pic8=pics_paragraph4.add_run()
+        pic8.add_picture(totCvt_anim_filename_full, width=docx.shared.Inches(3))      
+        plt.close()
         
-        # # %% Plot Approximation for Total NP conc Overtime
-        # linear_filename_partial=f'Linearplot{pc_i}.png'
-        # linear_filename_full=os.path.join(internal_export_path,linear_filename_partial)
-        # #pics_paragraph6=report.add_paragraph() commented out  when log plots out
-        # #pic9=pics_paragraph6.add_run() commented out  when log plots out
-        # pics_paragraph5=report.add_paragraph()
-        # pic9=pics_paragraph5.add_run()
-        # pic9.add_picture(linear_filename_full,width=docx.shared.Inches(3))
-        # log_filename_partial=f'Logplot{pc_i}.png'
-        # log_filename_full=os.path.join(internal_export_path,log_filename_partial)
-        # pic10=pics_paragraph5.add_run() #Added when log plot off
-        # pic10.add_picture(log_filename_full,width=docx.shared.Inches(3))
+        # %% Plot Approximation for Total NP conc Overtime
+        linear_filename_partial=f'Linearplot{pc_i}.png'
+        linear_filename_full=os.path.join(internal_export_path,linear_filename_partial)
+        #pics_paragraph6=report.add_paragraph() commented out  when log plots out
+        #pic9=pics_paragraph6.add_run() commented out  when log plots out
+        pics_paragraph5=report.add_paragraph()
+        pic9=pics_paragraph5.add_run()
+        pic9.add_picture(linear_filename_full,width=docx.shared.Inches(3))
+        log_filename_partial=f'Logplot{pc_i}.png'
+        log_filename_full=os.path.join(internal_export_path,log_filename_partial)
+        pic10=pics_paragraph5.add_run() #Added when log plot off
+        pic10.add_picture(log_filename_full,width=docx.shared.Inches(3))
         
         # # %% Add Table for Fit
         # perc_acc_table=perc_acc_matrix[pc_i][0]

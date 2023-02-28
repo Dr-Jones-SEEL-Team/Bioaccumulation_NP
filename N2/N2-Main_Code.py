@@ -17,8 +17,8 @@ machine_number=1 #Input the machine you are running this code on
 """
 
 if machine_number == 1: #Code to assign the right export paths for each machine, since each is unique
-   direct_export_path=r'C:\Users\joshu\Box Sync\Quantum Biofilms\Raw Data\N2_results\Direct Exports'
-   internal_export_path=r'C:\Users\joshu\Box Sync\Quantum Biofilms\Raw Data\N2_results\Internal Exports' 
+   direct_export_path=r'C:\Users\joshu\Box\Quantum Biofilms\Raw Data\N2_results\Direct Exports'
+   internal_export_path=r'C:\Users\joshu\Box\Quantum Biofilms\Raw Data\N2_results\Internal Exports' 
 
    
 # %% I don't remember what this is for but I'm scared to delete it 
@@ -54,10 +54,10 @@ tol=np.array([10**(-8)])  #Define the tolerance the code will run with when runn
 t1=np.array([0]) #Define initialtime vector of values to test
 t2=np.array([10]) #Final Time
 nx=np.array([200]) #Mesh size
-gam=np.array([0.1]) #Define dimenionless ratio of diffusivities to test
+gam=np.array([1]) #Define dimenionless ratio of diffusivities to test
 beta=np.array([0]) #Define the dimensionless ratio of potentials to test
-F=np.array([10]) #Define the dimensionless forward reaction rate constant to test
-Re=np.array([0.001]) #Define the dimensionless reverse reaction rate constant to test
+F=np.array([5]) #Define the dimensionless forward reaction rate constant to test
+Re=np.array([0.01]) #Define the dimensionless reverse reaction rate constant to test
 n=np.array([1]) #Define the hill coeffecient to test
 ci=10**(-10) #Define the inital concentration in the biofilm (Can't be zero, if one wants to be zero, set it to a very small number instead)
 

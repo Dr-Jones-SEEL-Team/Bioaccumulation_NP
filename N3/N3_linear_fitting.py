@@ -42,12 +42,12 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
         lognorm_tavg_conc_cutoff=np.zeros(mod_cutoff) #Initialize log of normalized concentration vector
         j=0
         for t_i in t_cutoff:
-            lognorm_tavg_conc_cutoff[j]=np.log(norm_tavg_conc_cutoff[j])
+            lognorm_tavg_conc_cutoff[j]=np.log10(norm_tavg_conc_cutoff[j])
             j=j+1
         lognorm_tavg_conc=np.zeros(len(t)) #Initialize log of normalized concentration vector
         j=0
         for t_i in t:
-            lognorm_tavg_conc[j]=np.log(norm_tavg_conc[j])
+            lognorm_tavg_conc[j]=np.log10(norm_tavg_conc[j])
             j=j+1
         #%% Run linear fit
         [m,b]=np.polyfit(t_cutoff,lognorm_tavg_conc_cutoff,1) #Find linear fit for plot
@@ -91,8 +91,8 @@ def linear_fit(c_set,parameter_combos_count,parameter_matrix,internal_export_pat
         plt.figure(2*pc_i+1)
         plt.plot(t,lognorm_tavg_conc,label='Model Results')
         plt.plot(t,fit_lognorm_avg,label='First-Order Approximation')
-        upper_1 = np.amax(lognorm_tavg_conc_cutoff)*0.9 #Upper bound on fit average total concentration overtime
-        lower_1 = np.amin(lognorm_tavg_conc_cutoff)*1.1  #Lower Bound on fit average total concentration overtime
+        upper_1 = np.amax(lognorm_tavg_conc_cutoff)*1.1 #Upper bound on fit average total concentration overtime
+        lower_1 = np.amin(lognorm_tavg_conc_cutoff)*0.9  #Lower Bound on fit average total concentration overtime
         plt.xlim(left=parameter_matrix[pc_i,2],right=np.amax(t_cutoff))  
         plt.ylim(bottom=lower_1,top=upper_1)
         plt.xlabel('Time',fontsize=14)

@@ -9,7 +9,7 @@ from N3_Newton_Rhapson import *
 
 
 def parameter_checker(parameter_matrix,fit_coeff): #unpack paramteres and test
-    
+
     #Calculate other internal paramters to model
     parameter_combos_count=np.shape(parameter_matrix) [0]
     c_set = [[0 for i in range(15)] for j in range(parameter_combos_count)] #Number in the i-range bracket is number of matrices being sotred in c_set. Can always makde more than used
@@ -98,6 +98,18 @@ def parameter_checker(parameter_matrix,fit_coeff): #unpack paramteres and test
         average_uconc_overtime=np.zeros(nt)
         average_bconc_overtime=np.zeros(nt)
         average_tconc_overtime=np.zeros(nt)
+        tindex=np.arange(0,nt)
+        for t_i in tindex:
+            average_uconc_overtime[t_i]=np.average(cu[:,t_i])
+            average_bconc_overtime[t_i]=np.average(cb[:,t_i])
+            average_tconc_overtime[t_i]=Kp*average_uconc_overtime[t_i]+average_bconc_overtime[t_i]
+        c_set[i][3]=average_uconc_overtime
+        c_set[i][4]=average_bconc_overtime
+        c_set[i][5]=average_tconc_overtime
+        
+        
+        #Find NP Concentrations Overtime
+        average_tconc_ss=average_tconc_overtime[nt-1]
         lognorm_tconc_overtime=np.zeros(nt)
         tindex=np.arange(0,nt)
         for t_i in tindex:
@@ -105,9 +117,6 @@ def parameter_checker(parameter_matrix,fit_coeff): #unpack paramteres and test
             average_bconc_overtime[t_i]=np.average(cb[:,t_i])
             average_tconc_overtime[t_i]=Kp*average_uconc_overtime[t_i]+average_bconc_overtime[t_i]
             lognorm_tconc_overtime[t_i]=np.log(round(average_tconc_ss,3)+0.00000001-round(average_tconc_overtime[t_i],3))
-        c_set[i][3]=average_uconc_overtime
-        c_set[i][4]=average_bconc_overtime
-        c_set[i][5]=average_tconc_overtime
         c_set[i][6]=lognorm_tconc_overtime
         
         
