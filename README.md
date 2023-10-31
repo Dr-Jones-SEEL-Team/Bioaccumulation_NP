@@ -5,7 +5,7 @@ Project Folder for Finite Difference Mass Transport Models for Bioaccumulation o
 For those pointed here by the paper, "", the data/scripts are in the following locations:
 
 - Figure_1:
-  - Model Solver Script: Bioaccumulation_NP/N12
+  - Model Solver Script: Bioaccumulation_NP/N15
     - Open the python script 'N12-Main Code'. Change parameters as neccesary to run model. Can run script for multiple parameter combination by entering multiple values for a parameter of interest. Ensure all other scripts in the directory are copied over. Results are saved in an exported word document, with directory destination specified through the string-variable "direct_export_path". Cocnentration and parameter values for each run are saved as .csv files. Requires a .txt file with the current run # to be saved in the same directory as the 'N12-Main Code' file. 
   - Solver results: Bioaccumulation_NP/Results/Figure_1
     - Parameter and concentration data for each run of simulation used in Phase-space plot contained in the directory.
